@@ -24,16 +24,30 @@ export class RegistroComponent {
 
   ngOnInit(): void {
     this.cargaInicial();
-
+    console.log(this.fgregistro.valid);
   }
 
   cargaInicial() {
     this.fgregistro = this.formBuilder.group({
       nombre: [null, [Validators.required]],
+      email: [null, [Validators.required, Validators.maxLength(155), Validators.email]],
       contrasena: [null, [Validators.required]],
-      email: [null, [Validators.required, Validators.email, Validators.maxLength(45)]]
+      confirmPassword: [null, [Validators.required]],
 
-    });
+    },{ validators: [this.validacionPassword] });
   }
+
+
+  validacionPassword(group: FormGroup): { [key: string]: boolean } | null {
+    const password = group.get('contrasena').value;
+    const confirmPassword = group.get('confirmPassword').value;
+
+    if (password !== confirmPassword) {
+        return { matchingPasswords: true };
+    } else {
+        return null;
+    }
+}
+
 
 }
