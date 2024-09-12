@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { AppComponent } from 'src/app/app.component';
 import { Router, ActivatedRoute } from '@angular/router';
+import { RegisterService } from '../servicios/register.service';
 
 @Component({
   selector: 'app-registro',
@@ -17,7 +18,8 @@ export class RegistroComponent {
     private formBuilder: FormBuilder,
     private app: AppComponent,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private servicioRegistro: RegisterService,
 
   ) {
   }

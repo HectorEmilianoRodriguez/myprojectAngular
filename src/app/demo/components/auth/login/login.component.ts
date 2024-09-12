@@ -42,7 +42,6 @@ export class LoginComponent {
         let data = {
             email: this.Correo,
             password: this.password
-
         }
 
         this.servicioLogin.postLogin(data).subscribe({
