@@ -6,12 +6,21 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
+
 export class RegisterService {
   private url = environment.URL_BACK;
 
   constructor(
     private http:HttpClient
-  ) { }
+  ) { 
+
+
+  }
+
+  postRegister(data:any) :Observable<any>{
+    return this.http.post(this.url + `api/register`,data, {withCredentials : true}) as Observable<any>;
+     
+  }
 
   
 }
