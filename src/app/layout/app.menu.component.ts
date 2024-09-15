@@ -17,7 +17,7 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Home',
                 items: [
-                    { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                    { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/documentation'] }
                 ]
             },
 
@@ -26,16 +26,53 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     { label: 'Tableros', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
                 ]
+
+                
             },
+
             {
-                label: 'UI Components',
+                label: 'Crear y unir',
                 items: [
-                    { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
-                    { label: 'Input', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input'] },
-                    { label: 'Float Label', icon: 'pi pi-fw pi-bookmark', routerLink: ['/uikit/floatlabel'] },
-                    { label: 'Invalid State', icon: 'pi pi-fw pi-exclamation-circle', routerLink: ['/uikit/invalidstate'] },
-                    { label: 'Button', icon: 'pi pi-fw pi-box', routerLink: ['/uikit/button'] },
-                    { label: 'Table', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/table'] },
+                   { label: 'Crear nuevo espacio', icon: 'pi pi-fw pi-home', routerLink: ['crearE/crearEntorno'] },
+                    { label: 'Unirme a un entorno', icon: 'pi pi-fw pi-home', routerLink: ['/union/unionEntorno'] },
+                    { label: 'Entornos donde participo', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
+                    
+               
+                ]
+
+                
+
+
+                
+            },
+
+            {
+                label: 'Detalles',
+                items: [
+                    { label: 'Miembros del espacio de trabajo', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
+                    { label: 'Ajustes del espacio de trabajo', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
+                    //{ label: 'Entornos donde participo', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
+                    { label: 'Tableros del espacio de trabajo', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
+                    
+              
+               
+                ]
+
+                
+
+
+                
+            },
+
+            {
+                label: 'Vistas del Espacio de trabajo',
+                items: [
+                    //{ label: 'Unirme a un entorno', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
+                    { label: 'Mis solicitudes', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input'] },
+                    { label: 'Archivados', icon: 'pi pi-fw pi-bookmark', routerLink: ['/uikit/floatlabel'] },
+                    { label: 'Calendario', icon: 'pi pi-fw pi-exclamation-circle', routerLink: ['/uikit/invalidstate'] },
+                    { label: 'Configuraciónes del espacio', icon: 'pi pi-fw pi-box', routerLink: ['/uikit/button'] },
+                    /*/{ label: 'Table', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/table'] },
                     { label: 'List', icon: 'pi pi-fw pi-list', routerLink: ['/uikit/list'] },
                     { label: 'Tree', icon: 'pi pi-fw pi-share-alt', routerLink: ['/uikit/tree'] },
                     { label: 'Panel', icon: 'pi pi-fw pi-tablet', routerLink: ['/uikit/panel'] },
@@ -46,7 +83,8 @@ export class AppMenuComponent implements OnInit {
                     { label: 'File', icon: 'pi pi-fw pi-file', routerLink: ['/uikit/file'] },
                     { label: 'Chart', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/uikit/charts'] },
                     { label: 'Misc', icon: 'pi pi-fw pi-circle', routerLink: ['/uikit/misc'] }
-                ]
+                      */
+                    ]
             },
             {
                 label: 'Prime Blocks',
@@ -157,13 +195,13 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
-                label: 'Get Started',
+                label: 'Restauracion y respaldo',
                 items: [
                     {
-                        label: 'Documentation', icon: 'pi pi-fw pi-question', routerLink: ['/documentation']
+                        label: 'Restauración', icon: 'pi pi-fw pi-question', routerLink: ['/documentation']
                     },
                     {
-                        label: 'View Source', icon: 'pi pi-fw pi-search', url: ['https://github.com/primefaces/sakai-ng'], target: '_blank'
+                        label: 'Respaldo', icon: 'pi pi-fw pi-search', url: ['https://github.com/primefaces/sakai-ng'], target: '_blank'
                     }
                 ]
             }

@@ -18,10 +18,19 @@ export class LoginService {
      
      
    }
-   
+    
+   ///metodo del servicio para el login 
    postLogin(data): Observable<any>{
       return this.http.post(this.url + `api/login`,data, {withCredentials : true}) as Observable<any>;
       
    }
+
+   //metodo para recuperacion de contraseña
+
+   recuperarPassword(email):Observable<any>{
+      return this.http.post(this.url + `api/`, { email }, { withCredentials: true }) as Observable<any>;
+   }
+
+
 
 }

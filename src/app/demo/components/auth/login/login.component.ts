@@ -26,6 +26,7 @@ export class LoginComponent {
 
     password: string;
     Correo: string;
+    visible: boolean = false; //CONTRALa el modal del recuperar contraseña
 
     constructor(public layoutService: LayoutService, private messageService: MessageService,
         private app: AppComponent, private servicioLogin: LoginService,
@@ -65,6 +66,46 @@ export class LoginComponent {
         })
 
     }
+
+
+            // Método para mostrar el modal
+            showDialog() {
+                this.visible = true;
+            }
+
+
+            //metodo para manejar la recuperacion 
+
+            recuperarContraseña(){
+               
+                    this.app.showLoading();
+                    let data = {
+                        email: this.Correo,
+                        
+                    }
+            
+                    this.servicioLogin.recuperarPassword(data).subscribe({
+                        next: data => {
+                            //mensajes de no logear
+                            //his.messageService.add({severity:'info', summary:'Atención', detail:'Recibiras un correo electronico con un enlace de activación para completar el proceso de cambio de contraseña.',sticky: true});
+                            //if (typeof data === 'object' && data !== null) {
+                            //} else {
+            
+                            console.log(data);
+                            //}
+                        },
+                        complete: () => {
+                            this.router.navigate(['/Dash']);
+                        },
+            
+                        error: error => {
+                            //mensajes de error
+                        }
+            
+                    })
+
+
+            }
 
 
 }
