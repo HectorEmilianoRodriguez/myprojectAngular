@@ -14,6 +14,7 @@ import { PhotoService } from './demo/service/photo.service';
 import { PanelMenuModule } from 'primeng/panelmenu';  // Asegúrate de importar PanelMenuModule
 import { HttpClientModule } from '@angular/common/http';
 
+
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
     imports: [AppRoutingModule, AppLayoutModule],

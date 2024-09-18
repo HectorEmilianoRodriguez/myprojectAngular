@@ -46,21 +46,38 @@ export class LoginComponent {
         }
 
         this.servicioLogin.postLogin(data).subscribe({
-            next: data => {
+            next: (response: any) => {
                 //mensajes de no logear
+                 
                 //his.messageService.add({severity:'info', summary:'Atención', detail:'Recibiras un correo electronico con un enlace de activación para completar el proceso de cambio de contraseña.',sticky: true});
-                //if (typeof data === 'object' && data !== null) {
+                 if (response.message  === 'success'){
+                    localStorage.setItem('token',response.token);
+                    this.messageService.add({severity: 'success', summary : 'Éxito',detail: 'inicio de sesion Corrrecto'});
+                      this.router.navigate(['/Dash']);
+                      
+                    }
+                      else{
+                        this.messageService.add({severity: 'info', summary : 'Informacion',detail: response.message});
+                     
+                      }
                 //} else {
+
 
                 console.log(data);
                 //}
             },
             complete: () => {
-                this.router.navigate(['/Dash']);
+               this.app.hideLoading();
             },
 
-            error: error => {
-                //mensajes de error
+            error: (error) => {
+              if(error.status === 401 ){
+                this.messageService.add({severity: 'error', summary : 'Error',detail: error.error.message});
+                 
+              }else{
+                this.messageService.add({severity: 'error', summary : 'Error',detail: 'Ocurrio un error durante el inicio de sesion'});
+             
+              }
             }
 
         })
