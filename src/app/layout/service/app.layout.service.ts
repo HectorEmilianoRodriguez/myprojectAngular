@@ -1,6 +1,7 @@
 import { Injectable, effect, signal } from '@angular/core';
-import { Subject } from 'rxjs';
-
+import { Observable, Subject } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
 export interface AppConfig {
     inputStyle: string;
     colorScheme: string;
@@ -43,6 +44,8 @@ export class LayoutService {
         menuHoverActive: false,
     };
 
+    private url = environment.URL_BACK;
+
     private configUpdate = new Subject<AppConfig>();
 
     private overlayOpen = new Subject<any>();
@@ -51,7 +54,9 @@ export class LayoutService {
 
     overlayOpen$ = this.overlayOpen.asObservable();
 
-    constructor() {
+    constructor(
+        private http:HttpClient
+    ) {
         effect(() => {
             const config = this.config();
             if (this.updateStyle(config)) {
@@ -60,6 +65,7 @@ export class LayoutService {
             this.changeScale(config.scale);
             this.onConfigUpdate();
         });
+        
     }
 
     updateStyle(config: AppConfig) {
@@ -155,5 +161,10 @@ export class LayoutService {
 
     changeScale(value: number) {
         document.documentElement.style.fontSize = `${value}px`;
+    }
+
+
+    logout():Observable<any>{
+        return this.http.post(this.url + `api/logout`,'',{withCredentials:true}) as Observable<any>;
     }
 }

@@ -3,7 +3,6 @@ import { AppLayoutComponent } from './app.layout.component';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { LayoutService } from "./service/app.layout.service";
-
 @Component({
     selector: 'app-topbar',
     templateUrl: './app.topbar.component.html'
@@ -23,7 +22,6 @@ export class AppTopBarComponent {
         public layoutService: LayoutService,
         private router: Router,
         private appLayoutComponent: AppLayoutComponent,
-        private ElementRef: ElementRef,
     ) { }
 
     ngOnInit() {
@@ -58,6 +56,17 @@ export class AppTopBarComponent {
 
 
     salir() {
+
+        this.layoutService.logout().subscribe({
+            next: (response: any) => {
+                if (response.message === 'success') {
+                    this.router.navigate(['/login']);
+                }
+            },
+            error: (error) => {
+            }
+
+        })
         
         this.ocultarOpciones();
     }

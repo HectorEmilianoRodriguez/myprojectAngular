@@ -72,7 +72,7 @@ export class RegistroComponent {
           next: response =>{
               //maneja la respuesta exitosa
               console.log("Registro exitoso: ", response);
-              this.router.navigate(['api/login']);//redirige a la pagina de inicio de sesion
+              this.router.navigate(['/auth/login']);//redirige a la pagina de inicio de sesion
 
 
             },
