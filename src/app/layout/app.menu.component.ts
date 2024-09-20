@@ -198,7 +198,7 @@ export class AppMenuComponent implements OnInit {
                 label: 'Restauracion y respaldo',
                 items: [
                     {
-                        label: 'Restauración', icon: 'pi pi-fw pi-question', routerLink: ['/documentation']
+                        label: 'Restauración', icon: 'pi pi-fw pi-question', routerLink: ['/respaldo/respaldo']
                     },
                     {
                         label: 'Respaldo', icon: 'pi pi-fw pi-search', url: ['https://github.com/primefaces/sakai-ng'], target: '_blank'
