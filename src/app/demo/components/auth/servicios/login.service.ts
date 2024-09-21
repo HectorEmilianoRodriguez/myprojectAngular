@@ -21,7 +21,7 @@ export class LoginService {
     
    ///metodo del servicio para el login 
    postLogin(data): Observable<any>{
-      return this.http.post(this.url + `api/login`,data, {withCredentials : true}) as Observable<any>;
+      return this.http.post(this.url + `api/login`,data, {withCredentials : true});
       
    }
 
@@ -31,6 +31,6 @@ export class LoginService {
       return this.http.post(this.url + `api/`, { email }, { withCredentials: true }) as Observable<any>;
    }
 
-
+   
 
 }
