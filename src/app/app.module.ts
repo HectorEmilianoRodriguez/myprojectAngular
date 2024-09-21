@@ -12,12 +12,13 @@ import { IconService } from './demo/service/icon.service';
 import { NodeService } from './demo/service/node.service';
 import { PhotoService } from './demo/service/photo.service';
 import { PanelMenuModule } from 'primeng/panelmenu';  // Asegúrate de importar PanelMenuModule
-import { HttpClientModule } from '@angular/common/http';
+import { HttpBackend, HttpClient, HttpClientModule } from '@angular/common/http';
+import { RespaldoModule } from './demo/components/ResA/respaldo.module';
 
 
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
-    imports: [AppRoutingModule, AppLayoutModule],
+    imports: [AppRoutingModule, AppLayoutModule,HttpClientModule,  RespaldoModule,],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
         CountryService, CustomerService, EventService, IconService, NodeService,

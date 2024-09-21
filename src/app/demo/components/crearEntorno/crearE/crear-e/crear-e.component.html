@@ -7,7 +7,7 @@
                 <form [formGroup]="entornoForm" (ngSubmit)="onSubmit()">
                     <div class="info-row">
                         <div class="info-group">
-                            <label for="entornoNombre" class=" block text-900  font-medium mb-2 text-2xl">Nombre del entorno <span class="required-asterisk">*</span></label>
+                            <label for="entornoNombre" class=" block text-900  font-medium mb-2 ">Nombre del entorno <span class="required-asterisk">*</span></label>
                             <input id="entornoNombre" type="text" formControlName="entornoNombre" placeholder="Nombre del entorno " pInputText class="w-full mb-5 p-4 text-xl border-round placeholder-lg">
                             <div *ngIf="entornoForm.controls['entornoNombre'].invalid && entornoForm.controls['entornoNombre'].touched" class="error-message">
                                 <div *ngIf="entornoForm.controls['entornoNombre'].errors?.['required']" class="text-lg">El nombre del entorno es obligatorio.</div>

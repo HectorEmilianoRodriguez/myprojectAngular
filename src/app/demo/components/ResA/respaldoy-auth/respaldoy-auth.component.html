@@ -1,69 +1,42 @@
-<div class="card mb-3" > 
-    <h2>Unirme a un nuevo entorno</h2>
+<div class="card mb-5"> 
+    <h2>Restauración</h2>
 
-    <div class="shadow-2 m-3 surface-card text-center p-2 border-round-sm font-semibold">
-        <div id="contenedor-de-dash" class="dashboard-container">
-
-            <div class="info-card">
+    <div class="dashboard-container">
+        <div class="info-card">
+            <div class="file-selection-container">
+                <p class="text-2xl label">Seleccione el archivo de restauración:</p>
                 
-                <div class="info-row">
-                    <div class="info-group">
-                        
-                    </div>
-                    <div class="info-group">
-                        
-
-                    </div>
-                </div>
-                <div class="info-row">
-                    <div class="info-group">
-                       
-                    </div>
-                    <div class="info-group">
-                       
-                    </div>
+                <div class="file-selection-row">
+                    <p-fileUpload 
+                        mode="basic" 
+                        chooseLabel="Seleccionar archivo" 
+                        [auto]="true"
+                        accept=".sql,.bak,.dump"
+                        (onSelect)="capturarFile($event)"
+                        [customUpload]="true"
+                        [showCancelButton]="false"
+                        [showUploadButton]="false"
+                        styleClass="p-button-outlined"
+                    ></p-fileUpload>
+        
+                    <button 
+                        pButton 
+                        type="button" 
+                        (click)="restaurarBaseDeDatos()" 
+                        [disabled]="!archivoSeleccionado || restaurando"
+                        [label]="restaurando ? 'Restaurando...' : 'Restaurar Base de Datos'"
+                        class="p-button-primary"
+                    ></button>
                 </div>
             </div>
-       
-        </div>
-
-        
-
-
-         
-
-    </div>
-
-    <div class="shadow-2 m-3 surface-card text-center p-2 border-round-sm font-semibold">
-        <div id="contenedor-de-dash" class="dashboard-container">
-
-            <div class="info-card">
-                
-
-                <div class="info-row">
-                    <div class="info-group">
-                      
-                    </div>
-                    <div class="info-group">
-                        
-                    </div>
-                </div>
-                <div class="info-row">
-                    <div class="info-group">
-                       
-                    </div>
-                    <div class="info-group">
-                         
-                    </div>
-                </div>
+            
+            <div *ngIf="nombreArchivo" class="file-name">
+                <p class="text-2xl value">Archivo seleccionado: {{ nombreArchivo }}</p>
             </div>
-        
         </div>
-
         
-
-
-         
-
+        
+        
     </div>
 </div>
+

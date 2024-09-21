@@ -5,6 +5,8 @@ import { PanelMenuModule } from 'primeng/panelmenu';
 import { TabMenuModule } from 'primeng/tabmenu'; // Asegúrate de importar TabMenuModule
 import { RespaldoyAuthComponent } from './respaldoy-auth/respaldoy-auth.component';
 import { ButtonModule } from 'primeng/button';
+import { FileUploadModule } from 'primeng/fileupload';
+import { ToastModule } from 'primeng/toast';
 
 
 @NgModule({
@@ -14,7 +16,10 @@ import { ButtonModule } from 'primeng/button';
     RespaldoRoutingModule,
     TabMenuModule,
     PanelMenuModule,
+    FileUploadModule,
     ButtonModule,
+    ToastModule,
   ]
+   
 })
 export class RespaldoModule { }
