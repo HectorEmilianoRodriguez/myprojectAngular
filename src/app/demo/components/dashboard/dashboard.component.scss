@@ -1,0 +1,105 @@
+@media screen and (max-width: 991px) {
+    .video-container {
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding-bottom: 56.25%;
+    
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    }
+}
+
+
+/* Estilo para el contenedor de paneles */
+.custom-tab-menu {
+    display: flex;
+    flex-direction: row; /* Alinea los ítems horizontalmente */
+}
+
+/* Estilo para los ítems del tabMenu */
+.custom-tab-menu .p-menuitem {
+    margin-right: 20px; /* Espacio entre los ítems */
+}
+
+/* Estilo específico para el texto de los ítems */
+.custom-tab-menu .p-menuitem .p-menuitem-link {
+    font-size: 18px; /* Ajusta el tamaño de la fuente aquí */
+}
+
+/* Estilo para el contenedor principal */
+.container {
+    display: flex;
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan en varias líneas */
+    gap: 10px; /* Espacio entre elementos */
+    margin-bottom: 10px; /* Espacio inferior entre los containers */
+}
+
+/* Estilo para cada panelMenu dentro del contenedor */
+.half {
+    flex: 1 1 calc(50% - 10px); /* Dos columnas con espacio entre ellas */
+    padding: 10px; /* Opcional: Añade padding para espacio interno */
+    box-sizing: border-box; /* Incluye padding y border en el ancho y alto total del div */
+}
+
+/* Media query para pantallas pequeñas */
+@media (max-width: 768px) {
+    .half {
+        flex: 1 1 100%; /* Cada div ocupa el 100% del ancho en pantallas pequeñas */
+    }
+}
+
+  /* Estilo para el contenedor del tabMenu */
+.custom-tab-menu {
+    display: flex;
+    flex-direction: row; /* Alinea los ítems horizontalmente */
+  }
+  
+  /* Estilo para los ítems del tabMenu */
+  .custom-tab-menu .p-menuitem {
+    margin-right: 20px; /* Espacio entre los ítems */
+  }
+  
+  /* Estilo específico para el texto de los ítems */
+  .custom-tab-menu .p-menuitem .p-menuitem-link {
+    font-size: 18px; /* Ajusta el tamaño de la fuente aquí */
+  }
+  
+
+  .container {
+    display: flex;
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan en varias líneas */
+  }
+  
+  .half {
+    flex: 1; /* Cada div ocupa el mismo espacio disponible */
+    padding: 10px; /* Opcional: Añade padding para espacio interno */
+    box-sizing: border-box; /* Incluye padding y border en el ancho y alto total del div */
+  }
+  
+  /* Media query para pantallas pequeñas */
+  @media (max-width: 768px) {
+    .half {
+      flex: 100%; /* Cada div ocupa el 100% del ancho en pantallas pequeñas */
+    }
+  }
+  
+
+  .circle-count {
+    background-color: #007bff;
+    color: white;
+    border-radius: 50%;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    line-height: 24px;
+    margin-left: 10px;
+    font-size: 14px;
+    font-weight: bold;
+}

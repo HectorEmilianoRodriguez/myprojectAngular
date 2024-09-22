@@ -7,7 +7,7 @@ import { AppLayoutComponent } from "./layout/app.layout.component";
     imports: [
         RouterModule.forRoot([
             {
-                path: '', redirectTo: 'landing', pathMatch: 'full'
+                path: '', redirectTo: '/auth/login', pathMatch: 'full'
             },
 
             {
