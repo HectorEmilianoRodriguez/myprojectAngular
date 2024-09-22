@@ -7,7 +7,7 @@ import { AuthGuard } from './demo/components/auth/guards/auth.guard';
     imports: [
         RouterModule.forRoot([
             {
-                path: '', redirectTo: 'landing', pathMatch: 'full'
+                path: '', redirectTo: '/auth/login', pathMatch: 'full'
             },
 
             {

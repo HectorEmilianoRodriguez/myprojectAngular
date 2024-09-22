@@ -17,82 +17,19 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Home',
                 items: [
-                    { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/documentation'] }
+                    { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/Dash'] }
                 ]
             },
 
             {
-                label: 'Tableros',
+                label: 'Opciones de espacios de trabajo',
                 items: [
-                    { label: 'Tableros', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
-                ]
-
-                
+                   { label: 'Crear nuevo espacio', icon: 'pi pi-fw pi-plus', routerLink: ['crearE/crearEntorno'] },
+                   { label: 'Unirme a un espacio', icon: 'pi pi-fw pi-users', routerLink: ['/union/unionEntorno'] },
+                   { label: 'Mis solicitudes', icon: 'pi pi-fw pi-bell', routerLink: ['/uikit/input'] },
+                ]  
             },
 
-            {
-                label: 'Crear y unir',
-                items: [
-                   { label: 'Crear nuevo espacio', icon: 'pi pi-fw pi-home', routerLink: ['crearE/crearEntorno'] },
-                    { label: 'Unirme a un entorno', icon: 'pi pi-fw pi-home', routerLink: ['/union/unionEntorno'] },
-                    { label: 'Entornos donde participo', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
-                    
-               
-                ]
-
-                
-
-
-                
-            },
-
-            {
-                label: 'Detalles',
-                items: [
-                    { label: 'Miembros del espacio de trabajo', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
-                    { label: 'Ajustes del espacio de trabajo', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
-                    //{ label: 'Entornos donde participo', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
-                    { label: 'Tableros del espacio de trabajo', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
-                    
-              
-               
-                ]
-
-                
-
-
-                
-            },
-
-            {
-                label: 'Vistas del Espacio de trabajo',
-                items: [
-                    //{ label: 'Unirme a un entorno', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
-                    { label: 'Mis solicitudes', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input'] },
-                    { label: 'Archivados', icon: 'pi pi-fw pi-bookmark', routerLink: ['/uikit/floatlabel'] },
-                    { label: 'Calendario', icon: 'pi pi-fw pi-exclamation-circle', routerLink: ['/uikit/invalidstate'] },
-                    { label: 'Configuraciónes del espacio', icon: 'pi pi-fw pi-box', routerLink: ['/uikit/button'] },
-                    /*/{ label: 'Table', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/table'] },
-                    { label: 'List', icon: 'pi pi-fw pi-list', routerLink: ['/uikit/list'] },
-                    { label: 'Tree', icon: 'pi pi-fw pi-share-alt', routerLink: ['/uikit/tree'] },
-                    { label: 'Panel', icon: 'pi pi-fw pi-tablet', routerLink: ['/uikit/panel'] },
-                    { label: 'Overlay', icon: 'pi pi-fw pi-clone', routerLink: ['/uikit/overlay'] },
-                    { label: 'Media', icon: 'pi pi-fw pi-image', routerLink: ['/uikit/media'] },
-                    { label: 'Menu', icon: 'pi pi-fw pi-bars', routerLink: ['/uikit/menu'], routerLinkActiveOptions: { paths: 'subset', queryParams: 'ignored', matrixParams: 'ignored', fragment: 'ignored' } },
-                    { label: 'Message', icon: 'pi pi-fw pi-comment', routerLink: ['/uikit/message'] },
-                    { label: 'File', icon: 'pi pi-fw pi-file', routerLink: ['/uikit/file'] },
-                    { label: 'Chart', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/uikit/charts'] },
-                    { label: 'Misc', icon: 'pi pi-fw pi-circle', routerLink: ['/uikit/misc'] }
-                      */
-                    ]
-            },
-            {
-                label: 'Prime Blocks',
-                items: [
-                    { label: 'Free Blocks', icon: 'pi pi-fw pi-eye', routerLink: ['/blocks'], badge: 'NEW' },
-                    { label: 'All Blocks', icon: 'pi pi-fw pi-globe', url: ['https://www.primefaces.org/primeblocks-ng'], target: '_blank' },
-                ]
-            },
             {
                 label: 'Utilities',
                 items: [
@@ -101,99 +38,30 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
-                label: 'Pages',
-                icon: 'pi pi-fw pi-briefcase',
-                items: [
-                    {
-                        label: 'Landing',
-                        icon: 'pi pi-fw pi-globe',
-                        routerLink: ['/landing']
-                    },
-                    {
-                        label: 'Auth',
-                        icon: 'pi pi-fw pi-user',
+               
+                label: 'Espacios de trabajo', icon: 'pi pi-fw pi-bookmark',
                         items: [
                             {
-                                label: 'Login',
-                                icon: 'pi pi-fw pi-sign-in',
-                                routerLink: ['/auth/login']
+                                label: 'Mis espacios', icon: 'pi pi-fw pi-book',
+                                items: [
+                                    { label: 'Entorno A', icon: 'pi pi-fw pi-bookmark' },
+                                    { label: 'Entorno B', icon: 'pi pi-fw pi-bookmark' },
+                                    { label: 'Entorno C', icon: 'pi pi-fw pi-bookmark' },
+                                ]
                             },
                             {
-                                label: 'Error',
-                                icon: 'pi pi-fw pi-times-circle',
-                                routerLink: ['/auth/error']
-                            },
-                            {
-                                label: 'Access Denied',
-                                icon: 'pi pi-fw pi-lock',
-                                routerLink: ['/auth/access']
+                                label: 'Espacios donde participo', icon: 'pi pi-fw pi-book',
+                                items: [
+                                    { label: 'Entorno A', icon: 'pi pi-fw pi-bookmark' },
+                                    { label: 'Entorno B', icon: 'pi pi-fw pi-bookmark' },
+                                    { label: 'Entorno C', icon: 'pi pi-fw pi-bookmark' },
+                                ]
                             }
+
                         ]
-                    },
-                    {
-                        label: 'Crud',
-                        icon: 'pi pi-fw pi-pencil',
-                        routerLink: ['/pages/crud']
-                    },
-                    {
-                        label: 'Timeline',
-                        icon: 'pi pi-fw pi-calendar',
-                        routerLink: ['/pages/timeline']
-                    },
-                    {
-                        label: 'Not Found',
-                        icon: 'pi pi-fw pi-exclamation-circle',
-                        routerLink: ['/notfound']
-                    },
-                    {
-                        label: 'Empty',
-                        icon: 'pi pi-fw pi-circle-off',
-                        routerLink: ['/pages/empty']
-                    },
-                ]
+
             },
-            {
-                label: 'Hierarchy',
-                items: [
-                    {
-                        label: 'Submenu 1', icon: 'pi pi-fw pi-bookmark',
-                        items: [
-                            {
-                                label: 'Submenu 1.1', icon: 'pi pi-fw pi-bookmark',
-                                items: [
-                                    { label: 'Submenu 1.1.1', icon: 'pi pi-fw pi-bookmark' },
-                                    { label: 'Submenu 1.1.2', icon: 'pi pi-fw pi-bookmark' },
-                                    { label: 'Submenu 1.1.3', icon: 'pi pi-fw pi-bookmark' },
-                                ]
-                            },
-                            {
-                                label: 'Submenu 1.2', icon: 'pi pi-fw pi-bookmark',
-                                items: [
-                                    { label: 'Submenu 1.2.1', icon: 'pi pi-fw pi-bookmark' }
-                                ]
-                            },
-                        ]
-                    },
-                    {
-                        label: 'Submenu 2', icon: 'pi pi-fw pi-bookmark',
-                        items: [
-                            {
-                                label: 'Submenu 2.1', icon: 'pi pi-fw pi-bookmark',
-                                items: [
-                                    { label: 'Submenu 2.1.1', icon: 'pi pi-fw pi-bookmark' },
-                                    { label: 'Submenu 2.1.2', icon: 'pi pi-fw pi-bookmark' },
-                                ]
-                            },
-                            {
-                                label: 'Submenu 2.2', icon: 'pi pi-fw pi-bookmark',
-                                items: [
-                                    { label: 'Submenu 2.2.1', icon: 'pi pi-fw pi-bookmark' },
-                                ]
-                            },
-                        ]
-                    }
-                ]
-            },
+            
             {
                 label: 'Restauracion y respaldo',
                 items: [
