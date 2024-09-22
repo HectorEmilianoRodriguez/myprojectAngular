@@ -3,6 +3,7 @@ import { AppLayoutComponent } from './app.layout.component';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { LayoutService } from "./service/app.layout.service";
+import { AuthService } from 'src/app/services/auth.service';
 @Component({
     selector: 'app-topbar',
     templateUrl: './app.topbar.component.html'
@@ -22,6 +23,7 @@ export class AppTopBarComponent {
         public layoutService: LayoutService,
         private router: Router,
         private appLayoutComponent: AppLayoutComponent,
+        private authService: AuthService
     ) { }
 
     ngOnInit() {
@@ -57,18 +59,31 @@ export class AppTopBarComponent {
 
     salir() {
 
-        this.layoutService.logout().subscribe({
+        this.authService.logout().subscribe({
             next: (response: any) => {
                 if (response.message === 'success') {
-                    this.router.navigate(['/login']);
+                    // Limpiar cualquier estado local si es necesario
+                    localStorage.removeItem('user');
+                    sessionStorage.clear();
+                    
+                    // Ocultar opciones
+                    this.ocultarOpciones();
+                    
+                    // Redirigir al login
+                    this.router.navigate(['/landing']);
+                    console.log('Cookies después del login:', document.cookie);
+                } else {
+                    // Manejar respuesta inesperada
+                    console.error('Respuesta inesperada del servidor');
                 }
             },
             error: (error) => {
+                console.error('Error al cerrar sesión', error);
+                // Aquí podrías mostrar un mensaje de error al usuario
+                // Por ejemplo, usando un servicio de notificaciones
+                // this.notificationService.showError('Error al cerrar sesión. Por favor, inténtelo de nuevo.');
             }
-
-        })
-        
-        this.ocultarOpciones();
+        });
     }
 
     editPerfil(){

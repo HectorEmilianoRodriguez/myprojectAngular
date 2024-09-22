@@ -14,6 +14,8 @@ import { PhotoService } from './demo/service/photo.service';
 import { PanelMenuModule } from 'primeng/panelmenu';  // Asegúrate de importar PanelMenuModule
 import { HttpBackend, HttpClient, HttpClientModule } from '@angular/common/http';
 import { RespaldoModule } from './demo/components/ResA/respaldo.module';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from './interceptors/token.interceptor';
 
 
 @NgModule({
@@ -21,6 +23,7 @@ import { RespaldoModule } from './demo/components/ResA/respaldo.module';
     imports: [AppRoutingModule, AppLayoutModule,HttpClientModule,  RespaldoModule,],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
+        { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
         CountryService, CustomerService, EventService, IconService, NodeService,
         PhotoService, ProductService
     ],
