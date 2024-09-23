@@ -1,0 +1,50 @@
+<div class="layout-topbar">
+    <!-- Esta es la parte del logo y la hamburguesa -->
+    <div style="flex: 1; display: flex; align-items: center;">
+        <a class="layout-topbar-logo" routerLink="">
+            <img src="assets/demo/images/login/logoUpemor.png" alt="logo">
+            <span>UpeFlexControl</span>
+        </a>
+
+        <button #menubutton class="p-link layout-menu-button layout-topbar-button" style="margin-left: 0vw;"
+            (click)="layoutService.onMenuToggle()">
+            <i class="pi pi-bars"></i>
+        </button>
+    </div>
+
+<!-- esta es la parte de las opciones -->
+    <div class="topbar-profile" style="position: relative;">
+        <button type="button" class="p-element topbar-profile-button p-link" (click)="toggleOpciones()"
+            style="position: relative;">
+            <span class="profile-details">
+                <span style="margin-left: 1vw;" class="profile-name">Opciones de usuarios</span>
+            </span>
+            <i class="pi pi-angle-down" style="margin-left: 8rem;"></i>
+        </button>
+        <ul *ngIf="opcionesDesplegadas" class="p-menu p-component" style="position: absolute; top: calc(100% + 5px);">
+
+            <a pripple class="p-ripple p-element flex p-2 border-round align-items-center
+            hover:surface-hover transition-colors transition-duration-150 cursor-pointer" (click)="editPerfil()">
+                <i class="pi pi-user mr-3" style="color: black;"></i>
+                <span style="color: black;">Perfil</span>
+                <span class="p-ink" aria-hidden="true" role="presentation"></span>
+            </a>
+
+            <a pripple class="p-ripple p-element flex p-2 border-round align-items-center
+            hover:surface-hover transition-colors transition-duration-150 cursor-pointer" (click)="editContrasena()">
+                <i class="pi pi-key mr-3" style="color: black;"></i>
+                <span style="color: black;">Contraseña</span>
+                <span class="p-ink" aria-hidden="true" role="presentation"></span>
+            </a>
+
+            <a pripple class="p-ripple p-element flex p-2 border-round align-items-center
+            hover:surface-hover transition-colors transition-duration-150 cursor-pointer" (click)="salir()">
+                <i class="pi pi-sign-in mr-3" style="color: black;"></i>
+                <span style="color: black;">Salir</span>
+                <span class="p-ink" aria-hidden="true" role="presentation"></span>
+            </a>
+
+
+        </ul>
+    </div>
+</div>

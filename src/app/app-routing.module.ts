@@ -2,6 +2,7 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { NotfoundComponent } from './demo/components/notfound/notfound.component';
 import { AppLayoutComponent } from "./layout/app.layout.component";
+import { AppLayoutComponent as WorkEnvAppLayoutComponent} from './layoutw/app.layout.component';
 
 @NgModule({
     imports: [
@@ -26,6 +27,19 @@ import { AppLayoutComponent } from "./layout/app.layout.component";
                     
                 ]
             },
+
+            {
+                path: '', component: WorkEnvAppLayoutComponent,
+                children: [
+
+                    { path: 'WorkEnv', loadChildren: () => import('./demo/components/workenvm/workenvm.module').then(m => m.WorkEnvModule) }
+
+                ]
+
+            },
+
+
+
             { path: 'auth', loadChildren: () => import('./demo/components/auth/auth.module').then(m => m.AuthModule) },
             { path: 'landing', loadChildren: () => import('./demo/components/landing/landing.module').then(m => m.LandingModule) },
             { path: 'registro', loadChildren: () => import('./demo/components/componentes/componentes.module').then(m => m.ComponentesModule) },
