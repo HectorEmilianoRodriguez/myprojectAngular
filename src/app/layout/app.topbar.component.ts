@@ -81,10 +81,12 @@ export class AppTopBarComponent {
                 console.error('Error al cerrar sesión', error);
                 // Aquí podrías mostrar un mensaje de error al usuario
                 // Por ejemplo, usando un servicio de notificaciones
-                // this.notificationService.showError('Error al cerrar sesión. Por favor, inténtelo de nuevo.');
+                 
             }
         });
     }
+
+    
 
     editPerfil(){
         this.router.navigate(['/perfiles/perfil']);

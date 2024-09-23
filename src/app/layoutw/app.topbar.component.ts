@@ -64,6 +64,7 @@ export class AppTopBarComponent {
                 }
             },
             error: (error) => {
+                console.log(error);
             }
 
         })

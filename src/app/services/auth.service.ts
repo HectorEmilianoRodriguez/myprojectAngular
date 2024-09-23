@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
@@ -22,7 +22,10 @@ export class AuthService {
     postLogin(data): Observable<any> {
         return this.http.post(this.url + `api/login`, data, { withCredentials: true }).pipe(
             tap(() => {
+               
+                
                 this.isAuthenticated = true;
+                this.router.navigate(['/Dash'])
             })
         );
     }
@@ -32,15 +35,20 @@ export class AuthService {
         return this.isAuthenticated;
     }
 
-    logout():Observable<any>{
-        return this.http.post(this.url + `api/logout`,{ withCredentials: true }).pipe(
-            tap(() => {
-                this.isAuthenticated = false;
-                // Limpiar cualquier token o estado almacenado localmente
-            }),
-            catchError(this.handleError)
-        );
+    logout(): Observable<any> {
+    
+            // Luego, hacemos la solicitud de logout
+         //   
+               return this.http.post(`${this.url}api/logout`, {}, { withCredentials: true }).pipe(
+                  tap(() => {
+                       this.isAuthenticated = false;
+                        // Limpiar cualquier token o estado almacenado localmente
+                    }),
+                    catchError(this.handleError)
+                );   
+      //
     }
+    
 
     private handleError(error: HttpErrorResponse) {
         console.error('An error occurred:', error);
