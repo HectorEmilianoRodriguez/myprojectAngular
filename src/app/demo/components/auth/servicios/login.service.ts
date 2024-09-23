@@ -20,10 +20,7 @@ export class LoginService {
    }
     
    ///metodo del servicio para el login 
-   postLogin(data): Observable<any>{
-      return this.http.post(this.url + `api/login`,data, {withCredentials : true});
-      
-   }
+   
 
    //metodo para recuperacion de contraseña
 

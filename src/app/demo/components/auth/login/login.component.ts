@@ -4,7 +4,7 @@ import { AppComponent } from 'src/app/app.component';
 import { LoginService } from '../servicios/login.service';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
-
+import { AuthService } from 'src/app/services/auth.service';
 
 
 @Component({
@@ -30,7 +30,7 @@ export class LoginComponent {
 
     constructor(public layoutService: LayoutService, private messageService: MessageService,
         private app: AppComponent, private servicioLogin: LoginService,
-        private router: Router
+        private router: Router, private authService: AuthService
     ) {
 
     }
@@ -45,7 +45,7 @@ export class LoginComponent {
             password: this.password
         }
 
-        this.servicioLogin.postLogin(data).subscribe({
+        this.authService.postLogin(data).subscribe({
             next: (response: any) => {
                 //mensajes de no logear
                 if (response.message === 'success') {
