@@ -7,34 +7,76 @@
                 <form [formGroup]="entornoForm" (ngSubmit)="onSubmit()">
                     <div class="info-row">
                         <div class="info-group">
-                            <label for="entornoNombre" class=" block text-900  font-medium mb-2 ">Nombre del entorno <span class="required-asterisk">*</span></label>
-                            <input id="entornoNombre" type="text" formControlName="entornoNombre" placeholder="Nombre del entorno " pInputText class="w-full mb-5 p-4 text-xl border-round placeholder-lg">
-                            <div *ngIf="entornoForm.controls['entornoNombre'].invalid && entornoForm.controls['entornoNombre'].touched" class="error-message">
-                                <div *ngIf="entornoForm.controls['entornoNombre'].errors?.['required']" class="text-lg">El nombre del entorno es obligatorio.</div>
+                            <label for="nameW" class="block text-900 font-medium mb-2 text-2xl">Nombre del entorno <span class="required-asterisk">*</span></label>
+                            <input id="nameW" type="text" formControlName="nameW" placeholder="Nombre del entorno" pInputText class="w-full mb-5 p-4 text-xl border-round placeholder-lg">
+                            <div *ngIf="entornoForm.controls['nameW'].invalid && entornoForm.controls['nameW'].touched" class="error-message">
+                                <div *ngIf="entornoForm.controls['nameW'].errors?.['required']" class="text-lg">El nombre del entorno es obligatorio.</div>
                             </div>
                         </div>
                         <div class="info-group">
-                            <label for="tipoEntorno" class="block text-900 text-xl font-medium mb-2 text-2xl">Tipo de entorno <span class="required-asterisk">*</span></label>
-                            <select id="tipoEntorno" formControlName="tipoEntorno" class="w-full mb-5 p-4 text-xl border-round placeholder-lg">
-                                <option class="text-23l"value="">Seleccione un tipo</option>
+                            <label for="type" class="block text-900 font-medium mb-2 text-2xl">Tipo de entorno <span class="required-asterisk">*</span></label>
+                            <select id="type" formControlName="type" class="w-full mb-5 p-4 text-xl border-round placeholder-lg">
+                                <option class="text-23l" value="">Seleccione un tipo</option>
                                 <option *ngFor="let tipo of tipoEntornos" [value]="tipo">{{ tipo }}</option>
                             </select>
-                            <div *ngIf="entornoForm.controls['tipoEntorno'].invalid && entornoForm.controls['tipoEntorno'].touched" class="error-message">
-                                <div *ngIf="entornoForm.controls['tipoEntorno'].errors?.['required']"  class="text-lg">El tipo de entorno es obligatorio.</div>
+                            <div *ngIf="entornoForm.controls['type'].invalid && entornoForm.controls['type'].touched" class="error-message">
+                                <div *ngIf="entornoForm.controls['type'].errors?.['required']" class="text-lg">El tipo de entorno es obligatorio.</div>
                             </div>
                         </div>
+                        
                     </div>
 
                     <div class="info-row">
                         <div class="info-group">
-                            <label for="descripcion" class="block text-900 text-xl font-medium mb-2 text-2xl" >Descripción</label>
-                            <textarea id="descripcion" formControlName="descripcion" placeholder="Descripción" class="w-full mb-5 p-inputtextarea text-xl" rows="5" style="padding:1rem" ></textarea>
+                            <label for="descriptionW" class="block text-900 text-xl font-medium mb-2 text-2xl">Descripción</label>
+                            <textarea id="descriptionW" formControlName="descriptionW" placeholder="Descripción" class="w-full mb-5 p-inputtextarea text-xl" rows="5" style="padding:1rem"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="info-row  ">
+                        <div class="info-group ">
+                            <label for="date_start" class="block text-900 text-xl font-medium mb-2 text-2xl">Fecha de inicio <span class="required-asterisk">*</span></label>
+                            <div class="">
+                                <p-calendar 
+                                    id="date_start"
+                                    formControlName="date_start"
+                                    [iconDisplay]="'input'"
+                                    [showIcon]="true"
+                                    dateFormat="yy-mm-dd"
+                                    class="w-full m-1"
+                                    [inputStyle]="{'width': '100%'}"
+                                    [style]="{'width': '100%'}"
+                                ></p-calendar>
+                            </div>
+                            <div *ngIf="entornoForm.controls['date_start'].invalid && entornoForm.controls['date_start'].touched" class="error-message">
+                                <div *ngIf="entornoForm.controls['date_start'].errors?.['required']" class="text-lg">La fecha de inicio es obligatoria.</div>
+                            </div>
+                        </div>
+                        <div class="info-group ">
+                            <label for="date_end" class=" block text-900 text-xl font-medium mb-2 text-2xl">Fecha de fin <span class="required-asterisk">*</span></label>
+                            <div class=" pl-6">
+                                <p-calendar 
+                                    id="date_end"
+                                    formControlName="date_end"
+                                    [iconDisplay]="'input'"
+                                    [showIcon]="true"
+                                    dateFormat="yy-mm-dd"
+                                    class="w-full "
+                                    [inputStyle]="{'width': '100%'}"
+                                    [style]="{'width': '100%'}"
+                                ></p-calendar>
+                            </div>
+                            <div *ngIf="entornoForm.controls['date_end'].invalid && entornoForm.controls['date_end'].touched" class="error-message">
+                                <div *ngIf="entornoForm.controls['date_end'].errors?.['required']" class="text-lg">La fecha de fin es obligatoria.</div>
+                            </div>
                         </div>
                     </div>
                     
-                    
-                </form>
-            </div><p-button label="Solicitar unirse" class="request-button" [disabled]="entornoForm.invalid"></p-button>
+                 </form> 
+                 <div class="flex justify-content-center mt-4">
+                   <p-button label="Crear Entorno" class="request-button" [disabled]="entornoForm.invalid" (click)="onSubmit()"></p-button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

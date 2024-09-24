@@ -5,6 +5,8 @@ import { CrearEntornoRoutingModule } from './crear-entorno-routing.module';
 import { CrearEComponent } from './crearE/crear-e/crear-e.component';
 import { ReactiveFormsModule } from '@angular/forms'; 
 import { InputTextModule } from 'primeng/inputtext'; 
+import { CalendarModule } from 'primeng/calendar';
+import { Calendar } from '@fullcalendar/core';
 
 @NgModule({
   declarations: [
@@ -15,7 +17,8 @@ import { InputTextModule } from 'primeng/inputtext';
     CrearEntornoRoutingModule,
     ButtonModule,
     ReactiveFormsModule, 
-    InputTextModule 
+    InputTextModule,
+    CalendarModule 
     
    
   ]
