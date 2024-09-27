@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ServiciosCEService } from '../../servicios/servicios-ce.service';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { WorkEnvService } from '../../../../service/work-env.service';
 
 @Component({
   selector: 'app-crear-e',
@@ -18,7 +19,8 @@ export class CrearEComponent implements OnInit {
     private fb: FormBuilder,
     private serviciosCE: ServiciosCEService,
     private router: Router,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private workEnvService: WorkEnvService
   ) {}
 
   ngOnInit(): void {
@@ -51,12 +53,14 @@ export class CrearEComponent implements OnInit {
         ...this.entornoForm.value,
         logicdeleted: 0
       };
-
+      console.log('Datos del entorno a enviar:', entornoData);
       this.serviciosCE.newWorkEnv(entornoData).subscribe({
         next: (response) => {
           if (response.message === 'ok') {
             this.messageService.add({severity:'success', summary: 'Éxito', detail: 'Entorno de trabajo creado exitosamente'});
-            this.router.navigate(['/dashboard']);
+            setTimeout(() => {
+              this.router.navigate(['/Dash']);
+            }, 1000); // Espera 1 segundo antes de navegar
           } else {
             this.messageService.add({severity:'error', summary: 'Error', detail: 'No se pudo crear el entorno de trabajo'});
           }

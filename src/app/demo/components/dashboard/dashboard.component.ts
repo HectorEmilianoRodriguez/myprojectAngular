@@ -1,19 +1,22 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MenuItem } from 'primeng/api';
-import { WorkEnvService } from '../../service/work-env.service';
+import { WorkEnvService, WorkEnvCounts } from '../../service/work-env.service';
 import { Subscription } from 'rxjs';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss'
 })
-export class DashboardComponent implements OnInit, OnDestroy {
-    private subscription: Subscription = new Subscription();
 
-    totalactividesevaluar = 0;
-    totalsolicitudes = 0;
-    totalactividesporexpirar = 0;
-    totalcomentarios = 0;
+export class DashboardComponent implements OnInit, OnDestroy {
+    totalMisEntornos: number = 0;
+    totalEntornosParticipo: number = 0;
+    totalActividadesEvaluar: number = 0;
+    totalComentarios: number = 0;
+    totalActividadesPorExpirar: number = 0;
+    totalSolicitudes: number = 0;
 
     misEntornos: MenuItem[] = [
         {
@@ -81,29 +84,46 @@ export class DashboardComponent implements OnInit, OnDestroy {
         },
     ];
 
-    constructor(public workEnvService: WorkEnvService) {}
+    private navigationSubscription: Subscription;
+
+    constructor(
+        private workEnvService: WorkEnvService,
+        private router: Router
+    ) {}
 
     ngOnInit() {
-        this.refreshCounts();
+        this.loadCounts();
+        this.navigationSubscription = this.router.events.pipe(
+            filter((event): event is NavigationEnd => event instanceof NavigationEnd)
+        ).subscribe(() => {
+            if (this.router.url === '/dashboard') {
+                this.loadCounts();
+            }
+        });
     }
 
     ngOnDestroy() {
-        this.subscription.unsubscribe();
+        if (this.navigationSubscription) {
+            this.navigationSubscription.unsubscribe();
+        }
     }
 
-    refreshCounts() {
-        this.subscription.add(
-            this.workEnvService.refreshCounts().subscribe({
-                error: (err) => console.error('Error fetching workEnv counts', err)
-            })
-        );
-    }
-
-    get totalMisEntornos() {
-        return this.workEnvService.ownerEnvs();
-    }
-
-    get totalEntornosParticipo() {
-        return this.workEnvService.participantEnvs();
+    loadCounts() {
+        this.workEnvService.getCounts().subscribe({
+            next: (counts: WorkEnvCounts) => {
+                console.log('Conteos recibidos:', counts);
+                this.totalMisEntornos = counts.owner;
+                this.totalEntornosParticipo = counts.participant;
+                // Los otros contadores se mantienen en 0 por ahora
+                this.totalActividadesEvaluar = 0;
+                this.totalComentarios = 0;
+                this.totalActividadesPorExpirar = 0;
+                this.totalSolicitudes = 0;
+            },
+            error: (error) => {
+                console.error('Error al obtener conteos:', error);
+                // Manejar el error apropiadamente
+            }
+        });
     }
 }
