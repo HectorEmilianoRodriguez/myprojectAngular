@@ -1,6 +1,8 @@
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { LayoutService } from './service/app.layout.service';
+import { WorkEnvMService } from '../demo/components/workenvm/servicios/workenvm-service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'app-menu',
@@ -9,73 +11,77 @@ import { LayoutService } from './service/app.layout.service';
 export class AppMenuComponent implements OnInit {
 
     model: any[] = [];
+    dataWork: any;
+    id: string | null = null;  // Inicializamos el id en null
+    data: any;
 
-    constructor(public layoutService: LayoutService) { }
+    constructor(
+        public layoutService: LayoutService,
+        private workEnvMService: WorkEnvMService,
+        private route: ActivatedRoute,
+        private router: Router
+    ) {}
 
     ngOnInit() {
-        this.model = [
-            {
-                label: 'Home',
-                items: [
-                    { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/Dash'] }
-                ]
-            },
+        // Usamos paramMap para obtener el 'id'
+        this.route.paramMap.subscribe(paramMap => {
+            this.id = paramMap.get('id');  // Obtenemos el id de los parámetros de la URL
 
-            {
-                label: 'Opciones de espacios de trabajo',
-                items: [
-                   { label: 'Crear nuevo espacio', icon: 'pi pi-fw pi-plus', routerLink: ['crearE/crearEntorno'] },
-                   { label: 'Unirme a un espacio', icon: 'pi pi-fw pi-users', routerLink: ['/union/unionEntorno'] },
-                   { label: 'Mis solicitudes', icon: 'pi pi-fw pi-bell', routerLink: ['/uikit/input'] },
-                ]  
-            },
+            if (this.id) {
+                this.workEnvMService.getWorkEnv(this.id).subscribe({
+                    next: (res) => {
+                        this.data = res;
+                        
 
-            {
-                label: 'Utilities',
-                items: [
-                    { label: 'PrimeIcons', icon: 'pi pi-fw pi-prime', routerLink: ['/utilities/icons'] },
-                    { label: 'PrimeFlex', icon: 'pi pi-fw pi-desktop', url: ['https://www.primefaces.org/primeflex/'], target: '_blank' },
-                ]
-            },
-            {
-               
-                label: 'Espacios de trabajo', icon: 'pi pi-fw pi-bookmark',
-                        items: [
+                        // Configura el menú aquí después de obtener los datos
+                        this.model = [
                             {
-                                label: 'Mis espacios', icon: 'pi pi-fw pi-book',
+                                label: 'Home',
                                 items: [
-                                    { label: 'Entorno A', icon: 'pi pi-fw pi-bookmark' },
-                                    { label: 'Entorno B', icon: 'pi pi-fw pi-bookmark' },
-                                    { label: 'Entorno C', icon: 'pi pi-fw pi-bookmark' },
+                                    { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/Dash'] },
+                                    { label: `${this.data.title}`, icon: 'pi pi-pencil', routerLink: [`/WorkEnv/Edit/${this.data?.idWorkEnv}`] }
                                 ]
                             },
                             {
-                                label: 'Espacios donde participo', icon: 'pi pi-fw pi-book',
+                                label: 'Opciones',
                                 items: [
-                                    { label: 'Entorno A', icon: 'pi pi-fw pi-bookmark' },
-                                    { label: 'Entorno B', icon: 'pi pi-fw pi-bookmark' },
-                                    { label: 'Entorno C', icon: 'pi pi-fw pi-bookmark' },
+                                    { label: 'Miembros', icon: 'pi pi-fw pi-users', routerLink: [`/WorkEnv/${this.data?.idWorkEnv}/Members/${this.data?.idWorkEnv}`] },
+                                    { label: 'Calendario de actividades', icon: 'pi pi-fw pi-calendar', routerLink: ['/union/unionEntorno'] },
+                                    { label: 'Recursos', icon: 'pi pi-fw pi-folder-open', routerLink: ['/uikit/input'] },
+                                    ...(this.data.privilege === 1 || this.data.privilege === 2 ? [{ label: 'Grupos de tareas', icon: 'pi pi-fw pi-book', routerLink: [`/WorkEnv/${this.data?.idWorkEnv}/GroupTasks`] }] : []),
+                                    {
+                                        label: 'Tableros', icon: 'pi pi-fw pi-book',
+                                        items: [
+                                            { label: 'Tablero A', icon: 'pi pi-fw pi-bookmark' },
+                                            { label: 'Tablero B', icon: 'pi pi-fw pi-bookmark' },
+                                            { label: 'Tablero C', icon: 'pi pi-fw pi-bookmark' }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                label: 'Archivados', icon: 'pi pi-fw pi-folder',
+                                items: [
+                                    {
+                                        label: 'Tableros archivados', icon: 'pi pi-fw pi-book',
+                                        items: [
+                                            { label: 'Entorno A', icon: 'pi pi-fw pi-bookmark' },
+                                            { label: 'Entorno B', icon: 'pi pi-fw pi-bookmark' },
+                                            { label: 'Entorno C', icon: 'pi pi-fw pi-bookmark' }
+                                        ]
+                                    }
                                 ]
                             }
-
-                        ]
-
-            },
-            
-            {
-                label: 'Restauracion y respaldo',
-                items: [
-                    {
-                        label: 'Restauración', icon: 'pi pi-fw pi-question', routerLink: ['/respaldo/respaldo']
+                        ];
                     },
-                    {
-                        label: 'Respaldo', icon: 'pi pi-fw pi-question', routerLink: ['/restauracion/restauracion']
-                    },
-                    {
-                        label: 'Recursos', icon: 'pi pi-fw pi-search', url: ['https://github.com/primefaces/sakai-ng'], target: '_blank'
+                    error: (err) => {
+                        console.error('Error al obtener datos:', err);
+                        this.router.navigate(['/Dash']);
                     }
-                ]
+                });
+            } else {
+                console.log('No se encontró el ID en la URL');
             }
-        ];
+        });
     }
 }
