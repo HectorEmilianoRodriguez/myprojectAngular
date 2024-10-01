@@ -14,7 +14,7 @@ import { AuthGuard } from './demo/components/auth/guards/auth.guard';import { Ap
             {
                 path: '', component: AppLayoutComponent,
                 children: [
-                    { path: 'Dash', loadChildren: () => import('./demo/components/dashboard/dashboard.module').then(m => m.DashboardModule), },
+                    { path: 'Dash', loadChildren: () => import('./demo/components/dashboard/dashboard.module').then(m => m.DashboardModule),canActivate: [AuthGuard] },
                     { path: 'uikit', loadChildren: () => import('./demo/components/uikit/uikit.module').then(m => m.UIkitModule) },
                     { path: 'utilities', loadChildren: () => import('./demo/components/utilities/utilities.module').then(m => m.UtilitiesModule) },
                     { path: 'documentation', loadChildren: () => import('./demo/components/documentation/documentation.module').then(m => m.DocumentationModule) },
