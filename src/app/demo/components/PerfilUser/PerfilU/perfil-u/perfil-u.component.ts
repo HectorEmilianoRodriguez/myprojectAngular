@@ -7,12 +7,10 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-perfil-u',
-  standalone: true,
-  imports: [ 
-  
-  ],
+ 
   templateUrl: './perfil-u.component.html',
-  styleUrl: './perfil-u.component.scss'
+  styleUrl: './perfil-u.component.scss',
+  providers: [MessageService]
 })
 export class PerfilUComponent implements OnInit{
   perfilForm : FormGroup;
