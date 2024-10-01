@@ -11,18 +11,38 @@ export interface WorkEnvCounts {
   participant: number;
 }
 
+export interface WorkActiCounts {
+  idWorkEnv: number,
+  nameW: string,
+  NotSeenComments: number,
+  requests: number,
+  AlmostExpiredOrExpiredActivities: number,
+  PendingApprovalActivities: number
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class WorkEnvService {
   private url = environment.URL_BACK;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getCounts(): Observable<WorkEnvCounts> {
-    console.log('Solicitando conteos de entornos de trabajo al backend');
     return this.http.get<WorkEnvCounts>(`${this.url}api/CountMyWorkEnvs`, {
-      withCredentials: true 
+      withCredentials: true
+    });
+  }
+
+  getActivitis(): Observable<WorkActiCounts>{
+    return this.http.get<WorkActiCounts>(`${this.url}api/getAllStatsUser/8`, {
+      withCredentials: true
+    });
+  }
+
+  getEntornos(): Observable<any>{
+    return this.http.get<any>(`${this.url}api/getMyWorkEnvs`, {
+      withCredentials: true
     });
   }
 }
