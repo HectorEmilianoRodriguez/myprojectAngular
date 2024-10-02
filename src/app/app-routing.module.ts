@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { NotfoundComponent } from './demo/components/notfound/notfound.component';
 import { AppLayoutComponent } from "./layout/app.layout.component";
 import { AuthGuard } from './demo/components/auth/guards/auth.guard';import { AppLayoutComponent as WorkEnvAppLayoutComponent} from './layoutw/app.layout.component';
-import { InvitationComponent } from './demo/components/Invitation/invitation.component';
+
 @NgModule({
     imports: [
         RouterModule.forRoot([
@@ -36,9 +36,9 @@ import { InvitationComponent } from './demo/components/Invitation/invitation.com
             {
                 path: 'WorkEnv/:id', component: WorkEnvAppLayoutComponent,
                 children: [
-
-                    { path: 'Members/:id', loadChildren: () => import('./demo/components/workenvm/workenvm.module').then(m => m.WorkEnvModule), canActivate: [AuthGuard] }
-
+                    { path: 'Members/:id', loadChildren: () => import('./demo/components/workenvm/workenvm.module').then(m => m.WorkEnvModule), canActivate: [AuthGuard] },
+                    { path: 'Reports/:id', loadChildren: () => import('./demo/components/reports/report-component/report-module.module').then(m => m.ReportModuleModule), canActivate: [AuthGuard]},
+                    { path: 'Board/:id/:idb',  loadChildren: () => import('./demo/components/board/board.module').then(m => m.BoardModule), canActivate: [AuthGuard]}
                 ]
 
             },

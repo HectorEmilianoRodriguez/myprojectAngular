@@ -18,7 +18,10 @@ import { AppConfigModule } from './config/config.module';
 import { AppSidebarComponent } from "./app.sidebar.component";
 import { AppLayoutComponent } from "./app.layout.component";
 import { CommonModule } from '@angular/common';
-
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 @NgModule({ 
     
     
@@ -30,6 +33,8 @@ import { CommonModule } from '@angular/common';
         AppSidebarComponent,
         AppLayoutComponent,
     ],
+   
+
     exports: [AppLayoutComponent], imports: [BrowserModule,
         CommonModule,
         FormsModule,
@@ -41,5 +46,8 @@ import { CommonModule } from '@angular/common';
         InputSwitchModule,
         RippleModule,
         RouterModule,
-        AppConfigModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
+        DialogModule,
+        ButtonModule,
+        ToastModule,
+        AppConfigModule], providers: [provideHttpClient(withInterceptorsFromDi()),  MessageService ] })
 export class AppLayoutModule { }

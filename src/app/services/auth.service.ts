@@ -64,4 +64,8 @@ export class AuthService {
         console.error('An error occurred:', error);
         return throwError(() => new Error('Algo salió mal. Por favor, inténtelo de nuevo más tarde.'));
     }
+
+    getUser(): Observable<any>{
+        return this.http.get(this.url + 'api/user', { withCredentials: true });
+    }
 }

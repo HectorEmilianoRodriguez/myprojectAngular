@@ -40,4 +40,18 @@ export class WorkEnvMService {
     return this.http.get(this.url+ `api/inviteMember/${email}/${workenv}/${idWork}`, {withCredentials: true}) as Observable<any>;
    }    
 
+   getBoards(id: number){
+    return this.http.get(this.url+ `api/getBoards/${id}`, {withCredentials: true}) as Observable<any>;
+   }
+
+   newBoard(idw: number, name: string, desc:string){
+    return this.http.post(this.url + `api/newBoard`, {
+
+        idWorkEnv: idw,
+        nameB: name,
+        descriptionB: desc
+
+    }, {withCredentials: true});
+   }
+
 }
