@@ -87,7 +87,10 @@ export class PerfilUComponent implements OnInit {
     if (this.actualizarArchivos.length > 0) {
       const formData = new FormData();
       formData.append('photo', this.actualizarArchivos[0]);
-      
+      formData.append('name',this.perfilForm.get('name').value);
+      formData.append('password',this.perfilForm.get('password').value);
+      formData.append('email',this.perfilForm.get('email').value);
+     
       this.perfilService.actualizarUserPerfil(formData).subscribe(
         (response) => {
           this.mensajeService.add({severity: 'success', summary: 'Éxito', detail: 'Foto de perfil actualizada'});

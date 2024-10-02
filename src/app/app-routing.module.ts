@@ -23,11 +23,7 @@ import { AuthGuard } from './demo/components/auth/guards/auth.guard';import { Ap
                     { path: 'union', loadChildren: () => import('./demo/components/UnionEntorno/union-entorno.module').then(m => m.UnionEntornoModule),canActivate: [AuthGuard]  },
                     { path: 'crearE', loadChildren: () => import('./demo/components/crearEntorno/crear-entorno.module').then(m => m.CrearEntornoModule),canActivate: [AuthGuard]  },
                     { path: 'respaldo', loadChildren: () => import('./demo/components/ResA/respaldo-routing.module').then(m => m.RespaldoRoutingModule),canActivate: [AuthGuard]  },
-<<<<<<< HEAD
                     { path: 'perfiles', loadChildren: () => import('./demo/components/PerfilUser/perfil-user.module').then(m => m.PerfilUserModule), canActivate: [AuthGuard] },
-=======
-                    { path: 'perfiles', loadChildren: () => import('./demo/components/PerfilUser/perfil-user-routing.module').then(m => m.PerfilUserRoutingModule),canActivate: [AuthGuard] },
->>>>>>> e2aa7c5017610834d443b2ef678652ce961887e7
                     
                     
                 ]
