@@ -26,6 +26,7 @@ export class LoginComponent {
 
     password: any;
     Correo: any;
+    resetCorreo: any;
     visible: boolean = false; //CONTRALa el modal del recuperar contraseña
 
     constructor(public layoutService: LayoutService, private messageService: MessageService,
@@ -38,6 +39,8 @@ export class LoginComponent {
     ngOnInit(): void {
         this.app.hideLoading();
     }
+
+    
     enviarLogin() {
         this.app.showLoading();
         let data = {
@@ -71,8 +74,7 @@ export class LoginComponent {
             }
         })
     }
-
-
+ 
     // Método para mostrar el modal
     showDialog() {
         this.visible = true;
@@ -81,26 +83,16 @@ export class LoginComponent {
 
     //metodo para manejar la recuperacion 
 
-    recuperarContraseña() {
+    recuperarContrasena() {
 
         this.app.showLoading();
-        let data = {
-            email: this.Correo,
 
-        }
-
-        this.servicioLogin.recuperarPassword(data).subscribe({
+        this.servicioLogin.recuperarPassword(this.resetCorreo).subscribe({
             next: data => {
-                //mensajes de no logear
-                //his.messageService.add({severity:'info', summary:'Atención', detail:'Recibiras un correo electronico con un enlace de activación para completar el proceso de cambio de contraseña.',sticky: true});
-                //if (typeof data === 'object' && data !== null) {
-                //} else {
-
                 console.log(data);
-                //}
             },
             complete: () => {
-                this.router.navigate(['/Dash']);
+                this.router.navigate(['/landing']);
             },
 
             error: error => {

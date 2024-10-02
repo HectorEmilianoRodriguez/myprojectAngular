@@ -1,12 +1,23 @@
-import { Injectable, signal } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
-interface WorkEnvCounts {
+// sedefine la estructura de los conteos de entornos de trabajo
+
+
+export interface WorkEnvCounts {
   owner: number;
   participant: number;
+}
+
+export interface WorkActiCounts {
+  idWorkEnv: number,
+  nameW: string,
+  NotSeenComments: number,
+  requests: number,
+  AlmostExpiredOrExpiredActivities: number,
+  PendingApprovalActivities: number
 }
 
 @Injectable({
@@ -14,38 +25,24 @@ interface WorkEnvCounts {
 })
 export class WorkEnvService {
   private url = environment.URL_BACK;
-  private ownerCount = signal<number>(0);
-  private participantCount = signal<number>(0);
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('auth_token');
-    return new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+  getCounts(): Observable<WorkEnvCounts> {
+    return this.http.get<WorkEnvCounts>(`${this.url}api/CountMyWorkEnvs`, {
+      withCredentials: true
     });
   }
 
-  refreshCounts(): Observable<WorkEnvCounts> {
-    console.log('Solicitando conteos de entornos de trabajo al backend');
-    return this.http.get<WorkEnvCounts>(`${this.url}api/CountMyWorkEnvs`, {
-      headers: this.getHeaders(),
+  getActivitis(): Observable<WorkActiCounts>{
+    return this.http.get<WorkActiCounts>(`${this.url}api/getAllStatsUser/8`, {
       withCredentials: true
-    }).pipe(
-      tap(counts => {
-        console.log('Conteos recibidos del backend:', counts);
-        this.ownerCount.set(counts.owner);
-        this.participantCount.set(counts.participant);
-        console.log(`Conteos actualizados - Dueño: ${this.ownerCount()}, Participante: ${this.participantCount()}`);
-      })
-    );
+    });
   }
 
-  ownerEnvs(): number {
-    return this.ownerCount();
-  }
-
-  participantEnvs(): number {
-    return this.participantCount();
+  getEntornos(): Observable<any>{
+    return this.http.get<any>(`${this.url}api/getMyWorkEnvs`, {
+      withCredentials: true
+    });
   }
 }

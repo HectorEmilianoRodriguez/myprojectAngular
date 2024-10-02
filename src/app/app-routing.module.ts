@@ -28,6 +28,7 @@ import { AuthGuard } from './demo/components/auth/guards/auth.guard';import { Ap
                     { path: 'union', loadChildren: () => import('./demo/components/UnionEntorno/union-entorno.module').then(m => m.UnionEntornoModule),canActivate: [AuthGuard]  },
                     { path: 'crearE', loadChildren: () => import('./demo/components/crearEntorno/crear-entorno.module').then(m => m.CrearEntornoModule),canActivate: [AuthGuard]  },
                     { path: 'respaldo', loadChildren: () => import('./demo/components/ResA/respaldo-routing.module').then(m => m.RespaldoRoutingModule),canActivate: [AuthGuard]  },
+                    { path: 'perfiles', loadChildren: () => import('./demo/components/PerfilUser/perfil-user.module').then(m => m.PerfilUserModule), canActivate: [AuthGuard] },
                     
                     
                 ]
@@ -49,6 +50,7 @@ import { AuthGuard } from './demo/components/auth/guards/auth.guard';import { Ap
             { path: 'landing', loadChildren: () => import('./demo/components/landing/landing.module').then(m => m.LandingModule) },
             { path: 'registro', loadChildren: () => import('./demo/components/componentes/componentes.module').then(m => m.ComponentesModule) },
             { path: 'verificacion', loadChildren: () => import('./demo/components/verificacion/verificacion-auth.module').then(m => m.VerificacionAuthModule) },
+            { path: 'resetPassword', loadChildren: () => import('./demo/components/recovertPassword/recovert.module').then(m => m.RecovertModule)},
             { path: 'notfound', component: NotfoundComponent },
             { path: '**', redirectTo: '/notfound' }
    
