@@ -5,6 +5,10 @@ import { CrearEntornoRoutingModule } from './crear-entorno-routing.module';
 import { CrearEComponent } from './crearE/crear-e/crear-e.component';
 import { ReactiveFormsModule } from '@angular/forms'; 
 import { InputTextModule } from 'primeng/inputtext'; 
+import { CalendarModule } from 'primeng/calendar';
+import { Calendar } from '@fullcalendar/core';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { DropdownModule } from 'primeng/dropdown';
 
 @NgModule({
   declarations: [
@@ -15,8 +19,10 @@ import { InputTextModule } from 'primeng/inputtext';
     CrearEntornoRoutingModule,
     ButtonModule,
     ReactiveFormsModule, 
-    InputTextModule 
-    
+    InputTextModule,
+    CalendarModule,
+    InputTextareaModule,
+    DropdownModule
    
   ]
 })

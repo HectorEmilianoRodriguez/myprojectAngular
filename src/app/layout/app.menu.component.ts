@@ -24,10 +24,10 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Opciones de espacios de trabajo',
                 items: [
-                   { label: 'Crear nuevo espacio', icon: 'pi pi-fw pi-plus', routerLink: ['crearE/crearEntorno'] },
-                   { label: 'Unirme a un espacio', icon: 'pi pi-fw pi-users', routerLink: ['/union/unionEntorno'] },
-                   { label: 'Mis solicitudes', icon: 'pi pi-fw pi-bell', routerLink: ['/uikit/input'] },
-                ]  
+                    { label: 'Crear nuevo espacio', icon: 'pi pi-fw pi-plus', routerLink: ['crearE/crearEntorno'] },
+                    { label: 'Unirme a un espacio', icon: 'pi pi-fw pi-users', routerLink: ['/union/unionEntorno'] },
+                    { label: 'Mis solicitudes', icon: 'pi pi-fw pi-bell', routerLink: ['/uikit/input'] },
+                ]
             },
 
             {
@@ -38,30 +38,30 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
-               
-                label: 'Espacios de trabajo', icon: 'pi pi-fw pi-bookmark',
-                        items: [
-                            {
-                                label: 'Mis espacios', icon: 'pi pi-fw pi-book',
-                                items: [
-                                    { label: 'Entorno A', icon: 'pi pi-fw pi-bookmark' },
-                                    { label: 'Entorno B', icon: 'pi pi-fw pi-bookmark' },
-                                    { label: 'Entorno C', icon: 'pi pi-fw pi-bookmark' },
-                                ]
-                            },
-                            {
-                                label: 'Espacios donde participo', icon: 'pi pi-fw pi-book',
-                                items: [
-                                    { label: 'Entorno A', icon: 'pi pi-fw pi-bookmark' },
-                                    { label: 'Entorno B', icon: 'pi pi-fw pi-bookmark' },
-                                    { label: 'Entorno C', icon: 'pi pi-fw pi-bookmark' },
-                                ]
-                            }
 
+                label: 'Espacios de trabajo', icon: 'pi pi-fw pi-bookmark',
+                items: [
+                    {
+                        label: 'Mis espacios', icon: 'pi pi-fw pi-book',
+                        items: [
+                            { label: 'Entorno A', icon: 'pi pi-fw pi-bookmark' },
+                            { label: 'Entorno B', icon: 'pi pi-fw pi-bookmark' },
+                            { label: 'Entorno C', icon: 'pi pi-fw pi-bookmark' },
                         ]
+                    },
+                    {
+                        label: 'Espacios donde participo', icon: 'pi pi-fw pi-book',
+                        items: [
+                            { label: 'Entorno A', icon: 'pi pi-fw pi-bookmark' },
+                            { label: 'Entorno B', icon: 'pi pi-fw pi-bookmark' },
+                            { label: 'Entorno C', icon: 'pi pi-fw pi-bookmark' },
+                        ]
+                    }
+
+                ]
 
             },
-            
+
             {
                 label: 'Restauracion y respaldo',
                 items: [
