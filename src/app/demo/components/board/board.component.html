@@ -1,0 +1,97 @@
+<div class="card">
+    <div class="p-d-flex p-jc-between p-ai-center" style="display: flex; align-items: center; gap: 10px;">
+        <strong>{{dataBoard.nameB}}</strong>
+        <strong>{{dataBoard.descriptionB}}</strong>
+
+        <p-button *ngIf="(dataBoard.logicdeleted === 0 && (privilege === 1 || privilege === 2))"
+                  label="Editar tablero"
+                  class="request-button"
+                  (click)="DialogEditBoard()">
+        </p-button>
+
+        <button *ngIf="(dataBoard.logicdeleted !== 0 && (privilege === 1 || privilege === 2))"
+                pButton type="button"
+                label="Desarchivar"
+                class="p-button-success"
+                (click)="UnDeleteBoard()">
+        </button>
+
+        <button *ngIf="(dataBoard.logicdeleted === 0 && (privilege === 1 || privilege === 2))"
+                pButton type="button"
+                label="Archivar"
+                class="p-button-danger"
+                (click)="DeleteBoard()">
+        </button>
+    </div>
+</div>
+
+<!-- Indicador de carga -->
+<div *ngIf="loading" class="loading-indicator">
+    <p>Cargando...</p> <!-- Puedes reemplazar esto por un spinner o un componente de carga -->
+</div>
+
+<div class="kanban" *ngIf="!loading">
+    <div *ngFor="let list of lists" 
+     class="list" 
+     [ngStyle]="{'background-color': list.color}" 
+     cdkDropList 
+     (cdkDropListDropped)="drop($event)" 
+     [cdkDropListData]="list.cards"
+     [cdkDropListConnectedTo]="connectedDropLists" 
+     [id]="list.idList.toString()">
+    <h3>{{list.name}}</h3>
+    <p>{{list.description}}</p>
+
+    <div class="cards">
+        <div *ngFor="let card of list.cards" 
+             cdkDrag 
+             class="card-item" 
+             (click)="openActivityModal(card)">
+            <p>{{card?.nameC}}</p>
+        </div>
+        <div *ngIf="list.cards.length === 0">
+            <p>No hay tarjetas disponibles.</p>
+        </div>
+    </div>
+</div>
+
+
+</div>
+
+
+<!-- Diálogo para editar tablero -->
+<p-dialog header="Editar tablero" [(visible)]="displayNewBoardDialog" [modal]="true" [closable]="true" [responsive]="true" [style]="{width: '400px'}" [baseZIndex]="10000">
+    <div class="p-fluid" style="margin-top: 20px;">
+        <div class="field" style="margin-bottom: 20px;">
+            <label for="name" style="font-weight: bold;">Nombre del tablero</label>
+            <input id="name" type="text" pInputText [(ngModel)]="newBoardName" placeholder="{{dataBoard.nameB}}" style="width: 100%; font-size: 16px;" />
+        </div>
+        <div class="field" style="margin-bottom: 20px;">
+            <label for="description" style="font-weight: bold;">Descripción</label>
+            <textarea id="description" pInputTextarea [(ngModel)]="newBoardDescription" placeholder="{{dataBoard.descriptionB}}" style="width: 100%; height: 50%; font-size: 16px;"></textarea>
+        </div>
+    </div>
+    <p-footer>
+        <div class="p-d-flex p-jc-between p-ai-center" style="gap: 10px;">
+            <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text p-button-lg" (click)="displayNewBoardDialog = false" style="width: 45%; height: 45%; "></button>
+            <button pButton label="Actualizar" icon="pi pi-check" class="p-button-lg" (click)="EditBoard()" style="width: 45%; height: 45%; "></button>
+        </div>
+    </p-footer>
+</p-dialog>
+
+<!-- Diálogo para detalles de la actividad -->
+<p-dialog header="Detalles de la Actividad" [(visible)]="displayActivityDialog" [modal]="true" [closable]="true" [responsive]="true" [style]="{width: '400px'}" [baseZIndex]="10000">
+    <div class="p-fluid">
+        <h4>{{selectedActivity.nameC}}</h4>
+        <p><strong>Descripción:</strong> {{selectedActivity.descriptionC}}</p>
+        <p><strong>Fecha de vencimiento:</strong> {{selectedActivity.end_date}}</p>
+        <p><strong>Estado:</strong> {{selectedActivity.done ? 'Completada' : 'Pendiente'}}</p>
+        <p><strong>Importante:</strong> {{selectedActivity.important ? 'Sí' : 'No'}}</p>
+    </div>
+    <p-footer>
+        <button pButton label="Cerrar" icon="pi pi-times" (click)="displayActivityDialog = false"></button>
+    </p-footer>
+</p-dialog>
+
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>

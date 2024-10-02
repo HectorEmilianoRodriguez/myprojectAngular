@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -12,14 +15,16 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { ToastModule } from 'primeng/toast';
 import { SliderModule } from 'primeng/slider';
 import { RatingModule } from 'primeng/rating';
-import { WorkEnvRoutingModule } from './workenvm-routing.module';
-import { WorkEnvComponent } from './workenvm.component';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReportRoutingModule } from './report-routing.module';
+import { ReportComponentComponent } from './report-component.component';
+import { CalendarModule } from 'primeng/calendar'; // Importación de p-calendar
+import { DialogModule } from 'primeng/dialog'; // Importa el módulo de diálogo
+
 @NgModule({
-    imports: [
-		CommonModule,
-        WorkEnvRoutingModule,
+  declarations: [ReportComponentComponent],
+  imports: [
+    	CommonModule,
+   	 	ReportRoutingModule,
 		FormsModule,
 		TableModule,
 		RatingModule,
@@ -32,9 +37,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 		DropdownModule,
 		ProgressBarModule,
 		ToastModule,
-        ConfirmDialogModule,
-        ReactiveFormsModule
-	],
-    declarations: [WorkEnvComponent]
+		ConfirmDialogModule,
+		ReactiveFormsModule,
+		CalendarModule,
+		DialogModule,
+		MultiSelectModule
+	
+  ]
 })
-export class WorkEnvModule { }
+export class ReportModuleModule { }

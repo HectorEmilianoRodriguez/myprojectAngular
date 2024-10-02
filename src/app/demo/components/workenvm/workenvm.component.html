@@ -1,1 +1,94 @@
-<h1>Test</h1>
+<div class="card">
+    <h5>Miembros del espacio de trabajo</h5>
+    <p-table [value]="customers1" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
+        [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading" [paginator]="true" [filterDelay]="300">
+        
+        <!-- Encabezados de la tabla -->
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="name">
+                    <i class="pi pi-user"></i> Nombre de usuario
+                    <p-columnFilter type="text" field="name" display="menu"></p-columnFilter>
+                </th>
+                <th pSortableColumn="email">
+                    <i class="pi pi-envelope"></i> Correo
+                    <p-columnFilter type="text" field="email" display="menu"></p-columnFilter>
+                </th>
+                <th pSortableColumn="privilege">
+                    <i class="pi pi-flag"></i> Privilegio
+                    <p-columnFilter type="dropdown" field="privilege" [showClear]="true" [options]="privileges"
+                        optionLabel="label" optionValue="value" display="menu"></p-columnFilter>
+                </th>
+                <th pSortableColumn="date">
+                    <i class="pi pi-calendar"></i> Registrado desde
+                    <p-columnFilter type="date" field="date" display="menu" dateFormat="yy-mm-dd"></p-columnFilter>
+                </th>
+
+                
+                <th *ngIf="privilege == 1 || privilege == 2">
+                    <i class="pi pi-pencil"></i> Acciones
+                </th>
+            </tr>
+        </ng-template>
+
+        <!-- Cuerpo de la tabla -->
+        <ng-template pTemplate="body" let-customer let-i="rowIndex">
+            <tr>
+                <td>{{customer.name}}</td>
+                <td>{{customer.email}}</td>
+                <td>
+                    <select *ngIf = 'privilege == 1 && customer.privilege == 0 || privilege == 2 && customer.privilege == 0 || privilege == 2 && customer.privilege == 1' [(ngModel)]="customer.privilege" (change)="onPrivilegeChange(customer)">
+                        <option *ngFor="let privilege of privileges" [value]="privilege.value">{{privilege.label}}</option>
+                    </select>
+                    
+                    <p  *ngIf = 'customer.privilege == 2' >
+                        Líder <i class = "pi pi-star-fill"></i>
+                    </p>
+
+                    <p *ngIf = 'customer.privilege == 1 && privilege == 1 || customer.privilege == 1 && privilege == 0 '>
+                        Coordinador <i class = "pi pi-star"></i>
+                    </p>
+
+                    <p *ngIf = 'customer.privilege == 0 && privilege == 0'>
+                        Miembro
+                    </p>
+
+                </td>
+                <td>{{customer.date | date}}</td>
+                <td *ngIf="privilege == 1 || privilege == 2">
+
+                    <button  *ngIf = 'customer.privilege == 0 || customer.privilege == 1' class="button" [disabled]="!customer.editedPrivilege" (click)="editPrivilege(customer)">Editar</button>
+                    <button  *ngIf = 'customer.privilege == 0 || customer.privilege == 1' class="button" [disabled] = "privilege == 1 && customer.privilege == 1"  (click)="deleteMember(customer)">Eliminar</button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<div class="card">
+    <form [formGroup]="invitarform" (ngSubmit)="onSubmit()">
+        <label class="block text-900 font-medium mb-2">
+            Invitar a una persona al espacio de trabajo<span class="required-asterisk">*</span>
+        </label>
+    
+        <input
+            type="text"
+            formControlName="emailinvitar"
+            placeholder="email@gmail.com"
+            pInputText
+            class="w-full mb-5 p-4 text-xl border-round placeholder-lg"
+            [ngClass]="{ 'is-invalid': invitarform.get('emailinvitar')?.invalid && invitarform.get('emailinvitar')?.touched }"
+        />
+        <p-button label="Invitar" class="request-button" [disabled] = "!invitarform.valid" type = "submit"></p-button>
+        <div *ngIf="invitarform.get('emailinvitar')?.invalid && invitarform.get('emailinvitar')?.touched" class="invalid-feedback">
+            <div *ngIf="invitarform.get('emailinvitar')?.errors?.required">El correo electrónico es requerido.</div>
+            <div *ngIf="invitarform.get('emailinvitar')?.errors?.email">Formato de correo electrónico inválido.</div>
+        </div>
+    
+    </form>
+</div>
+
+
+<!-- Diálogo de confirmación -->
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>

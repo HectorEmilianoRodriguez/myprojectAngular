@@ -2,6 +2,27 @@
     <ng-container *ngFor="let item of model; let i = index;">
         <li app-menuitem *ngIf="!item.separator" [item]="item" [index]="i" [root]="true"></li>
         <li *ngIf="item.separator" class="menu-separator"></li>
-    </ng-container>
-  
+    </ng-container> 
 </ul>
+
+<!-- Diálogo para crear un nuevo tablero con botones más grandes -->
+<p-dialog header="Nuevo Tablero" [(visible)]="displayNewBoardDialog" [modal]="true" [closable]="true" [responsive]="true" [style]="{width: '400px'}" [baseZIndex]="10000">
+    <div class="p-fluid" style="margin-top: 20px;">
+        <div class="field" style="margin-bottom: 20px;">
+            <label for="name" style="font-weight: bold;">Nombre del tablero</label>
+            <input id="name" type="text" pInputText [(ngModel)]="newBoardName" placeholder="Escribe el nombre del tablero" style="width: 100%; font-size: 16px;" />
+        </div>
+        <div class="field" style="margin-bottom: 20px;">
+            <label for="description" style="font-weight: bold;">Descripción</label>
+            <textarea id="description" pInputTextarea [(ngModel)]="newBoardDescription" placeholder="Añade una descripción..." style="width: 100%; height: 50%; font-size: 16px;"></textarea>
+        </div>
+    </div>
+    <p-footer>
+        <div class="p-d-flex p-jc-between p-ai-center" style="gap: 10px;">
+            <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text p-button-lg" (click)="displayNewBoardDialog = false" style="width: 45%; height: 45%; "></button>
+            <button pButton label="Crear" icon="pi pi-check" class="p-button-lg" (click)="createNewBoard()" style="width: 45%; height: 45%; "></button>
+        </div>
+    </p-footer>
+</p-dialog>
+
+<p-toast></p-toast>

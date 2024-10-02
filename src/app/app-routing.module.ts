@@ -10,6 +10,11 @@ import { AuthGuard } from './demo/components/auth/guards/auth.guard';import { Ap
             {
                 path: '', redirectTo: '/auth/login', pathMatch: 'full'
             },
+            {
+                path: 'Invitation', loadChildren: () => import('./demo/components/Invitation/invitation.module').then(m => m.InvitationModule)
+
+            },
+           
 
             {
                 path: '', component: AppLayoutComponent,
@@ -28,26 +33,28 @@ import { AuthGuard } from './demo/components/auth/guards/auth.guard';import { Ap
                     
                 ]
             },
-
+           
             {
-                path: '', component: WorkEnvAppLayoutComponent,
+                path: 'WorkEnv/:id', component: WorkEnvAppLayoutComponent,
                 children: [
-
-                    { path: 'WorkEnv', loadChildren: () => import('./demo/components/workenvm/workenvm.module').then(m => m.WorkEnvModule) }
-
+                    { path: 'Members/:id', loadChildren: () => import('./demo/components/workenvm/workenvm.module').then(m => m.WorkEnvModule), canActivate: [AuthGuard] },
+                    { path: 'Reports/:id', loadChildren: () => import('./demo/components/reports/report-component/report-module.module').then(m => m.ReportModuleModule), canActivate: [AuthGuard]},
+                    { path: 'Board/:id/:idb',  loadChildren: () => import('./demo/components/board/board.module').then(m => m.BoardModule), canActivate: [AuthGuard]}
                 ]
 
             },
 
 
-
+           
             { path: 'auth', loadChildren: () => import('./demo/components/auth/auth.module').then(m => m.AuthModule) },
             { path: 'landing', loadChildren: () => import('./demo/components/landing/landing.module').then(m => m.LandingModule) },
             { path: 'registro', loadChildren: () => import('./demo/components/componentes/componentes.module').then(m => m.ComponentesModule) },
             { path: 'verificacion', loadChildren: () => import('./demo/components/verificacion/verificacion-auth.module').then(m => m.VerificacionAuthModule) },
             { path: 'resetPassword', loadChildren: () => import('./demo/components/recovertPassword/recovert.module').then(m => m.RecovertModule)},
             { path: 'notfound', component: NotfoundComponent },
-            { path: '**', redirectTo: '/notfound' },
+            { path: '**', redirectTo: '/notfound' }
+   
+            
         ], { scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled', onSameUrlNavigation: 'reload' })
     ],
     exports: [RouterModule]

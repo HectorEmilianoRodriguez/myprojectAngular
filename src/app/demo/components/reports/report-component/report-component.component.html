@@ -1,0 +1,309 @@
+<div class="card">
+    <h4>Generación de reportes</h4>
+    <p>Seleccione el tipo de reporte que desea generar:</p>
+    
+    <div class="report-section">
+        <div class="report-item">
+            <h5>Reporte de productividad</h5>
+            <button pButton type="button" label="Generar" icon="pi pi-chart-line" class="p-button-success" (click)="productivity()"></button>
+        </div>
+        <div class="report-item">
+            <h5>Reporte de participación</h5>
+            <button pButton type="button" label="Generar" icon="pi pi-users" class="p-button-info" (click)="participation()"></button>
+        </div>
+        <div class="report-item">
+            <h5>Plazos de entrega</h5>
+            <button pButton type="button" label="Generar" icon="pi pi-calendar" class="p-button-warning" (click)="deadlines()"></button>
+        </div>
+        <div class="report-item">
+            <h5>Plazos de entrega (Coordinador)</h5>
+            <button pButton type="button" label="Generar" icon="pi pi-briefcase" class="p-button-warning" (click)="coordinatorDeadlines()"></button>
+        </div>
+        <div class="report-item">
+            <h5>Tareas pendientes</h5>
+            <button pButton type="button" label="Generar" icon="pi pi-list" class="p-button-danger" (click)="pendingTasks()"></button>
+        </div>
+        <div class="report-item">
+            <h5>Tareas completadas</h5>
+            <button pButton type="button" label="Generar" icon="pi pi-check" class="p-button-success" (click)="completedTasks()"></button>
+        </div>
+    </div>
+</div>
+
+<p-dialog header="Seleccione los criterios para la generación del reporte" [(visible)]="showProductivityDialog" modal="true" [style]="{width: '80%', height: 'auto'}" [closable]="false">
+    <div class="p-fluid responsive-dialog">
+        <div class="p-field">
+            <label for="miembro">Generar reporte para el miembro: </label>
+            <p-dropdown 
+                [options]="customers1" 
+                optionLabel="name" 
+                [(ngModel)]="selectedMember" 
+                placeholder="Seleccione un miembro" 
+                [showClear]="true" 
+                [appendTo]="'body'">
+            </p-dropdown>
+        </div>
+        <div class="p-field">
+            <label for="startDate">Fecha de inicio</label>
+            <p-calendar 
+                [(ngModel)]="startDate" 
+                dateFormat="yy-mm-dd" 
+                placeholder="Seleccione la fecha de inicio" 
+                [showIcon]="true" 
+                appendTo="body" 
+                (onSelect)="onDateSelect('start', $event)">
+            </p-calendar>
+        </div>
+        <div class="p-field">
+            <label for="endDate">Fecha de fin</label>
+            <p-calendar 
+                [(ngModel)]="endDate" 
+                dateFormat="yy-mm-dd" 
+                placeholder="Seleccione la fecha de fin" 
+                [showIcon]="true" 
+                appendTo="body" 
+                (onSelect)="onDateSelect('end', $event)">
+            </p-calendar>
+        </div>
+        <div class="p-field" style="text-align: center;">
+            <label for="labels">Mostrar actividades etiquetadas, frecuencia por etiqueta: </label>
+            <p-multiSelect 
+                [options]="labels" 
+                [(ngModel)]="selectedLabels" 
+                optionLabel="nameL" 
+                placeholder="Seleccione etiquetas" 
+                [showClear]="true" 
+                [appendTo]="'body'" 
+                style="display: inline-block; width: 90%;">
+                <ng-template let-label pTemplate="item">
+                    <div class="label-item" [style.backgroundColor]="label.colorL" style="padding: 5px; border-radius: 5px; color: white;">
+                        {{ label.nameL }}
+                    </div>
+                </ng-template>
+            </p-multiSelect>
+        </div>
+    </div>
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" label="Aceptar" (click)="generateProductivityReport()"></button>
+        <button type="button" pButton icon="pi pi-times" label="Cancelar" class="p-button-secondary" (click)="showProductivityDialog = false"></button>
+    </p-footer>
+</p-dialog>
+
+
+
+<p-dialog header="Seleccione los criterios para la generación del reporte" [(visible)]="showParticipantDialog" modal="true" [style]="{width: '80%', height: 'auto'}" [closable]="false">
+    <div class="p-fluid responsive-dialog">
+
+        <div class="p-field">
+            <label for="miembro">Generar reporte para el miembro: </label>
+            <p-dropdown 
+                [options]="customers1" 
+                optionLabel="name" 
+                [(ngModel)]="selectedMember" 
+                placeholder="Seleccione un miembro" 
+                [showClear]="true" 
+                [appendTo]="'body'">
+            </p-dropdown>
+        </div>
+        <div class="p-field">
+            <label for="startDate">Fecha de inicio</label>
+            <p-calendar 
+                [(ngModel)]="startDate" 
+                dateFormat="yy-mm-dd" 
+                placeholder="Seleccione la fecha de inicio" 
+                [showIcon]="true" 
+                appendTo="body" 
+                (onSelect)="onDateSelect('start', $event)">
+            </p-calendar>
+        </div>
+        <div class="p-field">
+            <label for="endDate">Fecha de fin</label>
+            <p-calendar 
+                [(ngModel)]="endDate" 
+                dateFormat="yy-mm-dd" 
+                placeholder="Seleccione la fecha de fin" 
+                [showIcon]="true" 
+                appendTo="body" 
+                (onSelect)="onDateSelect('end', $event)">
+            </p-calendar>
+        </div>
+        <div class="p-field" style="text-align: center;">
+            <label for="labels">Mostrar actividades etiquetadas, frecuencia por etiqueta: </label>
+            <p-multiSelect 
+                [options]="labels" 
+                [(ngModel)]="selectedLabels" 
+                optionLabel="nameL" 
+                placeholder="Seleccione etiquetas" 
+                [showClear]="true" 
+                [appendTo]="'body'" 
+                style="display: inline-block; width: 90%;">
+                <ng-template let-label pTemplate="item">
+                    <div class="label-item" [style.backgroundColor]="label.colorL" style="padding: 5px; border-radius: 5px; color: white;">
+                        {{ label.nameL }}
+                    </div>
+                </ng-template>
+            </p-multiSelect>
+        </div>
+    </div>
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" label="Aceptar" (click)="generateParticipantReport()"></button>
+        <button type="button" pButton icon="pi pi-times" label="Cancelar" class="p-button-secondary" (click)="showParticipantDialog = false"></button>
+    </p-footer>
+</p-dialog>
+  
+
+ 
+<p-dialog header="Seleccione los criterios para la generación del reporte" [(visible)]="showDeliveryMemberDialog" modal="true" [style]="{width: '80%', height: 'auto'}" [closable]="false">
+    <div class="p-fluid responsive-dialog">
+        <div class="p-field">
+            <label for="startDate">Fecha de inicio</label>
+            <p-calendar 
+                [(ngModel)]="startDate" 
+                dateFormat="yy-mm-dd" 
+                placeholder="Seleccione la fecha de inicio" 
+                [showIcon]="true" 
+                appendTo="body" 
+                (onSelect)="onDateSelect('start', $event)">
+            </p-calendar>
+        </div>
+        <div class="p-field">
+            <label for="endDate">Fecha de fin</label>
+            <p-calendar 
+                [(ngModel)]="endDate" 
+                dateFormat="yy-mm-dd" 
+                placeholder="Seleccione la fecha de fin" 
+                [showIcon]="true" 
+                appendTo="body" 
+                (onSelect)="onDateSelect('end', $event)">
+            </p-calendar>
+        </div>
+    </div>
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" label="Aceptar" (click)="generateDeliveryMemberReport()"></button>
+        <button type="button" pButton icon="pi pi-times" label="Cancelar" class="p-button-secondary" (click)="showDeliveryMemberDialog = false"></button>
+    </p-footer>
+</p-dialog> 
+  
+<p-dialog header="Seleccione los criterios para la generación del reporte" [(visible)]="showDeliveryCoordinatorDialog" modal="true" [style]="{width: '80%', height: 'auto'}" [closable]="false">
+    <div class="p-fluid responsive-dialog">
+        <div class="p-field">
+            <label for="startDate">Fecha de inicio</label>
+            <p-calendar 
+                [(ngModel)]="startDate" 
+                dateFormat="yy-mm-dd" 
+                placeholder="Seleccione la fecha de inicio" 
+                [showIcon]="true" 
+                appendTo="body" 
+                (onSelect)="onDateSelect('start', $event)">
+            </p-calendar>
+        </div>
+        <div class="p-field">
+            <label for="endDate">Fecha de fin</label>
+            <p-calendar 
+                [(ngModel)]="endDate" 
+                dateFormat="yy-mm-dd" 
+                placeholder="Seleccione la fecha de fin" 
+                [showIcon]="true" 
+                appendTo="body" 
+                (onSelect)="onDateSelect('end', $event)">
+            </p-calendar>
+        </div>
+    </div>
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" label="Aceptar" (click)="generateDeliveryCoordinatorReport()"></button>
+        <button type="button" pButton icon="pi pi-times" label="Cancelar" class="p-button-secondary" (click)="showDeliveryCoordinatorDialog = false"></button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Seleccione los criterios para la generación del reporte" [(visible)]="showPendingTasksDialog" modal="true" [style]="{width: '80%', height: 'auto'}" [closable]="false">
+    <div class="p-fluid responsive-dialog">
+
+        <div class="p-field" style="text-align: center;">
+            <label for="labels">Seleccionar miembros: </label>
+            <p-multiSelect 
+                [options]="customers1" 
+                [(ngModel)]="selectedMembers" 
+                optionLabel="name" 
+                placeholder="Seleccione miembros" 
+                [showClear]="true" 
+                [appendTo]="'body'" 
+                style="display: inline-block; width: 90%;">
+            </p-multiSelect>
+        </div>
+
+        <div class="p-field">
+            <label for="startDate">Fecha de inicio</label>
+            <p-calendar 
+                [(ngModel)]="startDate" 
+                dateFormat="yy-mm-dd" 
+                placeholder="Seleccione la fecha de inicio" 
+                [showIcon]="true" 
+                appendTo="body" 
+                (onSelect)="onDateSelect('start', $event)">
+            </p-calendar>
+        </div>
+        <div class="p-field">
+            <label for="endDate">Fecha de fin</label>
+            <p-calendar 
+                [(ngModel)]="endDate" 
+                dateFormat="yy-mm-dd" 
+                placeholder="Seleccione la fecha de fin" 
+                [showIcon]="true" 
+                appendTo="body" 
+                (onSelect)="onDateSelect('end', $event)">
+            </p-calendar>
+        </div>
+    </div>
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" label="Aceptar" (click)="generatePendingTasksReport()"></button>
+        <button type="button" pButton icon="pi pi-times" label="Cancelar" class="p-button-secondary" (click)="showPendingTasksDialog = false"></button>
+    </p-footer>
+</p-dialog>   
+
+
+<p-dialog header="Seleccione los criterios para la generación del reporte" [(visible)]="showCompletedTasksDialog" modal="true" [style]="{width: '80%', height: 'auto'}" [closable]="false">
+    <div class="p-fluid responsive-dialog">
+
+        <div class="p-field" style="text-align: center;">
+            <label for="labels">Seleccionar miembros: </label>
+            <p-multiSelect 
+                [options]="customers1" 
+                [(ngModel)]="selectedMembers" 
+                optionLabel="name" 
+                placeholder="Seleccione miembros" 
+                [showClear]="true" 
+                [appendTo]="'body'" 
+                style="display: inline-block; width: 90%;">
+            </p-multiSelect>
+        </div>
+
+        <div class="p-field">
+            <label for="startDate">Fecha de inicio</label>
+            <p-calendar 
+                [(ngModel)]="startDate" 
+                dateFormat="yy-mm-dd" 
+                placeholder="Seleccione la fecha de inicio" 
+                [showIcon]="true" 
+                appendTo="body" 
+                (onSelect)="onDateSelect('start', $event)">
+            </p-calendar>
+        </div>
+        <div class="p-field">
+            <label for="endDate">Fecha de fin</label>
+            <p-calendar 
+                [(ngModel)]="endDate" 
+                dateFormat="yy-mm-dd" 
+                placeholder="Seleccione la fecha de fin" 
+                [showIcon]="true" 
+                appendTo="body" 
+                (onSelect)="onDateSelect('end', $event)">
+            </p-calendar>
+        </div>
+    </div>
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" label="Aceptar" (click)="generateCompletedTasksReport()"></button>
+        <button type="button" pButton icon="pi pi-times" label="Cancelar" class="p-button-secondary" (click)="showCompletedTasksDialog = false"></button>
+    </p-footer>
+</p-dialog>   
+<!-- Notificaciones -->
+<p-toast></p-toast>

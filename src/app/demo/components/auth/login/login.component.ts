@@ -40,6 +40,7 @@ export class LoginComponent {
         this.app.hideLoading();
     }
 
+    
     enviarLogin() {
         this.app.showLoading();
         let data = {
@@ -53,15 +54,10 @@ export class LoginComponent {
                 if (response.message === 'success') {
                     console.log('Cookies después del login:', document.cookie);
                     this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'inicio de sesion Corrrecto' });
-                     this.router.navigate(['/Dash']);     
+                   
                 }
                 else {
-                    if (response.message === 'Credenciales inválidas') {
-                        this.messageService.add({ severity: 'info', summary: 'Informacion', detail: response.message });
-                        this.router.navigate(['/auth/login'])
-                        location.reload();
-                    }
-
+                    this.messageService.add({ severity: 'info', summary: 'Informacion', detail: response.message });
                 }
                 console.log(data);
                 //}
@@ -78,8 +74,7 @@ export class LoginComponent {
             }
         })
     }
-
-
+ 
     // Método para mostrar el modal
     showDialog() {
         this.visible = true;

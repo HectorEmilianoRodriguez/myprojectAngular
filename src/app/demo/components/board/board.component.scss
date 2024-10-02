@@ -1,0 +1,108 @@
+.card {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card > div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+/* Loading Indicator */
+.loading-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 9999;
+}
+
+.loading-indicator p {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.list {
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 550px;
+    height: 60vh;
+    margin: 0 10px; /* Ajustado para márgenes laterales */
+    display: inline-block;
+    
+}
+
+/* Header y tarjetas */
+.list-header {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.list-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.list-description {
+    font-size: 14px;
+    color: #777;
+    margin-top: 5px;
+}
+
+.cards {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.card-item {
+    margin-bottom: 5px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s; /* Agregado transform */
+    background-color: #007bff;
+    color: white;
+}
+
+.card-item:hover {
+    background-color: #0056b3;
+    transform: scale(1.02); /* Efecto de escalado al pasar el ratón */
+}
+
+.no-cards-message {
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.kanban {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 10px;
+    white-space: nowrap;
+}
+
+.cdk-drop-list {
+    display: flex;
+    flex-direction: column;
+    min-height: 100px;
+    padding: 10px;
+    border: 1px dashed #ccc;
+    background-color: #f9f9f9;
+}
