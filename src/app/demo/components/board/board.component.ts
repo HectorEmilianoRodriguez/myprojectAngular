@@ -36,6 +36,10 @@ export class BoardComponent implements OnInit {
     private cdr: ChangeDetectorRef
   ) {}
 
+  DialogEditBoard(){
+    this.displayNewBoardDialog = true;
+  }
+
   ngOnInit() {
     this.ar.paramMap.subscribe(params => {
       this.idb = params.get('idb');
