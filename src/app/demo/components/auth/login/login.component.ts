@@ -26,6 +26,7 @@ export class LoginComponent {
 
     password: any;
     Correo: any;
+    resetCorreo: any;
     visible: boolean = false; //CONTRALa el modal del recuperar contraseña
 
     constructor(public layoutService: LayoutService, private messageService: MessageService,
@@ -38,6 +39,7 @@ export class LoginComponent {
     ngOnInit(): void {
         this.app.hideLoading();
     }
+
     enviarLogin() {
         this.app.showLoading();
         let data = {
@@ -51,10 +53,15 @@ export class LoginComponent {
                 if (response.message === 'success') {
                     console.log('Cookies después del login:', document.cookie);
                     this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'inicio de sesion Corrrecto' });
-                   // this.router.navigate(['/Dash']);
+                     this.router.navigate(['/Dash']);     
                 }
                 else {
-                    this.messageService.add({ severity: 'info', summary: 'Informacion', detail: response.message });
+                    if (response.message === 'Credenciales inválidas') {
+                        this.messageService.add({ severity: 'info', summary: 'Informacion', detail: response.message });
+                        this.router.navigate(['/auth/login'])
+                        location.reload();
+                    }
+
                 }
                 console.log(data);
                 //}
@@ -81,26 +88,16 @@ export class LoginComponent {
 
     //metodo para manejar la recuperacion 
 
-    recuperarContraseña() {
+    recuperarContrasena() {
 
         this.app.showLoading();
-        let data = {
-            email: this.Correo,
 
-        }
-
-        this.servicioLogin.recuperarPassword(data).subscribe({
+        this.servicioLogin.recuperarPassword(this.resetCorreo).subscribe({
             next: data => {
-                //mensajes de no logear
-                //his.messageService.add({severity:'info', summary:'Atención', detail:'Recibiras un correo electronico con un enlace de activación para completar el proceso de cambio de contraseña.',sticky: true});
-                //if (typeof data === 'object' && data !== null) {
-                //} else {
-
                 console.log(data);
-                //}
             },
             complete: () => {
-                this.router.navigate(['/Dash']);
+                this.router.navigate(['/landing']);
             },
 
             error: error => {

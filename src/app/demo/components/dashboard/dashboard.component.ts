@@ -19,18 +19,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     totalSolicitudes: number = 0;
 
     misEntornos: MenuItem[] = [];
-
-
-
-    elementosEntornosParticipo: MenuItem[] = [
-        {
-            label: 'Ver entornos',
-            items: [
-                { label: 'Option 1', icon: 'pi pi-fw pi-calendar' },
-                { label: 'Option 2', icon: 'pi pi-fw pi-calendar' }
-            ]
-        },
-    ];
+    elementosEntornosParticipo: MenuItem[] = [];
 
     actividadesEvaluar: MenuItem[] = [
         {
@@ -123,20 +112,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
             }
 
         })
+        this.getCantEntornos()
+    }
 
+    getCantEntornos() {
         this.workEnvService.getEntornos().subscribe(data => {
 
+            const ownerItems = data.owner
+                .filter(entorno => entorno.privilege === 2) // Filtra por privilegio
+                .map(entorno => ({
+                    label: entorno.title,
+                    icon: 'pi pi-fw pi-calendar',
+                }));
 
-            const ownerItems = data.owner.map(entorno => ({
-                label: entorno.title,
-                icon: 'pi pi-fw pi-calendar', // Cambia el icono si es necesario
-                // Puedes agregar más propiedades aquí si lo necesitas
-            }));
-
-            const participantItems = data.participant.map(entorno => ({
-                label: entorno.title,
-                icon: 'pi pi-fw pi-calendar', // Cambia el icono si es necesario
-            }));
+            const participantItems = data.participant
+                .filter(entorno => entorno.privilege === 2) // Filtra por privilegio
+                .map(entorno => ({
+                    label: entorno.title,
+                    icon: 'pi pi-fw pi-calendar',
+                }));
 
             this.misEntornos = [
                 {
@@ -145,7 +139,34 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 }
             ];
         })
+
+        this.getCantInvEntornos();
     }
 
+    getCantInvEntornos() {
+        this.workEnvService.getEntornos().subscribe(data => {
+
+            const ownerItems = data.owner
+                .filter(entorno => entorno.privilege === 1) // Filtra por privilegio
+                .map(entorno => ({
+                    label: entorno.title,
+                    icon: 'pi pi-fw pi-calendar',
+                }));
+
+            const participantItems = data.participant
+                .filter(entorno => entorno.privilege === 1) // Filtra por privilegio
+                .map(entorno => ({
+                    label: entorno.title,
+                    icon: 'pi pi-fw pi-calendar',
+                }));
+
+            this.elementosEntornosParticipo = [
+                {
+                    label: 'Mis Entornos',
+                    items: [...ownerItems, ...participantItems]
+                }
+            ];
+        })
+    }
 
 }
