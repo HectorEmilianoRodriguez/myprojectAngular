@@ -100,7 +100,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             }
         });
 
-        /*this.workEnvService.getActivitis().subscribe({
+        this.workEnvService.getActivitis().subscribe({
             next: (counts2: WorkActiCounts) => {
                 this.totalActividadesEvaluar = counts2.requests;
                 this.totalComentarios = counts2.NotSeenComments;
@@ -111,8 +111,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 console.error('Error al obtener conteos:', error);
             }
 
-        })*/
-        this.getCantEntornos();
+        })
+        this.getCantEntornos()
     }
 
     getCantEntornos() {
