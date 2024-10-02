@@ -1,105 +1,172 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MenuItem } from 'primeng/api';
-import { Product } from '../../api/product';
-import { ProductService } from '../../service/product.service';
-import { Subscription, debounceTime } from 'rxjs';
-import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { WorkEnvService, WorkEnvCounts, WorkActiCounts } from '../../service/work-env.service';
+import { Subscription } from 'rxjs';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
     templateUrl: './dashboard.component.html',
+    styleUrl: './dashboard.component.scss'
 })
+
 export class DashboardComponent implements OnInit, OnDestroy {
+    totalMisEntornos: number = 0;
+    totalEntornosParticipo: number = 0;
+    totalActividadesEvaluar: number = 0;
+    totalComentarios: number = 0;
+    totalActividadesPorExpirar: number = 0;
+    totalSolicitudes: number = 0;
 
-    items!: MenuItem[];
+    misEntornos: MenuItem[] = [];
+    elementosEntornosParticipo: MenuItem[] = [];
 
-    products!: Product[];
+    actividadesEvaluar: MenuItem[] = [
+        {
+            label: 'Ver actividades',
+            items: [
+                { label: 'Option 1', icon: 'pi pi-fw pi-calendar' },
+                { label: 'Option 2', icon: 'pi pi-fw pi-calendar' }
+            ]
+        },
+    ];
 
-    chartData: any;
+    actividadesAExpirar: MenuItem[] = [
+        {
+            label: 'Ver actividades',
+            items: [
+                { label: 'Option 1', icon: 'pi pi-fw pi-calendar' },
+                { label: 'Option 2', icon: 'pi pi-fw pi-calendar' }
+            ]
+        },
+    ];
 
-    chartOptions: any;
+    comentariosPendientes: MenuItem[] = [
+        {
+            label: 'Ver comentarios',
+            items: [
+                { label: 'Option 1', icon: 'pi pi-fw pi-calendar' },
+                { label: 'Option 2', icon: 'pi pi-fw pi-calendar' },
+                { label: 'Option 3', icon: 'pi pi-fw pi-calendar' },
+                { label: 'Option 4', icon: 'pi pi-fw pi-calendar' }
+            ]
+        },
+    ];
 
-    subscription!: Subscription;
+    solicitudesPendientes: MenuItem[] = [
+        {
+            label: 'Ver solicitudes',
+            items: [
+                { label: 'Option 1', icon: 'pi pi-fw pi-calendar' },
+                { label: 'Option 2', icon: 'pi pi-fw pi-calendar' }
+            ]
+        },
+    ];
 
-    constructor(private productService: ProductService, public layoutService: LayoutService) {
-        this.subscription = this.layoutService.configUpdate$
-        .pipe(debounceTime(25))
-        .subscribe((config) => {
-            this.initChart();
+    private navigationSubscription: Subscription;
+
+    constructor(
+        private workEnvService: WorkEnvService,
+        private router: Router
+    ) { }
+
+    ngOnInit() {
+        this.loadCounts();
+        this.navigationSubscription = this.router.events.pipe(
+            filter((event): event is NavigationEnd => event instanceof NavigationEnd)
+        ).subscribe(() => {
+            if (this.router.url === '/dashboard') {
+                this.loadCounts();
+            }
         });
     }
 
-    ngOnInit() {
-        this.initChart();
-        this.productService.getProductsSmall().then(data => this.products = data);
-
-        this.items = [
-            { label: 'Add New', icon: 'pi pi-fw pi-plus' },
-            { label: 'Remove', icon: 'pi pi-fw pi-minus' }
-        ];
-    }
-
-    initChart() {
-        const documentStyle = getComputedStyle(document.documentElement);
-        const textColor = documentStyle.getPropertyValue('--text-color');
-        const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
-        const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
-
-        this.chartData = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [
-                {
-                    label: 'First Dataset',
-                    data: [65, 59, 80, 81, 56, 55, 40],
-                    fill: false,
-                    backgroundColor: documentStyle.getPropertyValue('--bluegray-700'),
-                    borderColor: documentStyle.getPropertyValue('--bluegray-700'),
-                    tension: .4
-                },
-                {
-                    label: 'Second Dataset',
-                    data: [28, 48, 40, 19, 86, 27, 90],
-                    fill: false,
-                    backgroundColor: documentStyle.getPropertyValue('--green-600'),
-                    borderColor: documentStyle.getPropertyValue('--green-600'),
-                    tension: .4
-                }
-            ]
-        };
-
-        this.chartOptions = {
-            plugins: {
-                legend: {
-                    labels: {
-                        color: textColor
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    ticks: {
-                        color: textColorSecondary
-                    },
-                    grid: {
-                        color: surfaceBorder,
-                        drawBorder: false
-                    }
-                },
-                y: {
-                    ticks: {
-                        color: textColorSecondary
-                    },
-                    grid: {
-                        color: surfaceBorder,
-                        drawBorder: false
-                    }
-                }
-            }
-        };
-    }
-
     ngOnDestroy() {
-        if (this.subscription) {
-            this.subscription.unsubscribe();
+        if (this.navigationSubscription) {
+            this.navigationSubscription.unsubscribe();
         }
     }
+
+    loadCounts() {
+        this.workEnvService.getCounts().subscribe({
+            next: (counts: WorkEnvCounts) => {
+                console.log('Conteos recibidos:', counts);
+                this.totalMisEntornos = counts.owner;
+                this.totalEntornosParticipo = counts.participant;
+            },
+            error: (error) => {
+                console.error('Error al obtener conteos:', error);
+                // Manejar el error apropiadamente
+            }
+        });
+
+        this.workEnvService.getActivitis().subscribe({
+            next: (counts2: WorkActiCounts) => {
+                this.totalActividadesEvaluar = counts2.requests;
+                this.totalComentarios = counts2.NotSeenComments;
+                this.totalActividadesPorExpirar = counts2.AlmostExpiredOrExpiredActivities;
+                this.totalSolicitudes = counts2.PendingApprovalActivities;
+            },
+            error: (error) => {
+                console.error('Error al obtener conteos:', error);
+            }
+
+        })
+        this.getCantEntornos()
+    }
+
+    getCantEntornos() {
+        this.workEnvService.getEntornos().subscribe(data => {
+
+            const ownerItems = data.owner
+                .filter(entorno => entorno.privilege === 2) // Filtra por privilegio
+                .map(entorno => ({
+                    label: entorno.title,
+                    icon: 'pi pi-fw pi-calendar',
+                }));
+
+            const participantItems = data.participant
+                .filter(entorno => entorno.privilege === 2) // Filtra por privilegio
+                .map(entorno => ({
+                    label: entorno.title,
+                    icon: 'pi pi-fw pi-calendar',
+                }));
+
+            this.misEntornos = [
+                {
+                    label: 'Mis Entornos',
+                    items: [...ownerItems, ...participantItems]
+                }
+            ];
+        })
+
+        this.getCantInvEntornos();
+    }
+
+    getCantInvEntornos() {
+        this.workEnvService.getEntornos().subscribe(data => {
+
+            const ownerItems = data.owner
+                .filter(entorno => entorno.privilege === 1) // Filtra por privilegio
+                .map(entorno => ({
+                    label: entorno.title,
+                    icon: 'pi pi-fw pi-calendar',
+                }));
+
+            const participantItems = data.participant
+                .filter(entorno => entorno.privilege === 1) // Filtra por privilegio
+                .map(entorno => ({
+                    label: entorno.title,
+                    icon: 'pi pi-fw pi-calendar',
+                }));
+
+            this.elementosEntornosParticipo = [
+                {
+                    label: 'Mis Entornos',
+                    items: [...ownerItems, ...participantItems]
+                }
+            ];
+        })
+    }
+
 }
