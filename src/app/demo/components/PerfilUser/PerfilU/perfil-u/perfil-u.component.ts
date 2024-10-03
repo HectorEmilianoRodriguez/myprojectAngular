@@ -16,6 +16,8 @@ export class PerfilUComponent implements OnInit, OnDestroy {
   fotoPreview: SafeUrl | null = null;
   actualizarArchivos: File[] = [];
   private objectUrl: string | null = null;
+  mostrarFotoPreview: boolean = false;
+  nombreArchivoSeleccionado: string | null = null;
 
   @ViewChild('fileUpload') fileUpload!: FileUpload;
 
@@ -31,8 +33,6 @@ export class PerfilUComponent implements OnInit, OnDestroy {
       password: ['', [Validators.minLength(6)]],
     });
   }
-
-  mostrarFotoPreview: boolean = false;
 
   ngOnInit() {
     this.cargarUserPerfil();
@@ -93,23 +93,13 @@ export class PerfilUComponent implements OnInit, OnDestroy {
     if (files.length > 0) {
       const file = files[0];
       this.actualizarArchivos = [file];
-      console.log('Archivo seleccionado:', file.name); // Añade este log
+      console.log('Archivo seleccionado:', file.name);
     
-      
-      // Crear preview
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        const result = e.target.result;
-        this.fotoPreview = this.sanitizer.bypassSecurityTrustUrl(result);
-        this.mostrarFotoPreview = true; // Activar la bandera
-    
-      };
-      reader.readAsDataURL(file);
+      //this.nombreArchivoSeleccionado = file.name;
+      this.mostrarFotoPreview = false; // No mostrar la previsualización
 
-      // Extraer base64 para enviar al servidor
-      this.extractBase64(file).then((base64) => {
-        console.log('Base64 extraído:', base64.substring(0, 50) + '...'); // Log primeros 50 caracteres
-      });
+      // Ya no necesitamos crear una previsualización
+      // this.fotoPreview = null;
     }
   }
 
@@ -157,11 +147,11 @@ export class PerfilUComponent implements OnInit, OnDestroy {
         console.log('Respuesta del servidor:', response);
         this.mensajeService.add({severity: 'success', summary: 'Éxito', detail: 'Perfil actualizado correctamente'});
         this.cargarUserFoto(); // Recargar la foto del usuario
-        this.fotoPreview = null; // Limpiar la previsualización
-           this.mostrarFotoPreview = false; // Resetear la bandera
-     
-        this.actualizarArchivos = []; // Limpiar los archivos seleccionados
-        this.limpiarFileUpload(); // Limpiar el componente FileUpload
+        this.fotoPreview = null;
+        this.mostrarFotoPreview = false;
+        this.nombreArchivoSeleccionado = null;
+        this.actualizarArchivos = [];
+        this.limpiarFileUpload();
       },
       (error) => {
         console.error('Error al actualizar el perfil:', error);
