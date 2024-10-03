@@ -91,6 +91,8 @@ export class PerfilUComponent implements OnInit, OnDestroy {
     if (files.length > 0) {
       const file = files[0];
       this.actualizarArchivos = [file];
+      console.log('Archivo seleccionado:', file.name); // Añade este log
+    
       
       // Crear preview
       const reader = new FileReader();
@@ -134,13 +136,14 @@ export class PerfilUComponent implements OnInit, OnDestroy {
 
       if (this.actualizarArchivos.length > 0) {
         const file = this.actualizarArchivos[0];
-        this.extractBase64(file).then((base64) => {
-          formData.append('photo', base64.split(',')[1]); // Enviar solo la parte de datos del base64
-          this.enviarFormulario(formData);
-        });
+        console.log('Preparando para enviar archivo:', file.name);
+        formData.append('photo', file, file.name);
+        console.log('Archivo añadido al formData');
       } else {
-        this.enviarFormulario(formData);
+        console.log('No se seleccionó ningún archivo');
       }
+
+      this.enviarFormulario(formData);
     }
   }
 
