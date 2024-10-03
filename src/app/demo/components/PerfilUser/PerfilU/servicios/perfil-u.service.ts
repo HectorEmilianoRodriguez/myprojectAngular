@@ -27,6 +27,8 @@ export class PerfilUService {
   }
 
   ObtenerFotoUser(): Observable<Blob> {
+    const timestamp = new Date().getTime();
+
     return this.http.get(`${this.url}api/getUserPhoto`, { responseType: 'blob', withCredentials: true })
       .pipe(
         catchError((error: HttpErrorResponse) => {

@@ -32,6 +32,8 @@ export class PerfilUComponent implements OnInit, OnDestroy {
     });
   }
 
+  mostrarFotoPreview: boolean = false;
+
   ngOnInit() {
     this.cargarUserPerfil();
     this.cargarUserFoto();
@@ -99,6 +101,8 @@ export class PerfilUComponent implements OnInit, OnDestroy {
       reader.onload = (e: any) => {
         const result = e.target.result;
         this.fotoPreview = this.sanitizer.bypassSecurityTrustUrl(result);
+        this.mostrarFotoPreview = true; // Activar la bandera
+    
       };
       reader.readAsDataURL(file);
 
@@ -154,6 +158,8 @@ export class PerfilUComponent implements OnInit, OnDestroy {
         this.mensajeService.add({severity: 'success', summary: 'Éxito', detail: 'Perfil actualizado correctamente'});
         this.cargarUserFoto(); // Recargar la foto del usuario
         this.fotoPreview = null; // Limpiar la previsualización
+           this.mostrarFotoPreview = false; // Resetear la bandera
+     
         this.actualizarArchivos = []; // Limpiar los archivos seleccionados
         this.limpiarFileUpload(); // Limpiar el componente FileUpload
       },
