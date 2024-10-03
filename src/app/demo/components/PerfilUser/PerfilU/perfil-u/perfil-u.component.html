@@ -1,5 +1,5 @@
-<div class="card p-3" style="min-height: 500px;">
-    <h5 class="text-center mb-4">Perfil de Usuario</h5>
+<div class="card p-3 shadow-1" style="min-height: 500px; background-color: #eff7ff;">
+    <h5 class="text-center mb-4 font-bold text-3xl" style="color: #333333;">Perfil de Usuario</h5>
     <div class="grid">
         <div class="col-12 md:col-8">
             <form [formGroup]="perfilForm" (ngSubmit)="onSubmit()">
@@ -43,7 +43,7 @@
                         (onSelect)="onFileSelected($event)"
                         [auto]="false"
                         [customUpload]="true"
-                        styleClass="p-button-raised p-button-secondary">
+                        styleClass="p-button-raised background-color: #eff7ff;">
                     </p-fileUpload>
                 </div>
             </div>
