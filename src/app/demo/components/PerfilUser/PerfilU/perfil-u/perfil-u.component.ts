@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PerfilUService } from '../servicios/perfil-u.service';
 import { MessageService } from 'primeng/api';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { FileUpload } from 'primeng/fileupload';
 
 @Component({
   selector: 'app-perfil-u',
@@ -15,6 +16,8 @@ export class PerfilUComponent implements OnInit, OnDestroy {
   fotoPreview: SafeUrl | null = null;
   actualizarArchivos: File[] = [];
   private objectUrl: string | null = null;
+
+  @ViewChild('fileUpload') fileUpload!: FileUpload;
 
   constructor(
     private fb: FormBuilder,
@@ -71,9 +74,8 @@ export class PerfilUComponent implements OnInit, OnDestroy {
 
   cargarUserFoto() {
     this.perfilService.ObtenerFotoUser().subscribe(
-      (blob: Blob) => {
-        // Convertir el Blob a una URL de objeto
-        this.objectUrl = URL.createObjectURL(blob);
+      (response: Blob) => {
+        this.objectUrl = URL.createObjectURL(response);
         this.fotoUser = this.sanitizer.bypassSecurityTrustUrl(this.objectUrl);
       },
       (error) => {
@@ -90,14 +92,37 @@ export class PerfilUComponent implements OnInit, OnDestroy {
       const file = files[0];
       this.actualizarArchivos = [file];
       
-      // Crear preview usando FileReader
+      // Crear preview
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.fotoPreview = this.sanitizer.bypassSecurityTrustUrl(e.target.result);
+        const result = e.target.result;
+        this.fotoPreview = this.sanitizer.bypassSecurityTrustUrl(result);
       };
       reader.readAsDataURL(file);
+
+      // Extraer base64 para enviar al servidor
+      this.extractBase64(file).then((base64) => {
+        console.log('Base64 extraído:', base64.substring(0, 50) + '...'); // Log primeros 50 caracteres
+      });
     }
   }
+
+  extractBase64 = async (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      try {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          resolve(reader.result as string);
+        };
+        reader.onerror = (error) => {
+          reject(error);
+        };
+      } catch (e) {
+        reject(e);
+      }
+    });
+  };
 
   onSubmit() {
     if (this.perfilForm.valid) {
@@ -109,10 +134,13 @@ export class PerfilUComponent implements OnInit, OnDestroy {
 
       if (this.actualizarArchivos.length > 0) {
         const file = this.actualizarArchivos[0];
-        formData.append('photo', file);
+        this.extractBase64(file).then((base64) => {
+          formData.append('photo', base64.split(',')[1]); // Enviar solo la parte de datos del base64
+          this.enviarFormulario(formData);
+        });
+      } else {
+        this.enviarFormulario(formData);
       }
-
-      this.enviarFormulario(formData);
     }
   }
 
@@ -124,6 +152,7 @@ export class PerfilUComponent implements OnInit, OnDestroy {
         this.cargarUserFoto(); // Recargar la foto del usuario
         this.fotoPreview = null; // Limpiar la previsualización
         this.actualizarArchivos = []; // Limpiar los archivos seleccionados
+        this.limpiarFileUpload(); // Limpiar el componente FileUpload
       },
       (error) => {
         console.error('Error al actualizar el perfil:', error);
@@ -131,4 +160,11 @@ export class PerfilUComponent implements OnInit, OnDestroy {
       }
     );
   }
+
+  limpiarFileUpload() {
+    if (this.fileUpload) {
+      this.fileUpload.clear(); // Esto limpiará el archivo seleccionado
+    }
+  }
 }
+

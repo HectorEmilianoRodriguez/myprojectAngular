@@ -21,7 +21,7 @@
                 <label>Foto de Perfil</label>
                 <img [src]="fotoUser" alt="Foto de perfil" style="max-width: 200px; max-height: 200px; display: block; margin-bottom: 10px;">
                 <img *ngIf="fotoPreview" [src]="fotoPreview" alt="Previsualización de la nueva foto" style="max-width: 200px; max-height: 200px; display: block; margin-bottom: 10px;">
-                <p-fileUpload 
+                <p-fileUpload #fileUpload
                     mode="basic" 
                     chooseLabel="Seleccionar Foto" 
                     name="photo" 
