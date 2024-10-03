@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PerfilUService } from '../servicios/perfil-u.service';
 import { MessageService } from 'primeng/api';
@@ -9,10 +9,12 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
   templateUrl: './perfil-u.component.html',
   styleUrls: ['./perfil-u.component.scss'],
 })
-export class PerfilUComponent implements OnInit {
+export class PerfilUComponent implements OnInit, OnDestroy {
   perfilForm: FormGroup;
   fotoUser: SafeUrl | null = null;
-  actualizarArchivos: any[] = [];
+  fotoPreview: SafeUrl | null = null;
+  actualizarArchivos: File[] = [];
+  private objectUrl: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -30,6 +32,12 @@ export class PerfilUComponent implements OnInit {
   ngOnInit() {
     this.cargarUserPerfil();
     this.cargarUserFoto();
+  }
+
+  ngOnDestroy() {
+    if (this.objectUrl) {
+      URL.revokeObjectURL(this.objectUrl);
+    }
   }
 
   cargarUserPerfil() {
@@ -63,63 +71,64 @@ export class PerfilUComponent implements OnInit {
 
   cargarUserFoto() {
     this.perfilService.ObtenerFotoUser().subscribe(
-      (blob) => {
-        if (blob) {
-          const objectURL = URL.createObjectURL(blob);
-          this.fotoUser = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-        } else {
-          this.fotoUser = 'assets/default-profile-picture.png';
-        }
+      (blob: Blob) => {
+        // Convertir el Blob a una URL de objeto
+        this.objectUrl = URL.createObjectURL(blob);
+        this.fotoUser = this.sanitizer.bypassSecurityTrustUrl(this.objectUrl);
       },
       (error) => {
         console.error('Error al cargar la foto del usuario:', error);
-        this.fotoUser = 'assets/default-profile-picture.png';
+        this.fotoUser = './assets/demo/images/login/avatar.png';
         this.mensajeService.add({severity: 'error', summary: 'Error', detail: 'No se pudo cargar la foto de perfil'});
       }
     );
   }
 
   onFileSelected(event: any) {
-    this.actualizarArchivos = event.files;
-  }
-
-  onUpload(event: any) {
-    if (this.actualizarArchivos.length > 0) {
-      const formData = new FormData();
-      formData.append('photo', this.actualizarArchivos[0]);
-      formData.append('name',this.perfilForm.get('name').value);
-      formData.append('password',this.perfilForm.get('password').value);
-      formData.append('email',this.perfilForm.get('email').value);
-     
-      this.perfilService.actualizarUserPerfil(formData).subscribe(
-        (response) => {
-          this.mensajeService.add({severity: 'success', summary: 'Éxito', detail: 'Foto de perfil actualizada'});
-          this.cargarUserFoto();
-        },
-        (error) => {
-          this.mensajeService.add({severity: 'error', summary: 'Error', detail: 'No se pudo actualizar la foto de perfil'});
-        }
-      );
+    const files = event.files;
+    if (files.length > 0) {
+      const file = files[0];
+      this.actualizarArchivos = [file];
+      
+      // Crear preview usando FileReader
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.fotoPreview = this.sanitizer.bypassSecurityTrustUrl(e.target.result);
+      };
+      reader.readAsDataURL(file);
     }
   }
 
   onSubmit() {
     if (this.perfilForm.valid) {
       const formData = new FormData();
-      formData.append('name', this.perfilForm.get('name')?.value);
-      formData.append('email', this.perfilForm.get('email')?.value);
+      formData.append('userName', this.perfilForm.get('name')?.value);
       if (this.perfilForm.get('password')?.value) {
         formData.append('password', this.perfilForm.get('password')?.value);
       }
 
-      this.perfilService.actualizarUserPerfil(formData).subscribe(
-        (response) => {
-          this.mensajeService.add({severity: 'success', summary: 'Éxito', detail: 'Perfil actualizado correctamente'});
-        },
-        (error) => {
-          this.mensajeService.add({severity: 'error', summary: 'Error', detail: 'No se pudo actualizar el perfil'});
-        }
-      );
+      if (this.actualizarArchivos.length > 0) {
+        const file = this.actualizarArchivos[0];
+        formData.append('photo', file);
+      }
+
+      this.enviarFormulario(formData);
     }
+  }
+
+  private enviarFormulario(formData: FormData) {
+    this.perfilService.actualizarUserPerfil(formData).subscribe(
+      (response) => {
+        console.log('Respuesta del servidor:', response);
+        this.mensajeService.add({severity: 'success', summary: 'Éxito', detail: 'Perfil actualizado correctamente'});
+        this.cargarUserFoto(); // Recargar la foto del usuario
+        this.fotoPreview = null; // Limpiar la previsualización
+        this.actualizarArchivos = []; // Limpiar los archivos seleccionados
+      },
+      (error) => {
+        console.error('Error al actualizar el perfil:', error);
+        this.mensajeService.add({severity: 'error', summary: 'Error', detail: 'No se pudo actualizar el perfil'});
+      }
+    );
   }
 }
