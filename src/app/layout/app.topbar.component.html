@@ -1,4 +1,4 @@
-<div class="layout-topbar">
+<div class="layout-topbar" style="display: flex; justify-content: space-between; align-items: center;">
     <!-- Esta es la parte del logo y la hamburguesa -->
     <div style="flex: 1; display: flex; align-items: center;">
         <a class="layout-topbar-logo" routerLink="">
@@ -10,13 +10,15 @@
             (click)="layoutService.onMenuToggle()">
             <i class="pi pi-bars"></i>
         </button>
+    </div>
 
+    <!-- Parte de las opciones de usuario y notificaciones -->
+    <div class="topbar-profile" style="display: flex; align-items: center; margin-left: auto;">
         <!-- Botón de notificaciones -->
-        <div style="margin-left: 20px;">
-            <p-button icon="pi pi-bell" [rounded]="true" [text]="true" severity="warning " /></div>
+        <div style="margin-right: 20px;">
+            <p-button icon="pi pi-bell" [rounded]="true" [text]="true" severity="warning"></p-button>
+        </div>
 
-    <!-- Parte de las opciones de usuario -->
-    <div class="topbar-profile" style="position: relative; display: flex; align-items: center;">
         <button type="button" class="p-element topbar-profile-button p-link" (click)="toggleOpciones()"
             style="display: flex; align-items: center; background: none; border: none; cursor: pointer;">
             <div style="width: 32px; height: 32px; border-radius: 50%; overflow: hidden; margin-right: 8px; display: flex; justify-content: center; align-items: center; background-color: #f0f0f0;">
@@ -51,5 +53,4 @@
             </a>
         </ul>
     </div>
-    
 </div>
