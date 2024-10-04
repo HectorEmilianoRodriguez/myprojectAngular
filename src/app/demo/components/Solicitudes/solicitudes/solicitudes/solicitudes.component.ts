@@ -25,18 +25,36 @@ export class SolicitudesComponent implements OnInit {
   }
 
   acceptRequest(idUser: number, idWorkEnv: number) {
-    this.serviciosService.acceptRequest(idUser, idWorkEnv).subscribe(() => {
-      this.loadPendingApprovals(); // Recargar las solicitudes después de aceptar
+    this.serviciosService.acceptRequest(idUser, idWorkEnv).subscribe((response) => {
+        if (response.success === "updated") {
+            // Llama a la función para notificar al usuario
+            this.serviciosService.notifyUserApprobedOrNot(idWorkEnv.toString(), idUser, 1).subscribe(() => {
+                console.log('Notificación enviada al usuario.');
+            }, error => {
+                console.error('Error al enviar la notificación:', error);
+            });
+            alert('Solicitud aprobada con éxito.');
+        }
+        this.loadPendingApprovals(); // Recargar las solicitudes después de aceptar
     }, error => {
-      console.error('Error al aprobar la solicitud:', error); // Manejo de errores
+        console.error('Error al aprobar la solicitud:', error); // Manejo de errores
     });
   }
 
   rejectRequest(idJoinUserWork: number) {
-    this.serviciosService.rejectRequest(idJoinUserWork).subscribe(() => {
-      this.loadPendingApprovals(); // Recargar las solicitudes después de rechazar
+    this.serviciosService.rejectRequest(idJoinUserWork).subscribe((response) => {
+        if (response.success === "updated") {
+            // Llama a la función para notificar al usuario
+            this.serviciosService.notifyUserApprobedOrNot(idJoinUserWork.toString(), idJoinUserWork, 0).subscribe(() => {
+                console.log('Notificación enviada al usuario.');
+            }, error => {
+                console.error('Error al enviar la notificación:', error);
+            });
+            alert('Solicitud rechazada con éxito.');
+        }
+        this.loadPendingApprovals(); // Recargar las solicitudes después de rechazar
     }, error => {
-      console.error('Error al rechazar la solicitud:', error); // Manejo de errores
+        console.error('Error al rechazar la solicitud:', error); // Manejo de errores
     });
   }
 }
