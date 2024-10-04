@@ -16,7 +16,7 @@ import { AuthGuard } from './demo/components/auth/guards/auth.guard';import { Ap
             },
            
 
-            {
+            { 
                 path: '', component: AppLayoutComponent,
                 children: [
                     { path: 'Dash', loadChildren: () => import('./demo/components/dashboard/dashboard.module').then(m => m.DashboardModule),canActivate: [AuthGuard] },
@@ -29,6 +29,8 @@ import { AuthGuard } from './demo/components/auth/guards/auth.guard';import { Ap
                     { path: 'crearE', loadChildren: () => import('./demo/components/crearEntorno/crear-entorno.module').then(m => m.CrearEntornoModule),canActivate: [AuthGuard]  },
                     { path: 'respaldo', loadChildren: () => import('./demo/components/ResA/respaldo-routing.module').then(m => m.RespaldoRoutingModule),canActivate: [AuthGuard]  },
                     { path: 'perfiles', loadChildren: () => import('./demo/components/PerfilUser/perfil-user.module').then(m => m.PerfilUserModule), canActivate: [AuthGuard] },
+                    { path: 'solicitud', loadChildren: () => import('./demo/components/Solicitudes/solicitud-routing.module').then(m => m.SolicitudRoutingModule), canActivate: [AuthGuard] },
+                    
                     
                     
                 ]

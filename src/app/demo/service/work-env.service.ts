@@ -35,7 +35,7 @@ export class WorkEnvService {
   }
 
   getActivitis(): Observable<WorkActiCounts>{
-    return this.http.get<WorkActiCounts>(`${this.url}api/getAllStatsUser/8`, {
+    return this.http.get<WorkActiCounts>(`${this.url}api/getAllStatsUser/`, {
       withCredentials: true
     });
   }

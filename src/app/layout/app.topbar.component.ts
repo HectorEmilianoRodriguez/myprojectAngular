@@ -1,14 +1,18 @@
-import { Component, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, ElementRef, ViewChild, HostListener,OnInit,ChangeDetectorRef } from '@angular/core';
 import { AppLayoutComponent } from './app.layout.component';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { LayoutService } from "./service/app.layout.service";
 import { AuthService } from 'src/app/services/auth.service';
+
+import { PerfilUService } from '../demo/components/PerfilUser/PerfilU/servicios/perfil-u.service';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+
 @Component({
     selector: 'app-topbar',
     templateUrl: './app.topbar.component.html'
 })
-export class AppTopBarComponent {
+export class AppTopBarComponent implements OnInit {
 
     items!: MenuItem[];
 
@@ -19,11 +23,22 @@ export class AppTopBarComponent {
     @ViewChild('topbarmenu') menu!: ElementRef;
 
     opcionesDesplegadas: boolean = false;
+    fotoUser: SafeUrl | null = null;
+    nombreUsuario: string = '';
+    isLoadingPhoto: boolean = false;
+
+
     constructor(
         public layoutService: LayoutService,
         private router: Router,
         private appLayoutComponent: AppLayoutComponent,
-        private authService: AuthService
+        private authService: AuthService,
+        private perfilService: PerfilUService,
+        private sanitizer: DomSanitizer,
+
+        private cdr: ChangeDetectorRef
+
+
     ) { }
 
     ngOnInit() {
@@ -54,8 +69,35 @@ export class AppTopBarComponent {
 
         ];
 
+        this.cargarDatosUsuario();
+    }
+ 
+    cargarDatosUsuario() {
+        this.perfilService.obtenerUserPerfil().subscribe(
+            (data) => {
+                if (data && data.name) {
+                    this.nombreUsuario = data.name;
+                }
+            },
+            (error) => {
+                console.error('Error al cargar el perfil del usuario:', error);
+            }
+        );
+
+        this.perfilService.ObtenerFotoUser().subscribe(
+            (response: Blob) => {
+                const objectUrl = URL.createObjectURL(response);
+                this.fotoUser = this.sanitizer.bypassSecurityTrustUrl(objectUrl);
+            },
+            (error) => {
+                console.error('Error al cargar la foto del usuario:', error);
+                this.fotoUser = './assets/demo/images/login/avatar.png';
+            }
+        );
     }
 
+    
+  
 
     salir() {
 
@@ -103,4 +145,6 @@ export class AppTopBarComponent {
     ocultarOpciones() {
         this.opcionesDesplegadas = false;
     }
+
+
 }

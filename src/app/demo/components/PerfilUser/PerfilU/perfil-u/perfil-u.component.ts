@@ -56,6 +56,8 @@ export class PerfilUComponent implements OnInit, OnDestroy {
             email: data.email
           });
           console.log('Formulario actualizado con datos del usuario');
+          
+
         } else {
           console.error('Datos de usuario incompletos o nulos:', data);
           this.mensajeService.add({severity: 'warn', summary: 'Advertencia', detail: 'Datos de usuario incompletos'});
@@ -79,6 +81,7 @@ export class PerfilUComponent implements OnInit, OnDestroy {
       (response: Blob) => {
         this.objectUrl = URL.createObjectURL(response);
         this.fotoUser = this.sanitizer.bypassSecurityTrustUrl(this.objectUrl);
+        
       },
       (error) => {
         console.error('Error al cargar la foto del usuario:', error);
@@ -138,6 +141,7 @@ export class PerfilUComponent implements OnInit, OnDestroy {
       }
 
       this.enviarFormulario(formData);
+      
     }
   }
 
@@ -152,6 +156,7 @@ export class PerfilUComponent implements OnInit, OnDestroy {
         this.nombreArchivoSeleccionado = null;
         this.actualizarArchivos = [];
         this.limpiarFileUpload();
+        window.location.reload();
       },
       (error) => {
         console.error('Error al actualizar el perfil:', error);

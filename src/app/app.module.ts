@@ -18,11 +18,12 @@ import { HttpBackend, HttpClient, HttpClientModule } from '@angular/common/http'
 import { RespaldoModule } from './demo/components/ResA/respaldo.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './interceptors/token.interceptor';
+import { SolicitudModule } from './demo/components/Solicitudes/solicitud.module';
 
 
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
-    imports: [AppRoutingModule, AppLayoutModule,HttpClientModule,  RespaldoModule,  WorkEnvAppLayoutModule],
+    imports: [AppRoutingModule, AppLayoutModule,HttpClientModule,  RespaldoModule,  WorkEnvAppLayoutModule,SolicitudModule],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
         { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },

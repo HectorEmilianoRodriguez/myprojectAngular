@@ -10,46 +10,45 @@
             (click)="layoutService.onMenuToggle()">
             <i class="pi pi-bars"></i>
         </button>
-    </div>
 
-    <div class="flex justify-content-center mt-3">
-        <p-button label="Notificaciones" badge="10" styleClass="mr-2"></p-button>
+        <!-- Botón de notificaciones -->
+        <div style="margin-left: 20px;">
+            <p-button icon="pi pi-bell" [rounded]="true" [text]="true" severity="warning " /></div>
 
-    </div>
-
-<!-- esta es la parte de las opciones -->
-    <div class="topbar-profile" style="position: relative;">
+    <!-- Parte de las opciones de usuario -->
+    <div class="topbar-profile" style="position: relative; display: flex; align-items: center;">
         <button type="button" class="p-element topbar-profile-button p-link" (click)="toggleOpciones()"
-            style="position: relative;">
-            <span class="profile-details">
-                <span style="margin-left: 1vw;" class="profile-name">Opciones de usuarios</span>
-            </span>
-            <i class="pi pi-angle-down" style="margin-left: 8rem;"></i>
+            style="display: flex; align-items: center; background: none; border: none; cursor: pointer;">
+            <div style="width: 32px; height: 32px; border-radius: 50%; overflow: hidden; margin-right: 8px; display: flex; justify-content: center; align-items: center; background-color: #f0f0f0;">
+                <ng-container *ngIf="!isLoadingPhoto; else loadingTemplate">
+                    <img [src]="fotoUser" alt="Foto de perfil" 
+                         style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                </ng-container>
+                <ng-template #loadingTemplate>
+                    <p-progressSpinner [style]="{width: '20px', height: '20px'}"></p-progressSpinner>
+                </ng-template>
+            </div>
+            <span class="profile-name" style="margin-right: 8px;">{{ nombreUsuario }}</span>
+            <i class="pi pi-angle-down"></i>
         </button>
-        <ul *ngIf="opcionesDesplegadas" class="p-menu p-component" style="position: absolute; top: calc(100% + 5px);">
-
+        <ul *ngIf="opcionesDesplegadas" class="p-menu p-component" style="position: absolute; top: calc(100% + 5px); right: 0;">
             <a pripple class="p-ripple p-element flex p-2 border-round align-items-center
             hover:surface-hover transition-colors transition-duration-150 cursor-pointer" (click)="editPerfil()">
                 <i class="pi pi-user mr-3" style="color: black;"></i>
                 <span style="color: black;">Perfil</span>
-                <span class="p-ink" aria-hidden="true" role="presentation"></span>
             </a>
 
             <a pripple class="p-ripple p-element flex p-2 border-round align-items-center
             hover:surface-hover transition-colors transition-duration-150 cursor-pointer" (click)="editContrasena()">
                 <i class="pi pi-key mr-3" style="color: black;"></i>
                 <span style="color: black;">Contraseña</span>
-                <span class="p-ink" aria-hidden="true" role="presentation"></span>
             </a>
 
             <a pripple class="p-ripple p-element flex p-2 border-round align-items-center
             hover:surface-hover transition-colors transition-duration-150 cursor-pointer" (click)="salir()">
                 <i class="pi pi-sign-in mr-3" style="color: black;"></i>
                 <span style="color: black;">Salir</span>
-                <span class="p-ink" aria-hidden="true" role="presentation"></span>
             </a>
-
-
         </ul>
     </div>
     

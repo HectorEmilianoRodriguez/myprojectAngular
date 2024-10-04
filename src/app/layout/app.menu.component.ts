@@ -26,7 +26,7 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     { label: 'Crear nuevo espacio', icon: 'pi pi-fw pi-plus', routerLink: ['crearE/crearEntorno'] },
                     { label: 'Unirme a un espacio', icon: 'pi pi-fw pi-users', routerLink: ['/union/unionEntorno'] },
-                    { label: 'Mis solicitudes', icon: 'pi pi-fw pi-bell', routerLink: ['/uikit/input'] },
+                    { label: 'Mis solicitudes', icon: 'pi pi-fw pi-bell', routerLink: ['/solicitud/solicitudM'] },
                 ]
             },
 
