@@ -21,6 +21,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     misEntornos: MenuItem[] = [];
     elementosEntornosParticipo: MenuItem[] = [];
 
+    comentariosPendientes: MenuItem[] = [];
+
     actividadesEvaluar: MenuItem[] = [
         {
             label: 'Ver actividades',
@@ -35,23 +37,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
         {
             label: 'Ver actividades',
             items: [
-                { label: 'Option 1', icon: 'pi pi-fw pi-calendar' },
+                { label: 'Option 11', icon: 'pi pi-fw pi-calendar' },
                 { label: 'Option 2', icon: 'pi pi-fw pi-calendar' }
             ]
         },
     ];
 
-    comentariosPendientes: MenuItem[] = [
-        {
-            label: 'Ver comentarios',
-            items: [
-                { label: 'Option 1', icon: 'pi pi-fw pi-calendar' },
-                { label: 'Option 2', icon: 'pi pi-fw pi-calendar' },
-                { label: 'Option 3', icon: 'pi pi-fw pi-calendar' },
-                { label: 'Option 4', icon: 'pi pi-fw pi-calendar' }
-            ]
-        },
-    ];
+
 
     solicitudesPendientes: MenuItem[] = [
         {
@@ -167,6 +159,31 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 }
             ];
         })
+        this.getNocoments();
+    }
+
+    getNocoments() {
+        this.workEnvService.getComents().subscribe(
+            (data) => {
+                this.comentariosPendientes = [
+                    {
+                        label: 'Comentarios Pendientes',
+                        items: data.map(comentario => ({
+                            label: `Entorno: ${comentario.nameW},
+                            Tablero: ${comentario.nameB},
+                            Comentario de: ${comentario.name},
+                            Comentario: ${comentario.nameC}- ${comentario.text} `,
+                            icon: 'pi pi-comment'
+                        })),
+                        icon: 'pi pi-comment',
+                        expanded: false // Propiedad para controlar la expansión
+                    }
+                ];
+            },
+            (error) => {
+                console.error('Error al cargar los comentarios:', error);
+            }
+        )
     }
 
 }

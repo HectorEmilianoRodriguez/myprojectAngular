@@ -45,4 +45,10 @@ export class WorkEnvService {
       withCredentials: true
     });
   }
+
+  getComents(): Observable<any>{
+    return this.http.get<any>(`${this.url}api/getNotSeenComments`, {
+      withCredentials: true
+    });
+  }
 }
