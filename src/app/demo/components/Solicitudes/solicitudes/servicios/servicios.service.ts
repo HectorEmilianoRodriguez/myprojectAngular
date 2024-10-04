@@ -26,7 +26,7 @@ export class ServiciosService {
   rejectRequest(idJoinUserWork: number): Observable<any> {
     return this.http.get(`${this.url}api/notapprobeRequestWorkEnv/${idJoinUserWork}`, { withCredentials: true });
   }
-
+//
   // Método para notificar al usuario sobre la aprobación o rechazo
   notifyUserApprobedOrNot(workenv: string, idUser: number, flag: number): Observable<any> {
     return this.http.get(`${this.url}api/NotifyUserApprobedOrNot/${workenv}/${idUser}/${flag}`, { withCredentials: true });
