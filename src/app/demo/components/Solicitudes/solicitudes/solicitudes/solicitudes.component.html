@@ -1,22 +1,22 @@
-<div class="card mb-3" > 
+<div class="card mb-3"> 
 <h2>Mis solicitudes pendientes!</h2>
 
   <div id="buscador" >
     <p>Buscador!</p>
   </div>
 
-  <div class="card p-3 shadow-2 mb-3">
+  <div *ngFor="let solicitud of solicitudes" class="card p-3 shadow-2 mb-3">
     <div class="flex mb-3">
         <div class="flex-none w-3 flex align-items-center justify-content-center">
-            <img src="ruta/a/tu/imagen-perfil.jpg" alt="Foto de perfil" class="w-full h-auto border-circle" />
+            <img [src]="solicitud.photo" alt="Foto de perfil" class="w-full h-auto border-circle" />
         </div>
         <div class="flex-1 flex align-items-center pl-3">
-            <p class="label text-lg m-0">El usuario: "nombreUsuario" desea unirse a tu entorno de trabajo "entorno"</p>
+            <p class="label text-lg m-0">El usuario: "{{ solicitud.name }}" desea unirse a tu entorno de trabajo "{{ solicitud.nameW }}"</p>
         </div>
     </div>
     <div class="flex justify-content-center gap-2">
-        <p-button label="Aceptar" class="p-button-success" />
-        <p-button label="Rechazar" severity="danger" />
+        <p-button label="Aceptar" class="p-button-success" (click)="acceptRequest(solicitud.idUser, solicitud.idWorkEnv)"></p-button>
+        <p-button label="Rechazar" severity="danger" (click)="rejectRequest(solicitud.idJoinUserWork)"></p-button>
     </div>
   </div>
 
