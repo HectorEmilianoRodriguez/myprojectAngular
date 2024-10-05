@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule,Route } from '@angular/router';
 import { TableDemoComponent } from './tabledemo.component';
 
 @NgModule({
@@ -7,5 +7,7 @@ import { TableDemoComponent } from './tabledemo.component';
 		{ path: '', component: TableDemoComponent }
 	])],
 	exports: [RouterModule]
+	
+
 })
 export class TableDemoRoutingModule { }
