@@ -1,0 +1,16 @@
+<p>editar-ent works!</p>
+<div class="card">
+    <h2>Editar Entorno</h2>
+    <form (ngSubmit)="onSubmit()">
+        <div>
+            <label>Título:</label>
+            <input type="text" [(ngModel)]="entornoData.title" name="title" required />
+        </div>
+        <div>
+            <label>Descripción:</label>
+            <textarea [(ngModel)]="entornoData.description" name="description" required></textarea>
+        </div>
+        <!-- Agrega más campos según sea necesario -->
+        <button type="submit">Guardar Cambios</button>
+    </form>
+</div>

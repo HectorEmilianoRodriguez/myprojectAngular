@@ -30,6 +30,7 @@ import { AuthGuard } from './demo/components/auth/guards/auth.guard';import { Ap
                     { path: 'respaldo', loadChildren: () => import('./demo/components/ResA/respaldo-routing.module').then(m => m.RespaldoRoutingModule),canActivate: [AuthGuard]  },
                     { path: 'perfiles', loadChildren: () => import('./demo/components/PerfilUser/perfil-user.module').then(m => m.PerfilUserModule), canActivate: [AuthGuard] },
                     { path: 'solicitud', loadChildren: () => import('./demo/components/Solicitudes/solicitud-routing.module').then(m => m.SolicitudRoutingModule), canActivate: [AuthGuard] },
+                    { path: 'edit-work-env', loadChildren: () => import('./demo/components/editarEnt/editarent/editar-routing.module').then(m => m.EditarRoutingModule), canActivate: [AuthGuard] },
                     
                     
                     
