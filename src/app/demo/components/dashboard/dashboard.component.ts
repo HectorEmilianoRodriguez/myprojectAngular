@@ -84,12 +84,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     getCantEntornos() {
         this.workEnvService.getEntornos().subscribe(data => {
+            console.log('Datos de entornos:', data); // Verifica la respuesta de la API
 
             const ownerItems = data.owner
                 .filter(entorno => entorno.privilege === 2) // Filtra por privilegio
                 .map(entorno => ({
                     label: entorno.title,
                     icon: 'pi pi-fw pi-calendar',
+                    command: () => this.editWorkEnv(entorno.idWorkEnv) // Verifica que 'entorno.id' sea correcto
                 }));
 
             const participantItems = data.participant
@@ -97,6 +99,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 .map(entorno => ({
                     label: entorno.title,
                     icon: 'pi pi-fw pi-calendar',
+                    command: () => this.editWorkEnv(entorno.idWorkEnv) // Verifica que 'entorno.id' sea correcto
                 }));
 
             this.misEntornos = [
@@ -105,11 +108,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
                     items: [...ownerItems, ...participantItems]
                 }
             ];
-        })
+        });
 
         this.getCantInvEntornos();
     }
 
+
+    editWorkEnv(id: string) {
+        console.log('ID del entorno:', id); // Agrega este log para verificar el ID
+        this.router.navigate(['/edit-work-env/editar', id]); // Navega al componente de edición
+    }
+    
     getCantInvEntornos() {
         this.workEnvService.getEntornos().subscribe(data => {
 
