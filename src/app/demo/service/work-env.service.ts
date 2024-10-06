@@ -52,7 +52,6 @@ export class WorkEnvService {
     });
   }
 
-<<<<<<< HEAD
   getNotActivities(): Observable<any>{
     return this.http.get<any>(`${this.url}api/getNotApprobedActivities`, {
       withCredentials: true
@@ -68,13 +67,5 @@ export class WorkEnvService {
     return this.http.get<any>(`${this.url}api/getAlmostExpiredActivities`, {
       withCredentials:true
     })
-=======
-  getWorkEnv(id: string): Observable<any> {
-    return this.http.get<any>(`${this.url}api/AmIOnWorkEnv/${id}`, { withCredentials: true });
-  }
-
-  updateWorkEnv(id: string, data: any): Observable<any> {
-    return this.http.put<any>(`${this.url}api/updateWorkEnv/${id}`, data, { withCredentials: true });
->>>>>>> 1b9c53a3a2541a755aab68dafb861ceb8a2425d2
   }
 }
