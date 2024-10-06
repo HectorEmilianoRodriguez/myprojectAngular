@@ -19,41 +19,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     totalSolicitudes: number = 0;
 
     misEntornos: MenuItem[] = [];
+
     elementosEntornosParticipo: MenuItem[] = [];
 
     comentariosPendientes: MenuItem[] = [];
 
-    actividadesEvaluar: MenuItem[] = [
-        {
-            label: 'Ver actividades',
-            items: [
-                { label: 'Option 1', icon: 'pi pi-fw pi-calendar' },
-                { label: 'Option 2', icon: 'pi pi-fw pi-calendar' }
-            ]
-        },
-    ];
+    actividadesEvaluar: MenuItem[] = [];
 
-    actividadesAExpirar: MenuItem[] = [
-        {
-            label: 'Ver actividades',
-            items: [
-                { label: 'Option 11', icon: 'pi pi-fw pi-calendar' },
-                { label: 'Option 2', icon: 'pi pi-fw pi-calendar' }
-            ]
-        },
-    ];
+    actividadesAExpirar: MenuItem[] = [];
 
-
-
-    solicitudesPendientes: MenuItem[] = [
-        {
-            label: 'Ver solicitudes',
-            items: [
-                { label: 'Option 1', icon: 'pi pi-fw pi-calendar' },
-                { label: 'Option 2', icon: 'pi pi-fw pi-calendar' }
-            ]
-        },
-    ];
+    solicitudesPendientes: MenuItem[] = [];
 
     private navigationSubscription: Subscription;
 
@@ -94,10 +69,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
         this.workEnvService.getActivitis().subscribe({
             next: (counts2: WorkActiCounts) => {
-                this.totalActividadesEvaluar = counts2.requests;
+                this.totalActividadesEvaluar = counts2.PendingApprovalActivities;
                 this.totalComentarios = counts2.NotSeenComments;
                 this.totalActividadesPorExpirar = counts2.AlmostExpiredOrExpiredActivities;
-                this.totalSolicitudes = counts2.PendingApprovalActivities;
+                this.totalSolicitudes = counts2.requests;
             },
             error: (error) => {
                 console.error('Error al obtener conteos:', error);
@@ -154,7 +129,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
             this.elementosEntornosParticipo = [
                 {
-                    label: 'Mis Entornos',
+                    label: 'Entornos a los que pertenezco',
                     items: [...ownerItems, ...participantItems]
                 }
             ];
@@ -184,6 +159,58 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 console.error('Error al cargar los comentarios:', error);
             }
         )
+        this.getNoActivitis();
+    }
+
+    getNoActivitis() {
+        this.workEnvService.getNotActivities().subscribe(data => {
+
+            const items = data.map(entorno => ({
+                label: `Titulo: ${entorno.nameC} (Entorno: ${entorno.nameW}) Tablero: ${entorno.nameB}`, // Formato del label
+                icon: 'pi pi-fw pi-calendar',
+            }));
+    
+            this.actividadesEvaluar = [
+                {
+                    label: 'Actividades por evaluar',
+                    items: items // Asignamos directamente los items
+                }
+            ];
+        }
+        )
+        this.getPendientes()
+    }
+
+    getPendientes() {
+        this.workEnvService.getPending().subscribe(data => {
+            const items = data.map(entorno => ({
+                label: `${entorno.name} (Entorno: ${entorno.nameW})`, // Formato del label
+                icon: 'pi pi-fw pi-calendar',
+            }));
+    
+            this.solicitudesPendientes = [
+                {
+                    label: 'Actividades',
+                    items: items // Asignamos directamente los items
+                }
+            ];
+        })
+        this.getExpiracion()
+    }
+
+    getExpiracion() {
+        this.workEnvService.getExpired().subscribe(data => {
+            const items = data.map(entorno => ({
+                label: `Titulo: ${entorno.nameC} (Entorno: ${entorno.nameW}) Tablero: ${entorno.nameB}`, // Formato del label
+                icon: 'pi pi-fw pi-calendar',
+            }));
+            this.actividadesAExpirar = [
+                {
+                    label: 'Actividades por expirar',
+                    items: items // Asignamos directamente los items
+                }
+            ];
+        })
     }
 
 }

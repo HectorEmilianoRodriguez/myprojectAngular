@@ -51,4 +51,21 @@ export class WorkEnvService {
       withCredentials: true
     });
   }
+
+  getNotActivities(): Observable<any>{
+    return this.http.get<any>(`${this.url}api/getNotApprobedActivities`, {
+      withCredentials: true
+    })
+  }
+
+  getPending(): Observable<any>{
+    return this.http.get<any>(`${this.url}api/getPendingApprovals`, {
+      withCredentials: true
+    })
+  }
+  getExpired(): Observable<any>{
+    return this.http.get<any>(`${this.url}api/getAlmostExpiredActivities`, {
+      withCredentials:true
+    })
+  }
 }
