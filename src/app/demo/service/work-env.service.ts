@@ -71,7 +71,11 @@ export class WorkEnvService {
     })
   }
 
- 
+  getNotActivities(): Observable<any>{
+    return this.http.get<any>(`${this.url}api/getNotApprobedActivities`, {
+      withCredentials: true
+    })
+  }
   
 
 
