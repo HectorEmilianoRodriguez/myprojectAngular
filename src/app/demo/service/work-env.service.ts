@@ -52,10 +52,12 @@ export class WorkEnvService {
     });
   }
 
-  getNotActivities(): Observable<any>{
-    return this.http.get<any>(`${this.url}api/getNotApprobedActivities`, {
-      withCredentials: true
-    })
+  getWorkEnv(id: string): Observable<any> {
+    return this.http.get<any>(`${this.url}api/AmIOnWorkEnv/${id}`, { withCredentials: true });
+  }
+
+  updateWorkEnv(id: string, data: any): Observable<any> {
+    return this.http.put<any>(`${this.url}api/updateWorkEnv/${id}`, data, { withCredentials: true });
   }
 
   getPending(): Observable<any>{
@@ -68,4 +70,9 @@ export class WorkEnvService {
       withCredentials:true
     })
   }
+
+ 
+  
+
+
 }
