@@ -52,11 +52,20 @@ export class WorkEnvService {
     });
   }
 
-  getWorkEnv(id: string): Observable<any> {
-    return this.http.get<any>(`${this.url}api/AmIOnWorkEnv/${id}`, { withCredentials: true });
+  getNotActivities(): Observable<any>{
+    return this.http.get<any>(`${this.url}api/getNotApprobedActivities`, {
+      withCredentials: true
+    })
   }
 
-  updateWorkEnv(id: string, data: any): Observable<any> {
-    return this.http.put<any>(`${this.url}api/updateWorkEnv/${id}`, data, { withCredentials: true });
+  getPending(): Observable<any>{
+    return this.http.get<any>(`${this.url}api/getPendingApprovals`, {
+      withCredentials: true
+    })
+  }
+  getExpired(): Observable<any>{
+    return this.http.get<any>(`${this.url}api/getAlmostExpiredActivities`, {
+      withCredentials:true
+    })
   }
 }
