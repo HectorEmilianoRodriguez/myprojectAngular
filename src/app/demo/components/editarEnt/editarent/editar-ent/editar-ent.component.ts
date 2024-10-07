@@ -32,7 +32,7 @@ export class EditarEntComponent implements OnInit {
 
   inicializarFormulario(): void {
       this.entornoForm = this.fb.group({
-          title: ['', Validators.required],
+          nameW: ['', Validators.required], // Cambiado a nameW
           type: ['', Validators.required],
           descriptionW: [''], // Este campo se mantiene como 'description'
           date_start: ['', Validators.required],
@@ -52,9 +52,9 @@ export class EditarEntComponent implements OnInit {
   loadEntornoData() {
     this.workEnvService.getWorkEnv(this.entornoId).subscribe(data => {
         this.entornoData = {
-            title: data.title,
+            nameW: data.nameW, // Cambiado a nameW
             type: data.type,
-            description: data.descriptionW, // Asigna descriptionW a description
+            descriptionW: data.descriptionW, // Asegúrate de que este campo sea correcto
             date_start: data.date_start,
             date_end: data.date_end
         }; // Carga los datos del entorno
@@ -72,11 +72,11 @@ export class EditarEntComponent implements OnInit {
         const formValues = this.entornoForm.value; // Usa el valor del formulario directamente
 
         const updatedData = {
-            nameW: formValues.title || this.entornoData.title, // Usa el valor del formulario directamente
-            descriptionW: formValues.descriptionW || this.entornoData.description, // Usa el valor del formulario o el original
-            type: formValues.type, // Usa el valor del formulario directamente
-            date_start: formValues.date_start, // Usa el valor del formulario directamente
-            date_end: formValues.date_end, // Usa el valor del formulario directamente
+            nameW: formValues.nameW, // Usa el nuevo valor directamente
+            descriptionW: formValues.descriptionW, // Usa el nuevo valor directamente
+            type: formValues.type, // Usa el nuevo valor directamente
+            date_start: formValues.date_start, // Usa el nuevo valor directamente
+            date_end: formValues.date_end, // Usa el nuevo valor directamente
             logicdeleted: false // O el valor que necesites
         };
 
