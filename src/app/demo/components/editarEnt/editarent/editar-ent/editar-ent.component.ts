@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { WorkEnvService } from '../../../../service/work-env.service';
-import { MessageService } from 'primeng/api'; // Asegúrate de importar MessageService
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'; // Asegúrate de importar FormBuilder y FormGroup
-
+import { MessageService } from 'primeng/api'; 
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'; 
 @Component({
   selector: 'app-editar-ent',
   templateUrl: './editar-ent.component.html',
@@ -11,14 +10,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms'; // Asegúra
 })
 export class EditarEntComponent implements OnInit {
   entornoId: string;
-  entornoData: any; // Aquí puedes definir la estructura de datos del entorno
-  tipoEntornos: any[]; // Define la propiedad para las opciones del dropdown
-  entornoForm: FormGroup; // Declara entornoForm como FormGroup
+  entornoData: any; 
+  tipoEntornos: any[]; 
+  entornoForm: FormGroup; 
 
   constructor(
       private route: ActivatedRoute,
       private workEnvService: WorkEnvService,
-      private fb: FormBuilder, // Asegúrate de inyectar FormBuilder
+      private fb: FormBuilder, 
       private messageService: MessageService
   ) { }
 
@@ -32,9 +31,9 @@ export class EditarEntComponent implements OnInit {
 
   inicializarFormulario(): void {
       this.entornoForm = this.fb.group({
-          nameW: ['', Validators.required], // Cambiado a nameW
+          nameW: ['', Validators.required],
           type: ['', Validators.required],
-          descriptionW: [''], // Este campo se mantiene como 'description'
+          descriptionW: [''], 
           date_start: ['', Validators.required],
           date_end: ['', Validators.required]
       });
@@ -51,14 +50,25 @@ export class EditarEntComponent implements OnInit {
 
   loadEntornoData() {
     this.workEnvService.getWorkEnv(this.entornoId).subscribe(data => {
+        console.log('Datos recuperados:', data); 
+
+        
         this.entornoData = {
-            nameW: data.nameW, // Cambiado a nameW
+            nameW: data.title, 
             type: data.type,
-            descriptionW: data.descriptionW, // Asegúrate de que este campo sea correcto
+            descriptionW: data.descriptionW,
             date_start: data.date_start,
             date_end: data.date_end
         }; // Carga los datos del entorno
-        this.entornoForm.patchValue(this.entornoData); // Rellena el formulario con los datos
+
+        // Rellena el formulario con los datos
+        this.entornoForm.patchValue({
+            nameW: this.entornoData.nameW, 
+            type: this.entornoData.type,
+            descriptionW: this.entornoData.descriptionW,
+            date_start: this.entornoData.date_start,
+            date_end: this.entornoData.date_end
+        });
     }, error => {
         console.error('Error al cargar los datos del entorno:', error);
     });
@@ -77,7 +87,7 @@ export class EditarEntComponent implements OnInit {
             type: formValues.type, // Usa el nuevo valor directamente
             date_start: formValues.date_start, // Usa el nuevo valor directamente
             date_end: formValues.date_end, // Usa el nuevo valor directamente
-            logicdeleted: false // O el valor que necesites
+            logicdeleted: false 
         };
 
         console.log('Datos a enviar:', updatedData); // Verifica los datos que se envían
