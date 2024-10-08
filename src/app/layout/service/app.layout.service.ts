@@ -55,7 +55,7 @@ export class LayoutService {
     overlayOpen$ = this.overlayOpen.asObservable();
 
     constructor(
-        private http:HttpClient
+        private http: HttpClient
     ) {
         effect(() => {
             const config = this.config();
@@ -65,7 +65,7 @@ export class LayoutService {
             this.changeScale(config.scale);
             this.onConfigUpdate();
         });
-        
+
     }
 
     updateStyle(config: AppConfig) {
@@ -134,8 +134,8 @@ export class LayoutService {
                 el == this._config.theme
                     ? (el = config.theme)
                     : el == `theme-${this._config.colorScheme}`
-                    ? (el = `theme-${config.colorScheme}`)
-                    : el
+                        ? (el = `theme-${config.colorScheme}`)
+                        : el
             )
             .join('/');
 
@@ -164,7 +164,13 @@ export class LayoutService {
     }
 
 
-    logout():Observable<any>{
-        return this.http.post(this.url + `api/logout`,'',{withCredentials:true}) as Observable<any>;
+    logout(): Observable<any> {
+        return this.http.post(this.url + `api/logout`, '', { withCredentials: true }) as Observable<any>;
+    }
+
+    getEntornos(): Observable<any> {
+        return this.http.get<any>(`${this.url}api/getMyWorkEnvs`, {
+            withCredentials: true
+        });
     }
 }

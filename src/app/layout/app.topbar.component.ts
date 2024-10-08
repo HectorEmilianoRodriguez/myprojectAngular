@@ -15,6 +15,8 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 export class AppTopBarComponent implements OnInit {
 
     items!: MenuItem[];
+    notificaciones: any[] = [];
+    mostrarNotificaciones: boolean = false;
 
     @ViewChild('menubutton') menuButton!: ElementRef;
 
@@ -94,6 +96,7 @@ export class AppTopBarComponent implements OnInit {
                 this.fotoUser = './assets/demo/images/login/avatar.png';
             }
         );
+        this.geNotifi();
     }
 
     
@@ -147,4 +150,19 @@ export class AppTopBarComponent implements OnInit {
     }
 
 
+    geNotifi() {
+        this.perfilService.getNotificatios().subscribe(
+            (data) => {
+                this.notificaciones = data; // Almacena las notificaciones en la propiedad
+                console.log('Notificaciones recibidas:', this.notificaciones); // Muestra las notificaciones en la consola
+            },
+            (error) => {
+                console.error('Error al obtener las notificaciones:', error); // Manejo de errores
+            }
+        )
+    }
+
+    toggleNotificaciones() {
+        this.mostrarNotificaciones = !this.mostrarNotificaciones; // Alterna la visibilidad
+    }
 }

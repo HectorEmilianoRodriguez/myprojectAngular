@@ -25,7 +25,8 @@
                     <div class="formgrid grid">
                         <div class="field col-12">
                             <label for="description" class="block text-900 text-2xl font-medium mb-3">Descripción:</label>
-                            <textarea id="description" formControlName="descriptionW" required pInputTextarea class="w-full" rows="5"></textarea>
+                            <textarea pInputTextarea id="descriptionW" formControlName="descriptionW"
+                                placeholder="Descripción" class="w-full" [autoResize]="true" rows="5"></textarea>
                         </div>
                     </div>
                     <div class="formgrid grid">
