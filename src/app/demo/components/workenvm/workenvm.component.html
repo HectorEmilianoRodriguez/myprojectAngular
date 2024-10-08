@@ -34,7 +34,7 @@
         <!-- Cuerpo de la tabla -->
         <ng-template pTemplate="body" let-customer let-i="rowIndex">
             <tr>
-                <td>{{customer.name}}</td>
+                <td style="display: flex; gap: 25px; align-items: center;">{{customer.name}} <img *ngIf="customer.photo" [src]="customer.photo" alt="{{ customer.name }}" style="width: 40px; height: 40px; border-radius: 50%;"></td>
                 <td>{{customer.email}}</td>
                 <td>
                     <select *ngIf = 'privilege == 1 && customer.privilege == 0 || privilege == 2 && customer.privilege == 0 || privilege == 2 && customer.privilege == 1' [(ngModel)]="customer.privilege" (change)="onPrivilegeChange(customer)">
@@ -55,6 +55,7 @@
 
                 </td>
                 <td>{{customer.date | date}}</td>
+                
                 <td *ngIf="privilege == 1 || privilege == 2">
 
                     <button  *ngIf = 'customer.privilege == 0 || customer.privilege == 1' class="button" [disabled]="!customer.editedPrivilege" (click)="editPrivilege(customer)">Editar</button>

@@ -21,6 +21,7 @@ import { BoardComponent } from './board.component';
 import { BoardRoutingModule } from './board-routing.module';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { RadioButtonModule } from 'primeng/radiobutton';
 @NgModule({
   declarations: [BoardComponent],
   imports: [
@@ -42,7 +43,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     ReactiveFormsModule,
     CalendarModule,
     DialogModule,
-    DragDropModule
+    DragDropModule,
+    RadioButtonModule
   ],
   providers: [ConfirmationService, MessageService]
 })

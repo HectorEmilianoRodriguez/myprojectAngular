@@ -60,7 +60,7 @@ export class AppTopBarComponent {
         this.layoutService.logout().subscribe({
             next: (response: any) => {
                 if (response.message === 'success') {
-                    this.router.navigate(['/login']);
+                    this.router.navigate(['/auth/login']);
                 }
             },
             error: (error) => {

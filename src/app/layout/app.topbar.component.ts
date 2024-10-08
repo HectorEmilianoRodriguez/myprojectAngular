@@ -116,8 +116,7 @@ export class AppTopBarComponent implements OnInit {
                     this.ocultarOpciones();
                     
                     // Redirigir al login
-                    this.router.navigate(['/landing']);
-                    console.log('Cookies después del login:', document.cookie);
+                    this.router.navigate(['/auth/login']);
                 } else {
                     // Manejar respuesta inesperada
                     console.error('Respuesta inesperada del servidor');
