@@ -151,15 +151,16 @@ export class AppTopBarComponent implements OnInit {
 
 
     geNotifi() {
-        this.perfilService.getNotificatios().subscribe(
-            (data) => {
-                this.notificaciones = data; // Almacena las notificaciones en la propiedad
-                console.log('Notificaciones recibidas:', this.notificaciones); // Muestra las notificaciones en la consola
+        this.perfilService.getNotificatios().subscribe({
+            next: (res) => {
+              // Convierte el objeto en un array
+              this.notificaciones = Object.values(res);
+              console.log(this.notificaciones); // Verifica la salida
             },
-            (error) => {
-                console.error('Error al obtener las notificaciones:', error); // Manejo de errores
+            error: (er) => {
+              console.log(er);
             }
-        )
+          });
     }
 
     toggleNotificaciones() {

@@ -38,9 +38,9 @@ export class PerfilUService {
       );
   }
 
-  getNotificatios(): Observable<any>{
-    return this.http.get<any>(`${this.url}api/getNotifications`, {
+  getNotificatios(){
+    return this.http.get(`${this.url}api/getNotifications`, {
       withCredentials: true
-    })
+    }) as Observable<any>;
   }
 }

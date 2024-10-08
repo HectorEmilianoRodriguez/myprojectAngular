@@ -59,7 +59,8 @@ export class BoardComponent implements OnInit {
   comments: any [] = [];
   idjoin;
   newComment;
-
+  displayEditComment = false;
+  EditComment;
   constructor(
     private bs: BoardService,
     private ar: ActivatedRoute,
@@ -864,7 +865,10 @@ deleteComment(idc){
     }
  }
  
- updateComment(idc){
+ updateComment(idc, txt){
+   this.displayEditComment = true;
+   this.EditComment = txt;
+
 
  }
 

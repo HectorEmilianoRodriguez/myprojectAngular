@@ -29,8 +29,6 @@
                 class="p-button-success"
                 (click)="createList()">
         </button>
-
-
     </div>
 </div>
 
@@ -375,7 +373,7 @@
                         </button>
                         <button *ngIf="( (dataBoard.logicdeleted === 0 && comment.name === nameAuth ) || (comment.name === nameAuth  && dataBoard.logicdeleted === 0 ) )" 
                                 pButton icon="pi pi-pencil" class="update-list-button" 
-                                (click)="updateComment(comment.idComment)"> 
+                                (click)="updateComment(comment.idComment, comment.text)"> 
                         </button>
                         <button *ngIf="( (dataBoard.logicdeleted === 0 && comment.seen === 0 && privilege === 1 && comment.privilege != 2 ) || (comment.seen === 0  && dataBoard.logicdeleted === 0  && privilege === 2 && comment.privilege != 2) )" 
                                 pButton icon="pi pi-check" class="p-button-success" 
@@ -392,7 +390,7 @@
             <div style="margin-top: 10px;">
                 <label for="commentt" style="font-weight: bold;">Agregar comentario</label>
                 <input id="commentt" type="text" pInputText [(ngModel)]="newComment" placeholder ="Insertar comentario aquí" style="width: 100%; font-size: 16px;" />
-                <button pButton icon="pi pi-plus" class="delete-comment-button" (click)="newC(selectedActivity.idCard)">Agregar</button>
+                <button pButton icon="pi pi-plus" class="delete-comment-button" (click)="newC(selectedActivity.idCard)">Agregar</button> 
             </div>
         </div>
     </div>
@@ -415,6 +413,17 @@
     <p-footer>
         <button pButton label="Cerrar" icon="pi pi-times" (click)="displayActivityDialog = false"></button>
     </p-footer>
+</p-dialog>
+
+
+<p-dialog header="Editar comentario" [(visible)]="displayEditComment" [modal]="true" [closable]="true" [responsive]="true" [style]="{width: '50%'}" [baseZIndex]="10000">
+
+    <div style="margin-top: 10px;">
+        <label for="commentt" style="font-weight: bold;">Editar comentario</label>
+        <input id="commentt" type="text" pInputText [(ngModel)]="EditComment" [placeholder] = "EditComment" style="width: 100%; font-size: 16px;" />
+        <button pButton icon="pi pi-plus" class="delete-comment-button" (click)="newC(selectedActivity.idCard)">Agregar</button> 
+    </div>
+
 </p-dialog>
 
 
