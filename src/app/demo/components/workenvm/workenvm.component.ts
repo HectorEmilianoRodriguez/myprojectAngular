@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 export interface Miembro {
   idUser: number;
+  photo: string,
   name: string;
   email: string;
   privilege: number; 

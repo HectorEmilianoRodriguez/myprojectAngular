@@ -22,42 +22,127 @@
                 class="p-button-danger"
                 (click)="DeleteBoard()">
         </button>
+
+        <button *ngIf="dataBoard.logicdeleted === 0"
+                pButton type="button"
+                label="Agregar lista"
+                class="p-button-success"
+                (click)="createList()">
+        </button>
+
+
     </div>
 </div>
 
 <!-- Indicador de carga -->
 <div *ngIf="loading" class="loading-indicator">
-    <p>Cargando...</p> <!-- Puedes reemplazar esto por un spinner o un componente de carga -->
+    <p>Cargando...</p>
 </div>
 
 <div class="kanban" *ngIf="!loading">
     <div *ngFor="let list of lists" 
-     class="list" 
-     [ngStyle]="{'background-color': list.color}" 
-     cdkDropList 
-     (cdkDropListDropped)="drop($event)" 
-     [cdkDropListData]="list.cards"
-     [cdkDropListConnectedTo]="connectedDropLists" 
-     [id]="list.idList.toString()">
-    <h3>{{list.name}}</h3>
-    <p>{{list.description}}</p>
+         class="list" 
+         [ngStyle]="{'background-color': list.color}" 
+         cdkDropList 
+         (cdkDropListDropped)="drop($event)" 
+         [cdkDropListData]="list.cards"
+         [cdkDropListConnectedTo]="connectedDropLists" 
+         [id]="list.idList.toString()">
+  
+      <div class="list-header">
+        <h3>{{list.name}}</h3>
+        <button *ngIf="(dataBoard.logicdeleted === 0 && (privilege === 1 || privilege === 2))"
+          pButton 
+          icon="pi pi-trash" 
+          class="delete-list-button" 
+          (click)="confirmDeleteList(list.idList)"
+          aria-label="Eliminar lista">
+        </button>
 
-    <div class="cards">
+        <button *ngIf="(dataBoard.logicdeleted === 0 && (privilege === 1 || privilege === 2))"
+        pButton 
+        icon="pi pi-pencil" 
+        class="update-list-button" 
+        (click)="UpdateListDialog(list)"
+        aria-label="Editar lista">
+        </button>
+
+        <button *ngIf="(dataBoard.logicdeleted === 0)"
+        pButton 
+        icon="pi pi-plus" 
+        class="add-act-button" 
+        (click)="addActivity(list.idList)"
+        aria-label="Agregar actividad">
+        </button>
+
+      </div>
+      
+      <p>{{list.description}}</p>
+  
+      <div class="cards">
         <div *ngFor="let card of list.cards" 
              cdkDrag 
              class="card-item" 
              (click)="openActivityModal(card)">
-            <p>{{card?.nameC}}</p>
+          <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+            <p>{{card?.nameC}}</p>  
+          </div>
+          <p>Fecha de entrega: {{card.end_date}}  <i class = "pi pi-fw pi-calendar"></i></p>
+          <div class="labels" style="display: flex; gap: 5px; flex-wrap: wrap;">
+            <div *ngIf = "card.important === 1" style="background-color: rgb(173, 11, 11); padding: 10px; border: 1px solid black;">Urgente</div>
+            <div *ngIf = "(card.done === 1 && card.approbed === 1)" style="background-color: rgb(26, 209, 102); padding: 10px; border: 1px solid black;">Completada</div>
+            <div *ngFor="let label of card.labels" [style.background-color]="label.colorL" style="padding: 10px; border: 1px solid black;">
+                {{label.nameL}}
+            </div>
+        </div>
+        
         </div>
         <div *ngIf="list.cards.length === 0">
-            <p>No hay tarjetas disponibles.</p>
+          <p>No hay tarjetas disponibles.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+  
+
+  <!-- Diálogo para editar actividad -->
+
+<p-dialog header="Editar actividad" [(visible)]="displayEditActDialog" [modal]="true" [closable]="true" [responsive]="true" [style]="{width: '400px'}" [baseZIndex]="10000">
+<div class="p-fluid" style="margin: 20px 0; padding: 0;">
+    <div class="field" style="margin-bottom: 20px;">
+        <label for="nameL" style="font-weight: bold;">Nombre de la actividad</label>
+        <input id="nameL" type="text" pInputText [(ngModel)]="EditActName" [placeholder]="EditActName" style="width: 100%; font-size: 16px;" />
+    </div>
+    <div class="field" style="margin-bottom: 20px;">
+        <label for="descriptionL" style="font-weight: bold;">Descripción</label>
+        <textarea id="descriptionL" pInputTextarea [(ngModel)]="EditActDescription" [placeholder]="EditActDescription" style="width: 100%; height: 100px; font-size: 16px; resize: vertical;"></textarea>
+    </div>
+    
+    <div class="field" style="margin-bottom: 20px;">
+        <label style="font-weight: bold;">¿Es urgente?</label>
+        <div>
+            <p-radioButton name="urgente" value="1" [(ngModel)]="EditisUrgent"></p-radioButton>
+            <label for="si">Sí</label>
+            <p-radioButton name="urgente" value="0" [(ngModel)]="EditisUrgent"></p-radioButton>
+            <label for="no">No</label>
         </div>
     </div>
+
+    <div class="field" style="margin-bottom: 20px;">
+        <label for="dateL" style="font-weight: bold;">Fecha de entrega</label>
+        <p-calendar id="dateL" [(ngModel)]="EditActDate" [showIcon]="true" [placeholder]="EditActDate" style="width: 100%; display: block;" dateFormat="yy-mm-dd" />
+    </div>
+
 </div>
-
-
-</div>
-
+<p-footer>
+    <div class="p-d-flex p-jc-between p-ai-center" style="gap: 10px;">
+        <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text p-button-lg" (click)="displayEditActDialog = false" style="width: 45%; height: 45%;"></button>
+        <button pButton label="Actualizar" icon="pi pi-check" class="p-button-lg" (click)="editAct()" style="width: 45%; height: 45%;"></button>
+    </div>
+</p-footer>
+</p-dialog>
 
 <!-- Diálogo para editar tablero -->
 <p-dialog header="Editar tablero" [(visible)]="displayNewBoardDialog" [modal]="true" [closable]="true" [responsive]="true" [style]="{width: '400px'}" [baseZIndex]="10000">
@@ -79,19 +164,260 @@
     </p-footer>
 </p-dialog>
 
-<!-- Diálogo para detalles de la actividad -->
-<p-dialog header="Detalles de la Actividad" [(visible)]="displayActivityDialog" [modal]="true" [closable]="true" [responsive]="true" [style]="{width: '400px'}" [baseZIndex]="10000">
-    <div class="p-fluid">
-        <h4>{{selectedActivity.nameC}}</h4>
-        <p><strong>Descripción:</strong> {{selectedActivity.descriptionC}}</p>
-        <p><strong>Fecha de vencimiento:</strong> {{selectedActivity.end_date}}</p>
-        <p><strong>Estado:</strong> {{selectedActivity.done ? 'Completada' : 'Pendiente'}}</p>
-        <p><strong>Importante:</strong> {{selectedActivity.important ? 'Sí' : 'No'}}</p>
+<!-- Diálogo para crear lista -->
+<p-dialog header="Nueva lista" [(visible)]="displayNewListDialog" [modal]="true" [closable]="true" [responsive]="true" [style]="{width: '400px'}" [baseZIndex]="10000">
+    <div class="p-fluid" style="margin-top: 20px;">
+        <div class="field" style="margin-bottom: 20px;">
+            <label for="nameL" style="font-weight: bold;">Nombre de la lista</label>
+            <input id="nameL" type="text" pInputText [(ngModel)]="newListName" placeholder="Mi Lista" style="width: 100%; font-size: 16px;" />
+        </div>
+        <div class="field" style="margin-bottom: 20px;">
+            <label for="descriptionL" style="font-weight: bold;">Descripción</label>
+            <textarea id="descriptionL" pInputTextarea [(ngModel)]="newListDescription" placeholder="Descripción" style="width: 100%; height: 50%; font-size: 16px;"></textarea>
+        </div>
+        <div class="field" style="margin-bottom: 20px;">
+            <label for="colorL" style="font-weight: bold;">Color</label>
+            <input id="colorL" type="color" [(ngModel)]="newListColor" style="width: 100%; height: 40px;" />
+        </div>
     </div>
+    <p-footer>
+        <div class="p-d-flex p-jc-between p-ai-center" style="gap: 10px;">
+            <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text p-button-lg" (click)="displayNewListDialog = false" style="width: 45%; height: 45%;"></button>
+            <button pButton label="Agregar" icon="pi pi-check" class="p-button-lg" (click)="newList()" style="width: 45%; height: 45%;"></button>
+        </div>
+    </p-footer>
+</p-dialog>
+
+<!-- Diálogo para crear actividad -->
+<p-dialog header="Nueva actividad" [(visible)]="displayNewActDialog" [modal]="true" [closable]="true" [responsive]="true" [style]="{width: '400px'}" [baseZIndex]="10000">
+    <div class="p-fluid" style="margin: 20px 0; padding: 0;">
+        <div class="field" style="margin-bottom: 20px;">
+            <label for="nameL" style="font-weight: bold;">Nombre de la actividad</label>
+            <input id="nameL" type="text" pInputText [(ngModel)]="newActName" placeholder="Mi actividad" style="width: 100%; font-size: 16px;" />
+        </div>
+        <div class="field" style="margin-bottom: 20px;">
+            <label for="descriptionL" style="font-weight: bold;">Descripción</label>
+            <textarea id="descriptionL" pInputTextarea [(ngModel)]="newActDescription" placeholder="Descripción" style="width: 100%; height: 100px; font-size: 16px; resize: vertical;"></textarea>
+        </div>
+        
+        <div class="field" style="margin-bottom: 20px;">
+            <label style="font-weight: bold;">¿Es urgente?</label>
+            <div>
+                <p-radioButton name="urgente" value="1" [(ngModel)]="isUrgent"></p-radioButton>
+                <label for="si">Sí</label>
+                <p-radioButton name="urgente" value="0" [(ngModel)]="isUrgent"></p-radioButton>
+                <label for="no">No</label>
+            </div>
+        </div>
+
+        <div class="field" style="margin-bottom: 20px;">
+            <label for="dateL" style="font-weight: bold;">Fecha de entrega</label>
+            <p-calendar id="dateL" [(ngModel)]="newActDate" [showIcon]="true" placeholder="Selecciona una fecha" style="width: 100%; display: block;" dateFormat="yy-mm-dd" />
+        </div>
+
+    </div>
+    <p-footer>
+        <div class="p-d-flex p-jc-between p-ai-center" style="gap: 10px;">
+            <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text p-button-lg" (click)="displayNewActDialog = false" style="width: 45%; height: 45%;"></button>
+            <button pButton label="Agregar" icon="pi pi-check" class="p-button-lg" (click)="newAct()" style="width: 45%; height: 45%;"></button>
+        </div>
+    </p-footer>
+</p-dialog>
+
+
+<!-- Diálogo para editar lista -->
+<p-dialog header="Editar lista" [(visible)]="displayEditListDialog" [modal]="true" [closable]="true" [responsive]="true" [style]="{width: '400px'}" [baseZIndex]="10000">
+    <div class="p-fluid" style="margin-top: 20px;">
+        <div class="field" style="margin-bottom: 20px;">
+            <label for="nameL" style="font-weight: bold;">Nombre de la lista</label>
+            <input id="nameL" type="text" pInputText [(ngModel)]="updateListName" [placeholder] ="updateListName" style="width: 100%; font-size: 16px;" />
+        </div>
+        <div class="field" style="margin-bottom: 20px;">
+            <label for="descriptionL" style="font-weight: bold;">Descripción</label>
+            <textarea id="descriptionL" pInputTextarea [(ngModel)]="updateListDescription" [placeholder] ="updateListDescription" style="width: 100%; height: 50%; font-size: 16px;"></textarea>
+        </div>
+        <div class="field" style="margin-bottom: 20px;">
+            <label for="colorL" style="font-weight: bold;">Color</label>
+            <input id="colorL" type="color" [(ngModel)]="updateListColor" style="width: 100%; height: 40px;" />
+        </div>
+    </div>
+    <p-footer>
+        <div class="p-d-flex p-jc-between p-ai-center" style="gap: 10px;">
+            <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text p-button-lg" (click)="displayEditListDialog = false" style="width: 45%; height: 45%;"></button>
+            <button pButton label="Actualizar" icon="pi pi-check" class="p-button-lg" (click)="EditList()" style="width: 45%; height: 45%;"></button>
+        </div>
+    </p-footer>
+</p-dialog>
+
+<!-- Diálogo para miembros asignados de una actividad  -->
+<p-dialog header="Miembros asignados" [(visible)]="displayMembersDialog" [modal]="true" [closable]="true" [responsive]="true" [style]="{width: '50%'}" [baseZIndex]="10000">
+    <div class="p-fluid" style="margin-top: 20px;">
+        <p-table [value]="membersact" [responsive]="true" [scrollable]="true" styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Foto</th>
+                    <th *ngIf = "privilege === 2 || privilege === 1">Acción</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-member>
+                <tr>
+                    <td>{{ member.name }}</td>
+                    <td>{{ member.email }}</td>
+                    <td>
+                        <img *ngIf="member.photo" [src]="member.photo" alt="{{ member.name }}" style="width: 40px; height: 40px; border-radius: 50%;">
+                    </td>
+                    <td *ngIf = "privilege === 2 || privilege === 1">
+                        <button 
+                        pButton 
+                        icon="pi pi-trash" 
+                        class="delete-list-button" 
+                        (click)="confirmDeleteMember(member.idJoinUserWork, selectedActivity.idCard)"
+                        aria-label="Remover miembro">
+                      </button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>  
+    </div>
+
+    <div class="p-fluid" style="margin-top: 20px; display: flex; gap: 5px;">
+        <p-multiSelect *ngIf="(dataBoard.logicdeleted === 0 && (privilege === 1 || privilege === 2))"
+                [options]="possiblesmembers" 
+                [(ngModel)]="selectedmembers" 
+                optionLabel="name" 
+                placeholder="Asignar más miembros" 
+                [showClear]="true" 
+                [appendTo]="'body'" 
+                style="display: inline-block; width: 90%; cursor: pointer;">
+            </p-multiSelect>
+
+            <button *ngIf="(dataBoard.logicdeleted === 0 && (privilege === 1 || privilege === 2))"
+            pButton 
+            icon="pi pi-plus" 
+            class="delete-list-button" 
+            (click)="addMember(selectedActivity.idCard)"
+            aria-label="Agregar miembro">
+            </button>
+
+    </div>
+
+    <p-footer>
+        <button pButton label="Cerrar" icon="pi pi-times" (click)="displayMembersDialog = false"></button>
+     </p-footer>
+
+</p-dialog>
+
+
+<p-dialog header="Detalles de la Actividad" [(visible)]="displayActivityDialog" [modal]="true" [closable]="true" [responsive]="true" [style]="{width: '80%'}" [baseZIndex]="10000">
+    <div class="p-fluid">
+        <div style="display: flex; gap: 5px; flex-wrap: wrap; align-items: center; margin-top: 5px; margin-right: 200px;">
+            <!-- Botones de acción -->
+            <button *ngIf="(dataBoard.logicdeleted === 0 && (privilege === 1 || privilege === 2))"
+                pButton icon="pi pi-pencil" class="update-list-button" (click)="UpdateActDialog()" aria-label="Editar actividad">
+            </button>
+            <button *ngIf="(dataBoard.logicdeleted === 0 && (privilege === 1 || privilege === 2))"
+                pButton icon="pi pi-trash" class="delete-list-button" (click)="confirmDeleteAct(selectedActivity.idCard)" aria-label="Eliminar actividad">
+            </button>
+            <button pButton icon="pi pi-users" class="add-act-button" (click)="getMembersAct(selectedActivity.idCard)" aria-label="Mostrar miembros"></button>
+            
+            <div class="labels" style="display: flex; gap: 5px; flex-wrap: wrap;">
+                <div *ngIf="selectedActivity.important === 1" style="background-color: rgb(173, 11, 11); padding: 10px; border: 1px solid black; color: white;">Urgente</div>
+                <div *ngIf="(selectedActivity.done === 1 && selectedActivity.approbed === 1)" style="background-color: rgb(26, 209, 102); padding: 10px; border: 1px solid black; color: white;">Completada</div>
+                <div *ngFor="let label of selectedActivity.labels" [style.background-color]="label.colorL" style="padding: 10px; border: 1px solid black; color: white; cursor: pointer; display: flex; gap: 5px;" (click)="deleteLabelAct(selectedActivity.idCard, label.idLabel)">
+                    {{label.nameL}} <i class="pi pi-times"></i>
+                </div>
+            </div>
+
+            <p-multiSelect [options]="labels" [(ngModel)]="selectedLabels" optionLabel="nameL" placeholder="Agregar más etiquetas" [showClear]="true" [appendTo]="'body'" style="display: inline-block; width: 90%; cursor: pointer;">
+                <ng-template let-label pTemplate="item">
+                    <div class="label-item" [style.backgroundColor]="label.colorL" style="padding: 5px; border-radius: 5px; color: white;">
+                        {{ label.nameL }}
+                    </div>
+                </ng-template>
+            </p-multiSelect>
+
+            <button pButton icon="pi pi-plus" class="delete-list-button" (click)="addLabel(selectedActivity.idCard)" aria-label="Agregar etiqueta"></button>
+        </div>   
+    </div>
+    
+    <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+        <div style="flex: 1;">
+            <h4>{{selectedActivity.nameC}}</h4>
+            <div>
+                <p><strong>Descripción:</strong> {{selectedActivity.descriptionC}}</p>
+                <p><strong>Fecha de vencimiento:</strong> {{selectedActivity.end_date}}</p>
+                <p><strong>Estado:</strong> {{selectedActivity.done ? 'Completada' : 'Pendiente'}}</p>
+                <p><strong>Urgente:</strong> {{selectedActivity.important ? 'Sí' : 'No'}}</p>
+            </div>
+        </div>
+
+        <div style="flex: 1; max-height: 300px; overflow-y: auto; border-left: 1px solid #ccc; padding-left: 10px;">
+            <h4>Comentarios</h4>
+            <div *ngFor="let comment of comments" style="display: flex; flex-direction: column; gap: 5px;">
+                <div style="display: flex; flex-direction: column; gap: 2px; align-items: flex-start; border-bottom: 1px solid #eee; padding: 5px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                        <div style="display: flex; align-items: center;">
+                            <img [src]="comment.photo" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;"> 
+                            <p style="margin: 0;">{{comment.name}}</p> 
+                            <p style="margin: 0; color: rgb(194, 10, 10);" *ngIf = "comment.privilege === 2">(Líder)</p>
+                            <p style="margin: 0; color: rgb(194, 10, 10);" *ngIf = "comment.privilege === 1">(Coordinador)</p>
+                            <i class="pi pi-star" *ngIf="comment.privilege === 1 || comment.privilege === 2" style="margin-left: 5px;"></i>
+                        </div>
+                        
+    
+                        <p style="margin-left: auto; margin-right: 5px;">{{comment.created_at}}</p>  
+                    
+                        <button *ngIf="( (dataBoard.logicdeleted === 0 && privilege === 1 ) || (privilege === 2 && dataBoard.logicdeleted === 0) )" 
+                                pButton icon="pi pi-times" class="delete-comment-button" 
+                                (click)="deleteComment(comment.idComment)"> 
+                        </button>
+                        <button *ngIf="( (dataBoard.logicdeleted === 0 && comment.name === nameAuth ) || (comment.name === nameAuth  && dataBoard.logicdeleted === 0 ) )" 
+                                pButton icon="pi pi-pencil" class="update-list-button" 
+                                (click)="updateComment(comment.idComment)"> 
+                        </button>
+                        <button *ngIf="( (dataBoard.logicdeleted === 0 && comment.seen === 0 && privilege === 1 && comment.privilege != 2 ) || (comment.seen === 0  && dataBoard.logicdeleted === 0  && privilege === 2 && comment.privilege != 2) )" 
+                                pButton icon="pi pi-check" class="p-button-success" 
+                                (click)="seenComment(comment.idComment)"> 
+                        </button>
+                    </div>
+                    <div style="display: flex; gap: 2px; flex-wrap: wrap; align-items: center;">
+                        <p>{{comment.text}}</p>
+                        <i *ngIf = "comment.seen === 0 && comment.privilege != 2" style="font-size: 12px;">(No visto por un coordinador)</i>  <i *ngIf = "comment.seen === 1" style="font-size: 12px;">(Visto por un coordinador)</i>
+                    </div>
+                </div>  
+            </div>    
+
+            <div style="margin-top: 10px;">
+                <label for="commentt" style="font-weight: bold;">Agregar comentario</label>
+                <input id="commentt" type="text" pInputText [(ngModel)]="newComment" placeholder ="Insertar comentario aquí" style="width: 100%; font-size: 16px;" />
+                <button pButton icon="pi pi-plus" class="delete-comment-button" (click)="newC(selectedActivity.idCard)">Agregar</button>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px;"> 
+        <input type="file" id="fileInput" (change)="onFileSelected($event, selectedActivity.idCard)" style="display: none;" accept=".pdf">
+        <button pButton icon="pi pi-plus" class="p-button-success" label="Adjuntar nueva evidencia" (click)="onUploadClick()"></button>
+        <button pButton icon="pi pi-check" class="request-button" label="Descargar evidencia" (click)="downloadEvidence(selectedActivity.idCard)"></button>
+        <button *ngIf="(dataBoard.logicdeleted === 0 && selectedActivity.approbed === 0 && selectedActivity.done === 1 && (privilege === 1 || privilege === 2))" 
+                pButton icon="pi pi-check" class="p-button-success" label="Aprobar actividad" (click)="ApprobeEvidence(selectedActivity.idCard, selectedActivity.nameC)">
+        </button>
+        <button *ngIf="(dataBoard.logicdeleted === 0 && selectedActivity.approbed === 1 && selectedActivity.done === 1 && (privilege === 1 || privilege === 2))" 
+                pButton icon="pi pi-times" class="p-button-danger" label="Deshacer aprobación" (click)="DesApprobeEvidence(selectedActivity.idCard, selectedActivity.nameC)">
+        </button>
+        <button *ngIf="(dataBoard.logicdeleted === 0 && selectedActivity.approbed === 0 && selectedActivity.done === 0)" 
+                pButton icon="pi pi-check" class="p-button-success" label="Marcar como terminada" (click)="EndAct(selectedActivity.idCard, selectedActivity.nameC)">
+        </button>
+    </div>
+
     <p-footer>
         <button pButton label="Cerrar" icon="pi pi-times" (click)="displayActivityDialog = false"></button>
     </p-footer>
 </p-dialog>
+
+
 
 <p-toast></p-toast>
 <p-confirmDialog></p-confirmDialog>

@@ -28,6 +28,12 @@ export class WorkEnvMService {
     return this.http.get(this.url + `api/getMembers/${id}`, { withCredentials: true }) as Observable<any>;
    }
 
+   getMembersPhotos(ida):Observable<any>{
+    return this.http.post(this.url + `api/getUsersPhotosByCard`, {
+      idCard: ida
+    }, { withCredentials: true }) as Observable<any>;
+   }
+
    updateMember(id: number, idWork: number, priv: number):Observable<any>{
      return this.http.put(this.url+ `api/updateMember/${id}/${idWork}/${priv}`, {}, {withCredentials: true}) as Observable<any>;
    }

@@ -35,17 +35,15 @@
     background-color: white;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    width: 550px;
     height: 60vh;
     margin: 0 10px; /* Ajustado para márgenes laterales */
     display: inline-block;
-    
+    overflow-y: auto;
 }
 
 /* Header y tarjetas */
 .list-header {
     display: flex;
-    flex-direction: column;
     margin-bottom: 10px;
 }
 
@@ -106,3 +104,69 @@
     border: 1px dashed #ccc;
     background-color: #f9f9f9;
 }
+
+.list-header {
+    display: flex; /* Usar flexbox para la alineación */
+    align-items: center; /* Centrar verticalmente los elementos */
+    flex-wrap: wrap;
+    gap: 5px;
+}
+  
+  h3 {
+    margin: 0; /* Eliminar margen por defecto del h3 */
+    font-size: 1.5rem; /* Ajustar tamaño de fuente si es necesario */
+  }
+  
+  .delete-list-button {
+    border: none; /* Quitar borde del botón */
+    background-color: rgb(192, 8, 8);
+    cursor: pointer; /* Cambiar cursor para indicar que es clickeable */
+    margin-left: 10px; /* Espacio entre el título y el ícono */
+    color: #ffffff; /* Color rojo para el ícono de eliminación */
+  }
+  
+  .delete-list-button:hover {
+    color: #c0bebe; /* Color más oscuro al pasar el mouse */
+  }
+
+  .update-list-button{
+    border: none; /* Quitar borde del botón */
+    background-color: rgb(240, 178, 6);
+    cursor: pointer; /* Cambiar cursor para indicar que es clickeable */
+    color: #ffffff; /* Color rojo para el ícono de eliminación */
+  }
+  
+.labels{
+    display: flex;
+    gap: 5px;
+}
+
+.add-act-button{
+    border: none; /* Quitar borde del botón */
+    background-color: rgb(6, 193, 240);
+    cursor: pointer; /* Cambiar cursor para indicar que es clickeable */
+    color: #0485cf; /* Color rojo para el ícono de eliminación */
+}
+
+  /* Asegúrate de que el calendario no exceda el ancho del contenedor */
+  .p-calendar {
+    width: 100%;
+    display: block; /* Asegúrate de que el calendario se muestre como un bloque */
+}
+
+/* Asegúrate de que el textarea se pueda redimensionar verticalmente */
+textarea {
+    resize: vertical;
+}
+
+/* Ajustar el espacio entre los elementos del formulario */
+.field {
+    margin-bottom: 20px;
+}
+
+/* Asegúrate de que el texto del botón sea legible */
+.p-button {
+    font-size: 16px;
+}
+
+

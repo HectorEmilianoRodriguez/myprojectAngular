@@ -65,7 +65,7 @@ export class RegistroComponent {
         let data = {
           name : this.fgregistro.value['nombre'],
           email: this.fgregistro.value['email'],
-          Password : this.fgregistro.value['contrasena']
+          password : this.fgregistro.value['contrasena']
        }
        
         this.servicioRegistro.postRegister(data).subscribe({
