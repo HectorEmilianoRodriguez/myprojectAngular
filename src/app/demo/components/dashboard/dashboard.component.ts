@@ -116,7 +116,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     editWorkEnv(id: string) {
         console.log('ID del entorno:', id); // Agrega este log para verificar el ID
-        this.router.navigate(['/edit-work-env/editar', id]); // Navega al componente de edición
+        this.router.navigate([`WorkEnv/${id}/Edit/${id}`]); // Navega al componente de edición
     }
     
     getCantInvEntornos() {

@@ -49,7 +49,7 @@ export class AppMenuComponent implements OnInit {
                             items: data.owner.map(space => ({
                                 label: space.title, // Usar el título del owner
                                 icon: 'pi pi-fw pi-bookmark',
-                                routerLink: [`/workspace/${space.idWorkEnv}`] // Enlace dinámico
+                                routerLink: [`WorkEnv/${space.idWorkEnv}/Edit/${space.idWorkEnv}`] // Enlace dinámico
                             }))
                         },
                         {
@@ -57,7 +57,7 @@ export class AppMenuComponent implements OnInit {
                             items: data.participant.map(space => ({
                                 label: space.title, // Usar el título del participant
                                 icon: 'pi pi-fw pi-bookmark',
-                                routerLink: [`/workspace/${space.idWorkEnv}`] // Enlace dinámico
+                                routerLink: [`WorkEnv/${space.idWorkEnv}/Edit/${space.idWorkEnv}`] // Enlace dinámico
                             }))
                         }
 

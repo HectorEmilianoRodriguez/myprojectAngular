@@ -173,4 +173,10 @@ export class LayoutService {
             withCredentials: true
         });
     }
+
+    notificacionVisible(idNoti):Observable<any> {
+        return this.http.get<any>(`${this.url}api/setSeenNotificationn/${idNoti}`, {
+            withCredentials: true
+        });
+    }
 }

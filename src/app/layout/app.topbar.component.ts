@@ -36,6 +36,7 @@ export class AppTopBarComponent implements OnInit {
         private appLayoutComponent: AppLayoutComponent,
         private authService: AuthService,
         private perfilService: PerfilUService,
+        private notificacionService :LayoutService,
         private sanitizer: DomSanitizer,
 
         private cdr: ChangeDetectorRef
@@ -164,5 +165,19 @@ export class AppTopBarComponent implements OnInit {
 
     toggleNotificaciones() {
         this.mostrarNotificaciones = !this.mostrarNotificaciones; // Alterna la visibilidad
+    }
+    visto(idNoti){
+        this.notificacionService.notificacionVisible(idNoti).subscribe(
+            (next)=> {
+                this.geNotifi();
+                console.log('Notificaciones vistas'); // Muestra las notificaciones en la consola
+             },
+             (error) => {
+                 console.error('Error al marcar las notificaciones:'); // Manejo de errores
+             }
+
+        )
+                   
+    
     }
 }
