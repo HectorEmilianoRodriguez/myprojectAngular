@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { TableroCRoutingModule } from './tablero-c-routing.module';
@@ -23,7 +23,7 @@ import { TableroCComponent } from './tablero-c/tablero-c.component';
     CommonModule,
     TableroCRoutingModule,
     FormsModule,
-		TableModule,
+		TableModule, // Asegúrate de que este módulo esté importado
 		RatingModule,
 		ButtonModule,
 		SliderModule,
@@ -33,8 +33,9 @@ import { TableroCComponent } from './tablero-c/tablero-c.component';
 		MultiSelectModule,
 		DropdownModule,
 		ProgressBarModule,
-		ToastModule
-
+		ToastModule,
+		
   ]
+ 
 })
 export class TableroCModule { }
