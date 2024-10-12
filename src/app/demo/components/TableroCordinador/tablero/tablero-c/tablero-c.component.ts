@@ -154,14 +154,13 @@ interface ExpandedRows {
       });
 
       // Inicializa el nuevo grupo
-      this.newGroup = new Group(0, '', '', '', '', this.idJoinUserWork); // Asegúrate de que el constructor de Group tenga los parámetros correctos
+      this.newGroup = new Group(0, '', '', '', this.idJoinUserWork); // Asegúrate de que el constructor de Group tenga los parámetros correctos
     }
 
     createGroup(): void {
       // Crea un nuevo grupo incluyendo idJoinUserWork
       const groupData = {
-        name: this.newGroup.name,
-        description: this.newGroup.description, // Asegúrate de que esta propiedad exista en el modelo
+        name: this.newGroup.name,// Asegúrate de que esta propiedad exista en el modelo
         startdate: this.newGroup.startdate,
         endate: this.newGroup.endate,
         idJoinUserWork: this.idJoinUserWork // Incluye el ID del entorno de trabajo
@@ -171,7 +170,7 @@ interface ExpandedRows {
         (data) => {
           this.taskGroups.push(data); // Agrega el nuevo grupo a la lista
           this.displayModal = false; // Cierra el modal
-          this.newGroup = new Group(0, '', '', '', '', this.idJoinUserWork); // Reinicia el formulario
+          this.newGroup = new Group(0, '', '', '', this.idJoinUserWork); // Reinicia el formulario
         },
         (error) => {
           console.error('Error creando grupo', error);
