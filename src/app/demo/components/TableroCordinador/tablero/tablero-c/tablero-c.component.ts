@@ -6,6 +6,8 @@ import { ServicioTCService } from '../servicio/servicio-tc.service'; // Asegúra
 import { Activity } from '../modelo/actividad'; // Asegúrate de que la ruta sea correcta
 import { Group } from '../modelo/groups.model'; // Asegúrate de que la ruta sea correcta
 import { WorkEnvMService } from 'src/app/demo/components/workenvm/servicios/workenvm-service'; // Asegúrate de que la ruta sea correcta
+import { AuthService } from 'src/app/services/auth.service'; // Asegúrate de importar el servicio de autenticación
+
 
 interface ExpandedRows {
     [key: string]: boolean;
@@ -30,45 +32,57 @@ interface ExpandedRows {
 
     constructor(private servicioTC: ServicioTCService,
       private workEnvService: WorkEnvMService,
-      private route: ActivatedRoute,) { }
+      private route: ActivatedRoute,
+      private authService: AuthService // Inyecta el servicio de autenticación
+   
+     ) { }
 
     ngOnInit() {
-      this.getWorkEnv();
-      this.loadTaskGroups();
-      this.route.paramMap.subscribe(params =>{
-        this.id = params.get('id');
-        console.log(this.id)
-     })
+      this.route.paramMap.subscribe(params => {
+        this.id = params.get('id'); // Obtiene el ID del grupo
+        console.log(this.id);
+        this.loadUserData(); // Llama a cargar los datos del usuario
+      });
     }
 
-
-
-
-    getWorkEnv(): void {
-      const userId = '1'; // Reemplaza esto con el ID del usuario actual
-      this.workEnvService.getWorkEnv(userId).subscribe(
-          (data) => {
-              this.idJoinUserWork = data.idJoinUserWork; // Asegúrate de que la respuesta contenga esta propiedad
-              this.loadTaskGroups(); // Carga los grupos de tareas después de obtener el ID
-          },
-          (error) => {
-              console.error('Error fetching work environment', error);
-          }
-      );
-  }
-
-  loadTaskGroups(): void {
-    this.servicioTC.getTaskGroups(this.idJoinUserWork).subscribe(
+    loadUserData(): void {
+      this.authService.getUser().subscribe(
         (data) => {
-            this.taskGroups = data; // Asigna los grupos de tareas a la propiedad
-            this.loading = false; // Cambia el estado de carga
+          this.idJoinUserWork = data.idJoinUserWork; // Asegúrate de que la respuesta contenga esta propiedad
+          console.log('ID del entorno de trabajo:', this.idJoinUserWork);
+          this.getWorkEnv(); // Llama a obtener el entorno de trabajo después de obtener el ID del usuario
         },
         (error) => {
-            console.error('Error fetching task groups', error);
-            this.loading = false; // Cambia el estado de carga
+          console.error('Error fetching user data', error);
         }
-    );
-}
+      );
+    }
+
+    getWorkEnv(): void {
+      const userId = this.idJoinUserWork.toString(); 
+      this.workEnvService.getWorkEnv(userId).subscribe(
+        (data) => {
+          this.idJoinUserWork = data.idJoinUserWork; // Asegúrate de que la respuesta contenga esta propiedad
+          this.loadTaskGroups(); // Carga los grupos de tareas después de obtener el ID
+        },
+        (error) => {
+          console.error('Error fetching work environment', error);
+        }
+      );
+    }
+
+    loadTaskGroups(): void {
+      this.servicioTC.getTaskGroups(this.idJoinUserWork).subscribe(
+        (data) => {
+          this.taskGroups = data; // Asigna los grupos de tareas a la propiedad
+          this.loading = false; // Cambia el estado de carga
+        },
+        (error) => {
+          console.error('Error fetching task groups', error);
+          this.loading = false; // Cambia el estado de carga
+        }
+      );
+    }
 
     loadActivities(idgrouptaskcl: number): void {
       this.servicioTC.getActivitiesByGroup(idgrouptaskcl).subscribe(
@@ -131,5 +145,24 @@ interface ExpandedRows {
 
     clear(table: Table) {
       table.clear();
+    }
+
+    newGroup: Group = new Group(0, '', '', '', '', 0); // Inicializa un nuevo grupo
+    displayModal: boolean = false; // Controla la visibilidad del modal
+
+    createGroup(): void {
+        // Asigna el ID del entorno de trabajo al nuevo grupo
+        this.newGroup.idJoinUserWork = this.idJoinUserWork;
+
+        this.servicioTC.createGroup(this.newGroup).subscribe(
+            (data) => {
+                this.taskGroups.push(data); // Agrega el nuevo grupo a la lista
+                this.displayModal = false; // Cierra el modal
+                this.newGroup = new Group(0, '', '', '', '', 0); // Reinicia el formulario
+            },
+            (error) => {
+                console.error('Error creando grupo', error);
+            }
+        );
     }
   }

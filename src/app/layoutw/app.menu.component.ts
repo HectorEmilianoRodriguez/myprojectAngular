@@ -80,7 +80,7 @@ export class AppMenuComponent implements OnInit {
                             { label: 'Calendario de actividades', icon: 'pi pi-fw pi-calendar', routerLink: ['/union/unionEntorno'] },
                             { label: 'Recursos', icon: 'pi pi-fw pi-folder-open', routerLink: ['/uikit/input'] },
                             { label: 'Reportes', icon: 'pi pi-fw pi-file-pdf', routerLink: [`/WorkEnv/${this.data?.idWorkEnv}/Reports/${this.data?.idWorkEnv}`] },
-                            ...(this.data.privilege === 1 || this.data.privilege === 2 ? [{ label: 'Grupos de tareas', icon: 'pi pi-fw pi-book', routerLink: [`/WorkEnv/${this.data?.idWorkEnv}/tablero/${this.data?.idWorkEnv}`] }] : []),
+                            ...(this.data.privilege === 1 || this.data.privilege === 2 ? [{ label: 'Grupos de tareas', icon: 'pi pi-fw pi-book', routerLink: [`/WorkEnv/${this.data?.idWorkEnv}/grupos/${this.data?.idWorkEnv}`] }] : []),
                             {
                                 label: 'Tableros', icon: 'pi pi-fw pi-book',
                                 items: this.boards.filter(board => board.logicdeleted === 0).map(board => ({

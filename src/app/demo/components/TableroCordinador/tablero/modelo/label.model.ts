@@ -1,11 +1,11 @@
 export class Label {
-    constructor(
-        public idLabel: number,
-        public nameL: string,
-        public colorL: string,
-        public logicdeleted: number,
-        public idWorkEnv: number,
-        public created_at?: string,
-        public updated_at?: string
-    ) {}
+    
+        idLabel: number;
+        nameL: string;
+        colorL: string;
+        logicdeleted: number;
+         idWorkEnv: number;
+        created_at?: string;
+         updated_at?: string;
+    
 }

@@ -16,6 +16,7 @@ import { ToastModule } from 'primeng/toast';
 import { SliderModule } from 'primeng/slider';
 import { RatingModule } from 'primeng/rating';
 import { TableroCComponent } from './tablero-c/tablero-c.component';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [TableroCComponent],
@@ -34,6 +35,8 @@ import { TableroCComponent } from './tablero-c/tablero-c.component';
 		DropdownModule,
 		ProgressBarModule,
 		ToastModule,
+		DialogModule,
+		FormsModule
 		
   ]
  
