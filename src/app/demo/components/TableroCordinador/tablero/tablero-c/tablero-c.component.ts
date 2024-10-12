@@ -37,13 +37,7 @@ interface ExpandedRows {
    
      ) { }
 
-    ngOnInit() {
-      this.route.paramMap.subscribe(params => {
-        this.id = params.get('id'); // Obtiene el ID del grupo
-        console.log(this.id);
-        this.loadUserData(); // Llama a cargar los datos del usuario
-      });
-    }
+    
 
     loadUserData(): void {
       this.authService.getUser().subscribe(
@@ -147,22 +141,42 @@ interface ExpandedRows {
       table.clear();
     }
 
-    newGroup: Group = new Group(0, '', '', '', '', 0); // Inicializa un nuevo grupo
+    newGroup: Group; // Inicializa un nuevo grupo
     displayModal: boolean = false; // Controla la visibilidad del modal
 
-    createGroup(): void {
-        // Asigna el ID del entorno de trabajo al nuevo grupo
-        this.newGroup.idJoinUserWork = this.idJoinUserWork;
+    ngOnInit() {
+      this.route.paramMap.subscribe(params => {
+        this.id = params.get('id'); // Obtiene el ID del grupo
+        console.log(this.id);
+        this.idJoinUserWork = Number(this.id); // Asigna el ID a idJoinUserWork
+        console.log('ID del entorno de trabajo:', this.idJoinUserWork);
+        this.loadTaskGroups(); // Carga los grupos de tareas
+      });
 
-        this.servicioTC.createGroup(this.newGroup).subscribe(
-            (data) => {
-                this.taskGroups.push(data); // Agrega el nuevo grupo a la lista
-                this.displayModal = false; // Cierra el modal
-                this.newGroup = new Group(0, '', '', '', '', 0); // Reinicia el formulario
-            },
-            (error) => {
-                console.error('Error creando grupo', error);
-            }
-        );
+      // Inicializa el nuevo grupo
+      this.newGroup = new Group(0, '', '', '', '', this.idJoinUserWork); // Asegúrate de que el constructor de Group tenga los parámetros correctos
+    }
+
+    createGroup(): void {
+      // Crea un nuevo grupo incluyendo idJoinUserWork
+      const groupData = {
+        id: 0, // Asegúrate de incluir un ID, aunque sea temporal
+        name: this.newGroup.name,
+        description: this.newGroup.description, // Asegúrate de que esta propiedad exista en el modelo
+        startdate: this.newGroup.startdate,
+        enddate: this.newGroup.enddate,
+        idJoinUserWork: this.idJoinUserWork // Incluye el ID del entorno de trabajo
+      };
+
+      this.servicioTC.createGroup(groupData).subscribe(
+        (data) => {
+          this.taskGroups.push(data); // Agrega el nuevo grupo a la lista
+          this.displayModal = false; // Cierra el modal
+          this.newGroup = new Group(0, '', '', '', '', this.idJoinUserWork); // Reinicia el formulario
+        },
+        (error) => {
+          console.error('Error creando grupo', error);
+        }
+      );
     }
   }
