@@ -3,7 +3,7 @@
 	  <div class="card">
 		<h5>Grupos de Actividades</h5>
 		<p-toast></p-toast>
-		<p-table [value]="taskGroups" dataKey="id" responsiveLayout="scroll" [rowGroupMetadata]="rowGroupMetadata">
+		<p-table [value]="taskGroups" dataKey="id" rowGroupMode="subheader" [groupRowsBy]="['name']" responsiveLayout="scroll">
 		  <ng-template pTemplate="header">
 			<tr>
 			  <th>Nombre del Grupo</th>
@@ -15,11 +15,11 @@
 		  </ng-template>
 		  <ng-template pTemplate="body" let-group let-rowIndex="rowIndex">
 			<tr>
-			  <td *ngIf="rowIndex === rowGroupMetadata[group.name]?.index">{{ group.name }}</td>
-			  <td *ngIf="rowIndex === rowGroupMetadata[group.name]?.index">{{ group.description }}</td>
-			  <td *ngIf="rowIndex === rowGroupMetadata[group.name]?.index">{{ group.startDate | date }}</td>
-			  <td *ngIf="rowIndex === rowGroupMetadata[group.name]?.index">{{ group.endDate | date }}</td>
-			  <td *ngIf="rowIndex === rowGroupMetadata[group.name]?.index">
+			  <td>{{ group.name }}</td>
+			  <td>{{ group.description }}</td>
+			  <td>{{ group.startDate | date }}</td>
+			  <td>{{ group.endDate | date }}</td>
+			  <td>
 				<ul>
 				  <li *ngFor="let activity of group.activities">{{ activity.name }}</li>
 				</ul>

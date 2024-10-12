@@ -4,7 +4,7 @@ import { TableroCComponent } from './tablero-c/tablero-c.component';
 
 const routes: Routes = [
 
-  {path : 'coordinador', component:TableroCComponent}
+  {path : ' ', component:TableroCComponent}
 ];
 
 @NgModule({

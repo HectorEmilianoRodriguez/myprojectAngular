@@ -1,27 +1,12 @@
 import { Activity } from '../modelo/actividad'; // Asegúrate de que la ruta sea correcta
 
 export class Group {
-    id: number;
-    name: string;
-    startdate: Date;
-    enddate: Date;
-    logicdeleted: boolean;
-    idJoinUserWork: number;
-    activities: Activity[] = []; // Asegúrate de que esto esté presente
-
     constructor(
-        id: number,
-        name: string,
-        startdate: Date,
-        enddate: Date,
-        logicdeleted: boolean,
-        idJoinUserWork: number
-    ) {
-        this.id = id;
-        this.name = name;
-        this.startdate = startdate;
-        this.enddate = enddate;
-        this.logicdeleted = logicdeleted;
-        this.idJoinUserWork = idJoinUserWork;
-    }
+        public id: number,
+        public name: string,
+        public startdate: string, // Cambiado a string para reflejar el formato de fecha
+        public enddate: string, // Cambiado a string para reflejar el formato de fecha
+        public logicdeleted: number,
+        public idJoinUserWork: number
+    ) {}
 }

@@ -1,21 +1,11 @@
 export class Label {
-    idLabel: number;
-    nameL: string;
-    colorL: string;
-    logicdeleted: boolean;
-    idWorkEnv: number;
-
     constructor(
-        idLabel: number,
-        nameL: string,
-        colorL: string,
-        logicdeleted: boolean,
-        idWorkEnv: number
-    ) {
-        this.idLabel = idLabel;
-        this.nameL = nameL;
-        this.colorL = colorL;
-        this.logicdeleted = logicdeleted;
-        this.idWorkEnv = idWorkEnv;
-    }
+        public idLabel: number,
+        public nameL: string,
+        public colorL: string,
+        public logicdeleted: number,
+        public idWorkEnv: number,
+        public created_at?: string,
+        public updated_at?: string
+    ) {}
 }
