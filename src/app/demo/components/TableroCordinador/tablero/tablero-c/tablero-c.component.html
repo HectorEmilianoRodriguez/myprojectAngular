@@ -8,8 +8,7 @@
 		  <ng-template pTemplate="header">
 			<tr>
 			  <th>Nombre del Grupo</th>
-			  <th>Descripción</th>
-			  <th>Fecha de Inicio</th>
+			 <th>Fecha de Inicio</th>
 			  <th>Fecha de Fin</th>
 			  <th>Acciones</th>
 			</tr>
@@ -17,7 +16,6 @@
 		  <ng-template pTemplate="body" let-group let-rowIndex="rowIndex">
 			<tr>
 			  <td>{{ group.name }}</td>
-			  <td>{{ group.description }}</td>
 			  <td>{{ group.startDate | date }}</td>
 			  <td>{{ group.endDate | date }}</td>
 			  <td>
