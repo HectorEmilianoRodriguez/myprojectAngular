@@ -160,11 +160,10 @@ interface ExpandedRows {
     createGroup(): void {
       // Crea un nuevo grupo incluyendo idJoinUserWork
       const groupData = {
-        id: 0, // Asegúrate de incluir un ID, aunque sea temporal
         name: this.newGroup.name,
         description: this.newGroup.description, // Asegúrate de que esta propiedad exista en el modelo
         startdate: this.newGroup.startdate,
-        enddate: this.newGroup.enddate,
+        endate: this.newGroup.endate,
         idJoinUserWork: this.idJoinUserWork // Incluye el ID del entorno de trabajo
       };
 
