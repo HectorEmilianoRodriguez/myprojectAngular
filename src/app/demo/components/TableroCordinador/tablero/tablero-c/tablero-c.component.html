@@ -21,9 +21,13 @@
 						<td>{{ group.startdate | date }}</td>
 						<td>{{ group.enddate | date }}</td>
 						<td>
-							<button pButton (click)="expandedRows[group.name] = !expandedRows[group.name]; loadActivities(group.idgrouptaskcl)" 
-							[label]="expandedRows[group.name] ? 'Ocultar Actividades' : 'Mostrar Actividades'" 
-							icon="pi pi-chevron-down"></button>
+							<div class="flex align-items-center">
+								<button pButton (click)="expandedRows[group.name] = !expandedRows[group.name]; loadActivities(group.idgrouptaskcl)" 
+										[label]="expandedRows[group.name] ? 'Ocultar Actividades' : 'Mostrar Actividades'" 
+										icon="pi pi-chevron-down" class="mr-2"></button>
+								<button pButton label="Modificar" icon="pi pi-pencil" (click)="editGroup(group.id)" class="mr-2"></button>
+								<button pButton label="Eliminar" icon="pi pi-trash" (click)="deleteGroup(group.id)"></button>
+							</div>
 						</td>
 					</tr>
 					<tr *ngIf="expandedRows[group.name]">
@@ -66,43 +70,40 @@
 											<label for="activityName">Nombre de la Actividad:</label>
 											<input id="activityName" [(ngModel)]="newActivity.nameT" pInputText
 												placeholder="Nombre de la Actividad"
-												class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
+												class="w-full" />
 										</div>
 										<div class="field col-12 md:col-4">
 											<label for="activityDescription">Descripción de la Actividad:</label>
 											<input id="activityDescription" [(ngModel)]="newActivity.descriptionT"
 												pInputText placeholder="Descripción de la Actividad"
-												class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
+												class="w-full" />
 										</div>
 										<div class="field col-12 md:col-4">
 											<label for="activityEndDate">Fecha de Fin:</label>
 											<input id="activityEndDate" [(ngModel)]="newActivity.end_date" type="date"
 												pInputText
-												class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
+												class="w-full" />
 										</div>
 										<div class="field col-12 md:col-4">
 											<label for="activityImportant">Importante (0 o 1):</label>
 											<input id="activityImportant" [(ngModel)]="newActivity.important"
 												type="number" pInputText placeholder="Importante (0 o 1)"
-												class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
+												class="w-full" />
 										</div>
 										<div class="field col-12 md:col-4">
 											<label for="activityLabel">Etiqueta:</label>
 											<select id="activityLabel" [(ngModel)]="newActivity.idLabel"
-												class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
-												pInputText>
+												class="w-full" pInputText>
 												<option *ngFor="let label of labels" [value]="label.idLabel"
 													[ngStyle]="{'background-color': label.colorL, 'color': '#fff'}">
 													{{ label.nameL }}
 												</option>
 											</select>
 										</div>
-
 										<div class="field col-12 md:col-4">
 											<label for="activityLabel">Nueva Etiqueta:</label>
-											<button pButton label="Crear Etiqueta" icon="pi pi-plus" class="w-full"></button> <!-- Agregar clase w-full -->
+											<button pButton label="Crear Etiqueta" icon="pi pi-plus" class="w-full"></button>
 										</div>
-
 									</div>
 									<div class="flex justify-content-end">
 										<button pButton label="Agregar"
