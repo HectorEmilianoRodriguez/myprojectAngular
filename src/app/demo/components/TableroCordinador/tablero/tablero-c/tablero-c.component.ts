@@ -137,7 +137,8 @@ interface ExpandedRows {
       this.servicioTC.createActivity(this.newActivity).subscribe(
           (data) => {
               this.activities.push(data); // Agrega la nueva actividad a la lista
-              this.newActivity = new Activity(0, '', '', new Date().toISOString().split('T')[0], 0, 0, 0, 0, null); // Reinicia el formulario
+          this.newActivity = new Activity(0, '', '', new Date().toISOString().split('T')[0], 0, 0, 0, 0, null); // Reinicia el formulario
+          this.loadActivities(groupId);
           },
           (error) => {
               console.error('Error creando actividad', error);
