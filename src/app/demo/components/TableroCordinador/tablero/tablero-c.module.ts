@@ -17,6 +17,14 @@ import { SliderModule } from 'primeng/slider';
 import { RatingModule } from 'primeng/rating';
 import { TableroCComponent } from './tablero-c/tablero-c.component';
 import { DialogModule } from 'primeng/dialog';
+import { DividerModule } from 'primeng/divider';
+
+
+
+
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 @NgModule({
   declarations: [TableroCComponent],
@@ -36,7 +44,12 @@ import { DialogModule } from 'primeng/dialog';
 		ProgressBarModule,
 		ToastModule,
 		DialogModule,
-		FormsModule
+		FormsModule,
+		DividerModule,
+		DropdownModule,
+		
+
+		
 		
   ]
  

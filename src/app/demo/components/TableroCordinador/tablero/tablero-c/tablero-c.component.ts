@@ -111,14 +111,15 @@ interface ExpandedRows {
 
     loadActivities(idgrouptaskcl: number): void {
       this.servicioTC.getActivitiesByGroup(idgrouptaskcl).subscribe(
-        (data) => {
-          this.activities = data; // Asigna las actividades a la propiedad
-        },
-        (error) => {
-          console.error('Error fetching activities', error);
-        }
+          (data) => {
+              this.activities = data; // Asigna las actividades a la propiedad
+              console.log('Actividades cargadas:', this.activities); // Para verificar que las actividades se cargan correctamente
+          },
+          (error) => {
+              console.error('Error fetching activities', error);
+          }
       );
-    }
+  }
    
     logGroupId(groupId: number): void {
       console.log('ID del grupo:', groupId);
