@@ -34,32 +34,31 @@
 				  <div class="card">
 					<h6>Agregar Actividad</h6>
 					<div class="p-fluid">
-					  <div class="p-field mb-3">
-						<label for="activityName">Nombre de la Actividad:</label>
-						<input id="activityName" [(ngModel)]="newActivity.nameT" pInputText placeholder="Nombre de la Actividad" />
-					  </div>
-					  <div class="p-field mb-3">
-						<label for="activityDescription">Descripción de la Actividad:</label>
-						<input id="activityDescription" [(ngModel)]="newActivity.descriptionT" pInputText placeholder="Descripción de la Actividad" />
-					  </div>
-					  <div class="p-field mb-3">
-						<label for="activityEndDate">Fecha de Fin:</label>
-						<input id="activityEndDate" [(ngModel)]="newActivity.end_date" type="date" pInputText />
-					  </div>
-					  <div class="p-field mb-3">
-						<label for="activityImportant">Importante (0 o 1):</label>
-						<input id="activityImportant" [(ngModel)]="newActivity.important" type="number" pInputText placeholder="Importante (0 o 1)" />
-					  </div>
-					  <div class="p-field mb-3">
-						<label for="activityLabel">Etiqueta:</label>
-						<select id="activityLabel" [(ngModel)]="newActivity.idLabel" pInputText>
-							<option *ngFor="let label of labels" [value]="label.idLabel" [ngStyle]="{'background-color': label.colorL, 'color': '#fff'}">
-								{{ label.nameL }}
-							</option>
-						</select>
-					  </div>
-					  <button pButton label="Agregar" (click)="addActivity(group.id)" icon="pi pi-plus"></button>
-					</div>
+						<div class="p-field mb-3">
+							<label for="activityName">Nombre de la Actividad:</label>
+							<input id="activityName" [(ngModel)]="newActivity.nameT" pInputText placeholder="Nombre de la Actividad" />
+						</div>
+						<div class="p-field mb-3">
+							<label for="activityDescription">Descripción de la Actividad:</label>
+							<input id="activityDescription" [(ngModel)]="newActivity.descriptionT" pInputText placeholder="Descripción de la Actividad" />
+						</div>
+						<div class="p-field mb-3">
+							<label for="activityEndDate">Fecha de Fin:</label>
+							<input id="activityEndDate" [(ngModel)]="newActivity.end_date" type="date" pInputText />
+						</div>
+						<div class="p-field mb-3">
+							<label for="activityImportant">Importante (0 o 1):</label>
+							<input id="activityImportant" [(ngModel)]="newActivity.important" type="number" pInputText placeholder="Importante (0 o 1)" />
+						</div>
+						<div class="p-field mb-3">
+							<label for="activityLabel">Etiqueta:</label>
+							<select id="activityLabel" [(ngModel)]="newActivity.idLabel" pInputText>
+								<option *ngFor="let label of labels" [value]="label.idLabel" [ngStyle]="{'background-color': label.colorL, 'color': '#fff'}">
+									{{ label.nameL }}
+								</option>
+							</select>
+						</div>
+						<button pButton label="Agregar" (click)="logGroupId(group.idgrouptaskcl); addActivity(group.idgrouptaskcl)" icon="pi pi-plus"></button></div>
 				  </div>
 				</div>
 			  </td>
