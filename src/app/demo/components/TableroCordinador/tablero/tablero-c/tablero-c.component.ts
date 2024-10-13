@@ -9,6 +9,7 @@ import { WorkEnvMService } from 'src/app/demo/components/workenvm/servicios/work
 import { AuthService } from 'src/app/services/auth.service'; // Asegúrate de importar el servicio de autenticación
 
 import { Label } from '../modelo/label.model'; // Asegúrate de que la ruta sea correcta
+import { EditarGroup } from '../modelo/editarGroup.model'; // Asegúrate de que la ruta sea correcta
 
 
 interface ExpandedRows {
@@ -27,7 +28,6 @@ export class TableroCComponent implements OnInit {
   loading: boolean = true; // Para mostrar el estado de carga
   expandedRows: ExpandedRows = {}; // Para manejar las filas expandidas
   isExpanded: boolean = false; // Para manejar el estado de expansión
-  selectedGroupId: number; // Asegúrate de que este ID esté definido
   id: any;
 
   idJoinUserWork: number; // Variable para almacenar el ID del entorno de trabajo
@@ -36,6 +36,8 @@ export class TableroCComponent implements OnInit {
   actividades: boolean = false;
   minDate: Date;
 
+  selectedGroup: EditarGroup; // Usar el modelo EditarGroup para la edición
+   
 
   constructor(private servicioTC: ServicioTCService,
     private workEnvService: WorkEnvMService,
@@ -202,6 +204,7 @@ export class TableroCComponent implements OnInit {
   createGroup(): void {
     // Crea un nuevo grupo incluyendo idJoinUserWork
     const groupData = {
+      
       name: this.newGroup.name,// Asegúrate de que esta propiedad exista en el modelo
       startdate: this.newGroup.startdate,
       enddate: this.newGroup.enddate,
@@ -224,9 +227,28 @@ export class TableroCComponent implements OnInit {
   }
 
 
-  editGroup(id:any) {
-    this.visible = true;
-  }
+  openEditModal(group: Group): void {
+    this.selectedGroup = new EditarGroup(group.id, group.name, group.startdate, group.enddate, group.idJoinUserWork); // Clona el grupo seleccionado
+    this.visible = true; // Abre el modal de edición
+}
+
+updateGroup(): void {
+    this.servicioTC.editGroup(this.selectedGroup).subscribe(
+        (response) => {
+            // Actualiza el grupo en la lista
+            const index = this.taskGroups.findIndex(g => g.id === this.selectedGroup.id);
+            if (index !== -1) {
+                this.taskGroups[index] = { ...this.selectedGroup }; // Reemplaza el grupo antiguo con el nuevo
+            }
+            this.visible = false; // Cierra el modal
+            this.messageService.add({ severity: 'success', summary: 'Grupo Modificado', detail: 'El grupo se ha modificado correctamente.' });
+        },
+        (error) => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'El grupo no se pudo modificar, verifique la información.' });
+            console.error('Error modificando grupo', error);
+        }
+    );
+}
   editActivity(id:any) {
     this.actividades = true;
   }

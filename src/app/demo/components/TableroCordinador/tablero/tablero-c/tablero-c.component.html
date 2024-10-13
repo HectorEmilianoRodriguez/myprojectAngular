@@ -153,31 +153,31 @@
 </p-dialog>
 
 <p-dialog header="Modificar Grupo de Actividades" [(visible)]="visible" [modal]="true" [style]="{ width: '50vw' }"
-	[draggable]="false" [resizable]="false">
-	<div class="formgrid grid">
-		<div class="field col-12 md:col-4">
-			<label for="groupName">Nombre del Grupo:</label>
-			<input id="groupName" [(ngModel)]="newGroup.name" pInputText placeholder="Nombre del Grupo"
-				class="w-full" />
-		</div>
+    [draggable]="false" [resizable]="false">
+    <div class="formgrid grid">
+        <div class="field col-12 md:col-4">
+            <label for="editGroupName">Nombre del Grupo:</label>
+            <input id="editGroupName" [(ngModel)]="selectedGroup.name" pInputText placeholder="Nombre del Grupo"
+                class="w-full" />
+        </div>
 
-		<div class="field col-12 md:col-4">
-			<label for="startDate">Fecha de Inicio:</label>
-			<p-calendar id="startDate" [(ngModel)]="newGroup.startdate" [showIcon]="true" [appendTo]="'body'"
-				class="w-full" [minDate]="minDate"></p-calendar>
-		</div>
+        <div class="field col-12 md:col-4">
+            <label for="editStartDate">Fecha de Inicio:</label>
+            <p-calendar id="editStartDate" [(ngModel)]="selectedGroup.startdate" [showIcon]="true" [appendTo]="'body'"
+                class="w-full" [minDate]="minDate"></p-calendar>
+        </div>
 
-		<div class="field col-12 md:col-4">
-			<label for="endDate">Fecha de Fin:</label>
-			<p-calendar id="endDate" [(ngModel)]="newGroup.enddate" [showIcon]="true" [appendTo]="'body'" class="w-full"
-				[minDate]="minDate"></p-calendar>
-		</div>
-	</div>
+        <div class="field col-12 md:col-4">
+            <label for="editEndDate">Fecha de Fin:</label>
+            <p-calendar id="editEndDate" [(ngModel)]="selectedGroup.enddate" [showIcon]="true" [appendTo]="'body'"
+                class="w-full" [minDate]="minDate"></p-calendar>
+        </div>
+    </div>
 
-	<p-footer>
-		<button pButton label="Cancelar" icon="pi pi-times" (click)="visible = false" class="p-button-danger"></button>
-		<button pButton label="Crear" icon="pi pi-check" class="p-button-success"></button>
-	</p-footer>
+    <p-footer>
+        <button pButton label="Cancelar" icon="pi pi-times" (click)="visible = false" class="p-button-danger"></button>
+        <button pButton label="Modificar" icon="pi pi-check" (click)="updateGroup()" class="p-button-success"></button>
+    </p-footer>
 </p-dialog>
 
 <p-dialog header="Modificar Actividad" [(visible)]="actividades" [modal]="true" [style]="{ width: '50vw' }"
