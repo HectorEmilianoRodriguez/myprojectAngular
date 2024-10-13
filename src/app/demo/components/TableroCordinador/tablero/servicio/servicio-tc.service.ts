@@ -26,7 +26,7 @@ export class ServicioTCService {
 
   // Editar un grupo
   editGroup(group: Group): Observable<Group> {
-    return this.http.put<Group>(`${this.url}api/editGroup`, group, { headers: this.getHeaders(), withCredentials: true });
+    return this.http.post<Group>(`${this.url}api/editGroup`, group, { headers: this.getHeaders(), withCredentials: true });
   }
 
   // Eliminar un grupo

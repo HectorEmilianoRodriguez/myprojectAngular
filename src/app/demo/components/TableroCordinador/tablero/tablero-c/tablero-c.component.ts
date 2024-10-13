@@ -35,9 +35,11 @@ export class TableroCComponent implements OnInit {
   visible: boolean = false;
   actividades: boolean = false;
   minDate: Date;
+  newGroup: Group; // Inicializa un nuevo grupo
+  displayModal: boolean = false; // Controla la visibilidad del modal
 
-  selectedGroup: EditarGroup; // Usar el modelo EditarGroup para la edición
-   
+  selectedGroup: EditarGroup = new EditarGroup(0, '', new Date(), new Date(), 0); // Usar el modelo EditarGroup para la edición
+
 
   constructor(private servicioTC: ServicioTCService,
     private workEnvService: WorkEnvMService,
@@ -60,7 +62,7 @@ export class TableroCComponent implements OnInit {
     });
 
     // Inicializa el nuevo grupo
-    this.newGroup = new Group(0, '', '', '', this.idJoinUserWork); // Asegúrate de que el constructor de Group tenga los parámetros correctos
+    this.newGroup = new Group(0, '', new Date(), new Date(), this.idJoinUserWork); // Asegúrate de que el constructor de Group tenga los parámetros correctos
   }
 
   loadUserData(): void {
@@ -196,15 +198,14 @@ export class TableroCComponent implements OnInit {
     table.clear();
   }
 
-  newGroup: Group; // Inicializa un nuevo grupo
-  displayModal: boolean = false; // Controla la visibilidad del modal
+  
 
 
 
   createGroup(): void {
     // Crea un nuevo grupo incluyendo idJoinUserWork
     const groupData = {
-      
+
       name: this.newGroup.name,// Asegúrate de que esta propiedad exista en el modelo
       startdate: this.newGroup.startdate,
       enddate: this.newGroup.enddate,
@@ -216,7 +217,7 @@ export class TableroCComponent implements OnInit {
         this.taskGroups.push(data); // Agrega el nuevo grupo a la lista
         this.displayModal = false; // Cierra el modal
         this.messageService.add({ severity: 'success', summary: 'Grupo Creado', detail: 'El grupo se ha creado correctamente.' });
-        this.newGroup = new Group(0, '', '', '', this.idJoinUserWork); // Reinicia el formulario
+        this.newGroup = new Group(0, '', new Date(), new Date(), this.idJoinUserWork); // Reinicia el formulario
         this.loadTaskGroups();
       },
       (error) => {
@@ -228,28 +229,28 @@ export class TableroCComponent implements OnInit {
 
 
   openEditModal(group: Group): void {
-    this.selectedGroup = new EditarGroup(group.id, group.name, group.startdate, group.enddate, group.idJoinUserWork); // Clona el grupo seleccionado
+    this.selectedGroup = new EditarGroup(group.idgrouptaskcl, group.name, new Date(group.startdate), new Date(group.enddate), group.idJoinUserWork); // Clona el grupo seleccionado
     this.visible = true; // Abre el modal de edición
-}
+  }
 
-updateGroup(): void {
+  updateGroup(): void {
     this.servicioTC.editGroup(this.selectedGroup).subscribe(
-        (response) => {
-            // Actualiza el grupo en la lista
-            const index = this.taskGroups.findIndex(g => g.id === this.selectedGroup.id);
-            if (index !== -1) {
-                this.taskGroups[index] = { ...this.selectedGroup }; // Reemplaza el grupo antiguo con el nuevo
-            }
-            this.visible = false; // Cierra el modal
-            this.messageService.add({ severity: 'success', summary: 'Grupo Modificado', detail: 'El grupo se ha modificado correctamente.' });
-        },
-        (error) => {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'El grupo no se pudo modificar, verifique la información.' });
-            console.error('Error modificando grupo', error);
+      (response) => {
+        // Actualiza el grupo en la lista
+        const index = this.taskGroups.findIndex(g => g.idgrouptaskcl === this.selectedGroup.idgrouptaskcl);
+        if (index !== -1) {
+          this.taskGroups[index] = { ...this.selectedGroup }; // Reemplaza el grupo antiguo con el nuevo
         }
+        this.visible = false; // Cierra el modal
+        this.messageService.add({ severity: 'success', summary: 'Grupo Modificado', detail: 'El grupo se ha modificado correctamente.' });
+      },
+      (error) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'El grupo no se pudo modificar, verifique la información.' });
+        console.error('Error modificando grupo', error);
+      }
     );
-}
-  editActivity(id:any) {
+  }
+  editActivity(id: any) {
     this.actividades = true;
   }
 }
