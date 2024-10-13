@@ -162,7 +162,7 @@ interface ExpandedRows {
       const groupData = {
         name: this.newGroup.name,// Asegúrate de que esta propiedad exista en el modelo
         startdate: this.newGroup.startdate,
-        endate: this.newGroup.endate,
+        enddate: this.newGroup.enddate,
         idJoinUserWork: this.idJoinUserWork // Incluye el ID del entorno de trabajo
       };
 
@@ -171,6 +171,7 @@ interface ExpandedRows {
           this.taskGroups.push(data); // Agrega el nuevo grupo a la lista
           this.displayModal = false; // Cierra el modal
           this.newGroup = new Group(0, '', '', '', this.idJoinUserWork); // Reinicia el formulario
+          this.loadTaskGroups();
         },
         (error) => {
           console.error('Error creando grupo', error);
