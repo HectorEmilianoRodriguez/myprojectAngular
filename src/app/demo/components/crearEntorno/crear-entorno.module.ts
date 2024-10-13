@@ -9,7 +9,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { Calendar } from '@fullcalendar/core';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { DropdownModule } from 'primeng/dropdown';
-
+import { ToastModule } from 'primeng/toast';
 @NgModule({
   declarations: [
     CrearEComponent
@@ -22,7 +22,8 @@ import { DropdownModule } from 'primeng/dropdown';
     InputTextModule,
     CalendarModule,
     InputTextareaModule,
-    DropdownModule
+    DropdownModule,
+    ToastModule
    
   ]
 })

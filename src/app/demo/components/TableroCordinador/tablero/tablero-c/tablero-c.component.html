@@ -4,7 +4,7 @@
 			<h5>Grupos de Actividades</h5>
 			<p-toast></p-toast>
 			<button pButton label="Crear Nuevo Grupo" icon="pi pi-plus" (click)="displayModal = true"
-				class="mb-3"></button>
+				class="mb-3 p-button-success"></button>
 			<p-table [value]="taskGroups" dataKey="id" rowGroupMode="subheader" [groupRowsBy]="['name']"
 				responsiveLayout="scroll">
 				<ng-template pTemplate="header">
@@ -22,11 +22,14 @@
 						<td>{{ group.enddate | date }}</td>
 						<td>
 							<div class="flex align-items-center">
-								<button pButton (click)="expandedRows[group.name] = !expandedRows[group.name]; loadActivities(group.idgrouptaskcl)" 
-										[label]="expandedRows[group.name] ? 'Ocultar Actividades' : 'Mostrar Actividades'" 
-										icon="pi pi-chevron-down" class="mr-2"></button>
-								<button pButton label="Modificar" icon="pi pi-pencil" (click)="editGroup(group.id)" class="mr-2"></button>
-								<button pButton label="Eliminar" icon="pi pi-trash" (click)="deleteGroup(group.id)"></button>
+								<button pButton
+									(click)="expandedRows[group.name] = !expandedRows[group.name]; loadActivities(group.idgrouptaskcl)"
+									[label]="expandedRows[group.name] ? 'Ocultar Actividades' : 'Mostrar Actividades'"
+									icon="pi pi-chevron-down" class="mr-2"></button>
+								<button pButton label="Modificar" icon="pi pi-pencil" (click)="editGroup(group.id)"
+									class="mr-2 p-button-warning"></button>
+								<button pButton label="Eliminar" icon="pi pi-trash" (click)="deleteGroup(group.id)"
+									class="p-button-danger"></button>
 							</div>
 						</td>
 					</tr>
@@ -36,108 +39,183 @@
 								<h6>Actividades</h6>
 								<p-table [value]="activities" dataKey="id" responsiveLayout="scroll">
 									<ng-template pTemplate="header">
-										<tr>
-											<th>Nombre</th>
-											<th>Descripción</th>
-											<th>Fecha de Fin</th>
-											<th>Importante</th>
-											<th>Etiqueta</th>
-											<th>Acciones</th>
-										</tr>
-									</ng-template>
-									<ng-template pTemplate="body" let-activity>
-										<tr>
-											<td>{{ activity.nameT }}</td>
-											<td>{{ activity.descriptionT }}</td>
-											<td>{{ activity.end_date | date }}</td>
-											<td>{{ activity.important === 1 ? 'Sí' : 'No' }}</td>
-											<td>
-												<span *ngFor="let label of labels" [hidden]="label.idLabel !== activity.idLabel">
-													{{ label.nameL }}
-												</span>
-											</td>
-											<td>
-												<button pButton label="Modificar" icon="pi pi-pencil" (click)="editActivity(activity.idactivitycl)" class="mr-2"></button>
-												<button pButton label="Eliminar" icon="pi pi-trash" (click)="deleteActivity(activity.idactivitycl)"></button>
-											</td>
-										</tr>
-									</ng-template>
-								</p-table>
-								<div class="card mt-6"> <!-- Agregar clase mt-3 para margen superior -->
-									<h6>Agregar Actividad</h6>
-									<div class="formgrid grid">
-										<div class="field col-12 md:col-4">
-											<label for="activityName">Nombre de la Actividad:</label>
-											<input id="activityName" [(ngModel)]="newActivity.nameT" pInputText
-												placeholder="Nombre de la Actividad"
-												class="w-full" />
-										</div>
-										<div class="field col-12 md:col-4">
-											<label for="activityDescription">Descripción de la Actividad:</label>
-											<input id="activityDescription" [(ngModel)]="newActivity.descriptionT"
-												pInputText placeholder="Descripción de la Actividad"
-												class="w-full" />
-										</div>
-										<div class="field col-12 md:col-4">
-											<label for="activityEndDate">Fecha de Fin:</label>
-											<input id="activityEndDate" [(ngModel)]="newActivity.end_date" type="date"
-												pInputText
-												class="w-full" />
-										</div>
-										<div class="field col-12 md:col-4">
-											<label for="activityImportant">Importante (0 o 1):</label>
-											<input id="activityImportant" [(ngModel)]="newActivity.important"
-												type="number" pInputText placeholder="Importante (0 o 1)"
-												class="w-full" />
-										</div>
-										<div class="field col-12 md:col-4">
-											<label for="activityLabel">Etiqueta:</label>
-											<select id="activityLabel" [(ngModel)]="newActivity.idLabel"
-												class="w-full" pInputText>
-												<option *ngFor="let label of labels" [value]="label.idLabel"
-													[ngStyle]="{'background-color': label.colorL, 'color': '#fff'}">
-													{{ label.nameL }}
-												</option>
-											</select>
-										</div>
-										<div class="field col-12 md:col-4">
-											<label for="activityLabel">Nueva Etiqueta:</label>
-											<button pButton label="Crear Etiqueta" icon="pi pi-plus" class="w-full"></button>
-										</div>
-									</div>
-									<div class="flex justify-content-end">
-										<button pButton label="Agregar"
-											(click)="logGroupId(group.idgrouptaskcl); addActivity(group.idgrouptaskcl)"
-											icon="pi pi-plus" ></button>
-									</div>
-								</div>
-							</div>
+					<tr>
+						<th>Nombre</th>
+						<th>Descripción</th>
+						<th>Fecha de Fin</th>
+						<th>Importante</th>
+						<th>Etiqueta</th>
+						<th>Acciones</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-activity>
+					<tr>
+						<td>{{ activity.nameT }}</td>
+						<td>{{ activity.descriptionT }}</td>
+						<td>{{ activity.end_date | date }}</td>
+						<td>{{ activity.important === 1 ? 'Sí' : 'No' }}</td>
+						<td>
+							<span *ngFor="let label of labels" [hidden]="label.idLabel !== activity.idLabel">
+								{{ label.nameL }}
+							</span>
+						</td>
+						<td>
+							<button pButton label="Modificar" icon="pi pi-pencil"
+								(click)="editActivity(activity.idactivitycl)" class="mr-2 p-button-warning"></button>
+							<button pButton label="Eliminar" icon="pi pi-trash"
+								(click)="deleteActivity(activity.idactivitycl)" class="p-button-danger"></button>
 						</td>
 					</tr>
 				</ng-template>
 			</p-table>
+			<div class="card mt-6">
+				<h6>Agregar Actividad</h6>
+				<div class="formgrid grid">
+					<div class="field col-12 md:col-4">
+						<label for="activityName">Nombre de la Actividad:</label>
+						<input id="activityName" [(ngModel)]="newActivity.nameT" pInputText
+							placeholder="Nombre de la Actividad" class="w-full" />
+					</div>
+					<div class="field col-12 md:col-4">
+						<label for="activityDescription">Descripción de la Actividad:</label>
+						<input id="activityDescription" [(ngModel)]="newActivity.descriptionT" pInputText
+							placeholder="Descripción de la Actividad" class="w-full" />
+					</div>
 
-			<!-- Modal para crear nuevo grupo -->
-			<p-dialog header="Crear Nuevo Grupo" [(visible)]="displayModal" [modal]="true" [closable]="false">
-				<div>
-					<div class="p-field mb-3">
-						<label for="groupName">Nombre del Grupo:</label>
-						<input id="groupName" [(ngModel)]="newGroup.name" pInputText placeholder="Nombre del Grupo" />
+					<div class="field col-12 md:col-4">
+						<label for="activityEndDate">Fecha de Fin:</label>
+						<p-calendar id="activityEndDate" [(ngModel)]="newActivity.end_date" [showIcon]="true"
+							[appendTo]="'body'" class="w-full" [minDate]="minDate"></p-calendar>
 					</div>
-					<div class="p-field mb-3">
-						<label for="startDate">Fecha de Inicio:</label>
-						<input id="startDate" type="date" [(ngModel)]="newGroup.startdate" pInputText />
+
+					<div class="field col-12 md:col-4">
+						<label for="activityImportant">Importante (0 o 1):</label>
+						<input id="activityImportant" [(ngModel)]="newActivity.important" type="number" pInputText
+							placeholder="Importante (0 o 1)" class="w-full" />
 					</div>
-					<div class="p-field mb-3">
-						<label for="endDate">Fecha de Fin:</label>
-						<input id="endDate" type="date" [(ngModel)]="newGroup.enddate" pInputText />
+					<div class="field col-12 md:col-4">
+						<label for="activityLabel">Etiqueta:</label>
+						<select id="activityLabel" [(ngModel)]="newActivity.idLabel" class="w-full" pInputText>
+							<option *ngFor="let label of labels" [value]="label.idLabel"
+								[ngStyle]="{'background-color': label.colorL, 'color': '#fff'}">
+								{{ label.nameL }}
+							</option>
+						</select>
+					</div>
+					<div class="field col-12 md:col-4">
+						<label for="activityLabel">Nueva Etiqueta:</label>
+						<button pButton label="Crear Etiqueta" icon="pi pi-plus"
+							class="w-full p-button-secondary"></button>
 					</div>
 				</div>
-				<p-footer>
-					<button pButton label="Cancelar" icon="pi pi-times" (click)="displayModal = false"></button>
-					<button pButton label="Crear" icon="pi pi-check" (click)="createGroup()"></button>
-				</p-footer>
-			</p-dialog>
+				<div class="flex justify-content-end">
+					<button pButton label="Agregar"
+						(click)="logGroupId(group.idgrouptaskcl); addActivity(group.idgrouptaskcl)" icon="pi pi-plus"
+						class="p-button-success"></button>
+				</div>
+			</div>
 		</div>
+		</td>
+		</tr>
+		</ng-template>
+		</p-table>
+
+
+
 	</div>
 </div>
+</div>
+
+<p-dialog header="Crear Nuevo Grupo" [(visible)]="displayModal" [modal]="true" [style]="{ width: '50vw' }"
+	[draggable]="false" [resizable]="false">
+	<div class="formgrid grid">
+		<div class="field col-12 md:col-4">
+			<label for="groupName">Nombre del Grupo:</label>
+			<input id="groupName" [(ngModel)]="newGroup.name" pInputText placeholder="Nombre del Grupo"
+				class="w-full" />
+		</div>
+		<div class="field col-12 md:col-4">
+			<label for="startDate">Fecha de Inicio:</label>
+			<p-calendar id="startDate" [(ngModel)]="newGroup.startdate" [showIcon]="true" [appendTo]="'body'"
+				class="w-full" [minDate]="minDate"></p-calendar>
+		</div>
+		<div class="field col-12 md:col-4">
+			<label for="endDate">Fecha de Fin:</label>
+			<p-calendar id="endDate" [(ngModel)]="newGroup.enddate" [showIcon]="true" [appendTo]="'body'" class="w-full"
+				[minDate]="minDate"></p-calendar>
+		</div>
+	</div>
+	<p-footer>
+		<button pButton label="Cancelar" icon="pi pi-times" (click)="displayModal = false"
+			class="p-button-danger"></button>
+		<button pButton label="Crear" icon="pi pi-check" (click)="createGroup()" class="p-button-success"></button>
+	</p-footer>
+</p-dialog>
+
+<p-dialog header="Modificar Grupo de Actividades" [(visible)]="visible" [modal]="true" [style]="{ width: '50vw' }"
+	[draggable]="false" [resizable]="false">
+	<div class="formgrid grid">
+		<div class="field col-12 md:col-4">
+			<label for="groupName">Nombre del Grupo:</label>
+			<input id="groupName" [(ngModel)]="newGroup.name" pInputText placeholder="Nombre del Grupo"
+				class="w-full" />
+		</div>
+
+		<div class="field col-12 md:col-4">
+			<label for="startDate">Fecha de Inicio:</label>
+			<p-calendar id="startDate" [(ngModel)]="newGroup.startdate" [showIcon]="true" [appendTo]="'body'"
+				class="w-full" [minDate]="minDate"></p-calendar>
+		</div>
+
+		<div class="field col-12 md:col-4">
+			<label for="endDate">Fecha de Fin:</label>
+			<p-calendar id="endDate" [(ngModel)]="newGroup.enddate" [showIcon]="true" [appendTo]="'body'" class="w-full"
+				[minDate]="minDate"></p-calendar>
+		</div>
+	</div>
+
+	<p-footer>
+		<button pButton label="Cancelar" icon="pi pi-times" (click)="visible = false" class="p-button-danger"></button>
+		<button pButton label="Crear" icon="pi pi-check" class="p-button-success"></button>
+	</p-footer>
+</p-dialog>
+
+<p-dialog header="Modificar Actividad" [(visible)]="actividades" [modal]="true" [style]="{ width: '50vw' }"
+	[draggable]="false" [resizable]="false">
+	<div class="formgrid grid">
+		<div class="field col-12 md:col-4">
+			<label for="activityName">Nombre de la actividad:</label>
+			<input id="activityName" [(ngModel)]="newActivity.nameT" pInputText placeholder="Nombre del Grupo"
+				class="w-full" />
+		</div>
+
+		<div class="field col-12 md:col-4">
+			<label for="activityImportant">Importante:</label>
+			<input id="activityImportant" [(ngModel)]="newActivity.important" pInputText placeholder="Nombre del Grupo"
+				class="w-full" />
+		</div>
+		<div class="field col-12 md:col-4">
+			<label for="endDate">Fecha de Fin:</label>
+			<p-calendar id="endDate" [(ngModel)]="newActivity.end_date" [showIcon]="true" [appendTo]="'body'"
+				class="w-full" [minDate]="minDate"></p-calendar> <!-- Cambiado a p-calendar y appendTo -->
+		</div>
+
+		<div class="field col-12 md:col-6">
+			<label for="activityLabel">Etiqueta:</label>
+			<input id="activityLabel" [(ngModel)]="newActivity.idLabel" pInputText placeholder="Nombre del Grupo"
+				class="w-full" />
+		</div>
+
+		<div class="field col-12 md:col-6">
+			<label for="activityLabel">Descripción:</label>
+			<input id="activityLabel" [(ngModel)]="newActivity.descriptionT" pInputText placeholder="Nombre del Grupo"
+				class="w-full" />
+		</div>
+	</div>
+
+	<p-footer>
+		<button pButton label="Cancelar" icon="pi pi-times" (click)="actividades = false"
+			class="p-button-danger"></button>
+		<button pButton label="Crear" icon="pi pi-check" class="p-button-success"></button>
+	</p-footer>
+</p-dialog>

@@ -18,6 +18,11 @@ import { RatingModule } from 'primeng/rating';
 import { TableroCComponent } from './tablero-c/tablero-c.component';
 import { DialogModule } from 'primeng/dialog';
 import { DividerModule } from 'primeng/divider';
+import { CalendarModule } from 'primeng/calendar';
+
+
+
+
 
 
 
@@ -47,7 +52,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 		FormsModule,
 		DividerModule,
 		DropdownModule,
-		
+		CalendarModule
 
 		
 		
