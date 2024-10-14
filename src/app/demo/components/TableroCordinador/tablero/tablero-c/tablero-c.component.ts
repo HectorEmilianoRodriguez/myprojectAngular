@@ -61,29 +61,27 @@ selectAct: EditarAct = new EditarAct(0, '', '', new Date().toISOString().split('
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
-        this.id = params.get('id'); // Obtiene el ID del grupo
-        console.log(this.id);
-        this.minDate = new Date();
+      this.id = params.get('id'); // Obtiene el ID del grupo
+      console.log(this.id);
+      this.loadTaskGroups(); // Carga los grupos de tareas
+      this.loadLabels();
+      this.minDate = new Date();
 
-        this.workEnvService.getWorkEnv(this.id).subscribe({
-            next: (res) => {
-                this.idJoinUserWork = res.idJoinUserWork;
+      this.workEnvService.getWorkEnv(this.id).subscribe({
 
-                // Carga los grupos de tareas y las etiquetas después de obtener el idJoinUserWork
-                this.loadTaskGroups();
-                this.loadLabels();
+          next: (res) =>{
+            this.idJoinUserWork = res.idJoinUserWork;
+          }
 
-                // Inicializa el nuevo grupo aquí, asegurando que idJoinUserWork esté disponible
-                this.newGroup = new Group(0, '', new Date(), new Date(), this.idJoinUserWork);
-            },
-            error: (err) => {
-                console.error('Error al obtener el entorno de trabajo:', err);
-                // Manejar el error según sea necesario
-            }
-        });
+      });
+
+
+
     });
-}
 
+    // Inicializa el nuevo grupo
+    this.newGroup = new Group(0, '', new Date(), new Date(), this.idJoinUserWork); // Asegúrate de que el constructor de Group tenga los parámetros correctos
+  }
 
   loadUserData(): void {
     this.authService.getUser().subscribe(
@@ -99,7 +97,7 @@ selectAct: EditarAct = new EditarAct(0, '', '', new Date().toISOString().split('
   }
 
   getWorkEnv(): void {
-    const userId = this.id;
+    const userId = this.idJoinUserWork.toString();
     this.workEnvService.getWorkEnv(userId).subscribe(
       (data) => {
         this.idJoinUserWork = data.idJoinUserWork; // Asegúrate de que la respuesta contenga esta propiedad
