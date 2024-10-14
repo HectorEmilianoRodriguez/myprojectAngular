@@ -61,18 +61,29 @@ selectAct: EditarAct = new EditarAct(0, '', '', new Date().toISOString().split('
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
-      this.id = params.get('id'); // Obtiene el ID del grupo
-      console.log(this.id);
-      this.idJoinUserWork = Number(this.id); // Asigna el ID a idJoinUserWork
-      console.log('ID del entorno de trabajo:', this.idJoinUserWork);
-      this.loadTaskGroups(); // Carga los grupos de tareas
-      this.loadLabels();
-      this.minDate = new Date();
-    });
+        this.id = params.get('id'); // Obtiene el ID del grupo
+        console.log(this.id);
+        this.minDate = new Date();
 
-    // Inicializa el nuevo grupo
-    this.newGroup = new Group(0, '', new Date(), new Date(), this.idJoinUserWork); // Asegúrate de que el constructor de Group tenga los parámetros correctos
-  }
+        this.workEnvService.getWorkEnv(this.id).subscribe({
+            next: (res) => {
+                this.idJoinUserWork = res.idJoinUserWork;
+
+                // Carga los grupos de tareas y las etiquetas después de obtener el idJoinUserWork
+                this.loadTaskGroups();
+                this.loadLabels();
+
+                // Inicializa el nuevo grupo aquí, asegurando que idJoinUserWork esté disponible
+                this.newGroup = new Group(0, '', new Date(), new Date(), this.idJoinUserWork);
+            },
+            error: (err) => {
+                console.error('Error al obtener el entorno de trabajo:', err);
+                // Manejar el error según sea necesario
+            }
+        });
+    });
+}
+
 
   loadUserData(): void {
     this.authService.getUser().subscribe(
@@ -88,7 +99,7 @@ selectAct: EditarAct = new EditarAct(0, '', '', new Date().toISOString().split('
   }
 
   getWorkEnv(): void {
-    const userId = this.idJoinUserWork.toString();
+    const userId = this.id;
     this.workEnvService.getWorkEnv(userId).subscribe(
       (data) => {
         this.idJoinUserWork = data.idJoinUserWork; // Asegúrate de que la respuesta contenga esta propiedad
