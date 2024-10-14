@@ -76,12 +76,12 @@
 				<h6>Agregar Actividad</h6>
 				<div class="formgrid grid">
 					<div class="field col-12 md:col-4">
-						<label for="activityName">Nombre de la Actividad:</label>
+						<label for="activityName" style="width: 100%">Nombre de la Actividad:</label>
 						<input id="activityName" [(ngModel)]="newActivity.nameT" pInputText
 							placeholder="Nombre de la Actividad" class="w-full" />
 					</div>
 					<div class="field col-12 md:col-4">
-						<label for="activityDescription">Descripción de la Actividad:</label>
+						<label for="activityDescription" style="width: 100%">Descripción de la Actividad:</label>
 						<input id="activityDescription" [(ngModel)]="newActivity.descriptionT" pInputText
 							placeholder="Descripción de la Actividad" class="w-full" />
 					</div>
@@ -95,12 +95,12 @@
 					<div class="field col-12 md:col-4">
 						<label for="activityImportant" style="width: 100%;">Importante:</label>
 						<p-dropdown id="activityImportant" [(ngModel)]="newActivity.important"
-							[options]="importanceOptions" placeholder="Seleccione una opción" class="w-full"
+							[options]="importanceOptions" placeholder="Seleccione una opción" style="width: 100%"
 							appendTo="body"></p-dropdown>
 					</div>
 
 					<div class="field col-12 md:col-4">
-						<label for="activityLabel">Etiqueta:</label>
+						<label for="activityLabel" style="width: 100%">Etiqueta:</label>
 						<select id="activityLabel" [(ngModel)]="newActivity.idLabel" class="w-full" pInputText>
 							<option *ngFor="let label of labels" [value]="label.idLabel"
 								[ngStyle]="{'background-color': label.colorL, 'color': '#fff'}">
@@ -108,8 +108,8 @@
 							</option>
 						</select>
 					</div>
-					<div class="field col-12 md:col-4">
-						<label for="activityLabel">Nueva Etiqueta:</label>
+					<div class="field col-12 md:col-4" >
+						<label for="activityLabel" style="width: 100%">Nueva Etiqueta:</label>
 						<button pButton label="Crear Etiqueta" icon="pi pi-plus"
 							class="w-full p-button-secondary"></button>
 					</div>
