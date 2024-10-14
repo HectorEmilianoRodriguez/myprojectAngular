@@ -39,6 +39,16 @@ export class ServicioTCService {
     return this.http.get<Activity[]>(`${this.url}api/getActivitiesOfGroup/${idgrouptaskcl}`, { withCredentials: true });
   }
 
+  // Editar una actividad
+editActivity(activity: Activity): Observable<Activity> {
+  return this.http.post<Activity>(`${this.url}api/editActCoordinator`, activity, { headers: this.getHeaders(), withCredentials: true });
+}
+
+// Eliminar una actividad
+deleteActivity(id: number): Observable<any> {
+  return this.http.post(`${this.url}api/deleteActCoordinator`, { idactivitycl: id }, { withCredentials: true });
+}
+
   // Crear una nueva actividad
   createActivity(activity: Activity): Observable<Activity> {
     return this.http.post<Activity>(`${this.url}api/newActCoordinator`, activity, { withCredentials: true });

@@ -64,7 +64,7 @@
 						</td>
 						<td>
 							<button pButton label="Modificar" icon="pi pi-pencil"
-								(click)="editActivity(activity.idactivitycl)" class="mr-2 p-button-warning"></button>
+								(click)="openEditModalAct(activity)" class="mr-2 p-button-warning"></button>
 							<button pButton label="Eliminar" icon="pi pi-trash"
 								(click)="deleteActivity(activity.idactivitycl, $event)"
 								class="p-button-danger"></button>
@@ -185,43 +185,48 @@
 		<button pButton label="Modificar" icon="pi pi-check" (click)="updateGroup()" class="p-button-success"></button>
 	</p-footer>
 </p-dialog>
-
 <p-dialog header="Modificar Actividad" [(visible)]="actividades" [modal]="true" [style]="{ width: '50vw' }"
-	[draggable]="false" [resizable]="false">
-	<div class="formgrid grid">
-		<div class="field col-12 md:col-4">
-			<label for="activityName">Nombre de la actividad:</label>
-			<input id="activityName" [(ngModel)]="newActivity.nameT" pInputText placeholder="Nombre del Grupo"
-				class="w-full" />
-		</div>
+    [draggable]="false" [resizable]="false">
+    <div class="formgrid grid">
+        <div class="field col-12 md:col-4">
+            <label for="activityName">Nombre de la actividad:</label>
+            <input id="activityName" [(ngModel)]="selectAct.nameT" pInputText placeholder="Nombre de la Actividad"
+                class="w-full" />
+        </div>
 
-		<div class="field col-12 md:col-4">
-			<label for="activityImportant">Importante:</label>
-			<input id="activityImportant" [(ngModel)]="newActivity.important" pInputText placeholder="Nombre del Grupo"
-				class="w-full" />
-		</div>
-		<div class="field col-12 md:col-4">
-			<label for="endDate">Fecha de Fin:</label>
-			<p-calendar id="endDate" [(ngModel)]="newActivity.end_date" [showIcon]="true" [appendTo]="'body'"
-				class="w-full" [minDate]="minDate"></p-calendar> <!-- Cambiado a p-calendar y appendTo -->
-		</div>
+        <div class="field col-12 md:col-4">
+            <label for="activityImportant">Importante:</label>
+            <p-dropdown id="activityImportant" [(ngModel)]="selectAct.important"
+                [options]="importanceOptions" placeholder="Seleccione una opción" class="w-full"
+                appendTo="body"></p-dropdown>
+        </div>
 
-		<div class="field col-12 md:col-6">
-			<label for="activityLabel">Etiqueta:</label>
-			<input id="activityLabel" [(ngModel)]="newActivity.idLabel" pInputText placeholder="Nombre del Grupo"
-				class="w-full" />
-		</div>
+        <div class="field col-12 md:col-4">
+            <label for="endDate">Fecha de Fin:</label>
+            <p-calendar id="endDate" [(ngModel)]="selectAct.end_date" [showIcon]="true" [appendTo]="'body'"
+                class="w-full" [minDate]="minDate"></p-calendar>
+        </div>
 
-		<div class="field col-12 md:col-6">
-			<label for="activityLabel">Descripción:</label>
-			<input id="activityLabel" [(ngModel)]="newActivity.descriptionT" pInputText placeholder="Nombre del Grupo"
-				class="w-full" />
-		</div>
-	</div>
+        <div class="field col-12 md:col-6">
+            <label for="activityLabel">Etiqueta:</label>
+            <select id="activityLabel" [(ngModel)]="selectAct.idLabel" class="w-full" pInputText>
+                <option *ngFor="let label of labels" [value]="label.idLabel"
+                    [ngStyle]="{'background-color': label.colorL, 'color': '#fff'}">
+                    {{ label.nameL }}
+                </option>
+            </select>
+        </div>
 
-	<p-footer>
-		<button pButton label="Cancelar" icon="pi pi-times" (click)="actividades = false"
-			class="p-button-danger"></button>
-		<button pButton label="Crear" icon="pi pi-check" class="p-button-success"></button>
-	</p-footer>
+        <div class="field col-12 md:col-6">
+            <label for="activityDescription">Descripción:</label>
+            <input id="activityDescription" [(ngModel)]="selectAct.descriptionT" pInputText placeholder="Descripción"
+                class="w-full" />
+        </div>
+    </div>
+
+    <p-footer>
+        <button pButton label="Cancelar" icon="pi pi-times" (click)="actividades = false"
+            class="p-button-danger"></button>
+        <button pButton label="Modificar" icon="pi pi-check" (click)="updateActivity()" class="p-button-success"></button>
+    </p-footer>
 </p-dialog>

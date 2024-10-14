@@ -10,6 +10,7 @@ import { AuthService } from 'src/app/services/auth.service'; // Asegúrate de im
 
 import { Label } from '../modelo/label.model'; // Asegúrate de que la ruta sea correcta
 import { EditarGroup } from '../modelo/editarGroup.model'; // Asegúrate de que la ruta sea correcta
+import { EditarAct } from '../modelo/editarAct.model';
 
 
 interface ExpandedRows {
@@ -45,8 +46,9 @@ export class TableroCComponent implements OnInit {
   ];
 
   selectedGroup: EditarGroup = new EditarGroup(0, '', new Date(), new Date(), 0); // Usar el modelo EditarGroup para la edición
+  // src/app/demo/components/TableroCordinador/tablero/tablero-c/tablero-c.component.ts
 
-
+selectAct: EditarAct = new EditarAct(0, '', '', new Date().toISOString().split('T')[0], 0, null, 0, 0, 0); // Inicializa el modelo EditarAct
   constructor(private servicioTC: ServicioTCService,
     private workEnvService: WorkEnvMService,
     private route: ActivatedRoute,
@@ -240,6 +242,21 @@ export class TableroCComponent implements OnInit {
     this.visible = true; // Abre el modal de edición
   }
 
+  openEditModalAct(activity: Activity): void {
+    this.selectAct = new EditarAct(
+        activity.idactivitycl,
+        activity.nameT,
+        activity.descriptionT,
+        activity.end_date,
+        activity.important,
+        activity.idLabel,
+        0, // Asigna un valor por defecto para logicdeleted
+        0, // Asigna un valor por defecto para done
+        activity.idgrouptaskcl // Asegúrate de que este valor esté disponible
+    ); // Clona la actividad seleccionada
+    this.actividades = true; // Abre el modal de edición
+}
+
   updateGroup(): void {
     this.servicioTC.editGroup(this.selectedGroup).subscribe(
       (response) => {
@@ -257,10 +274,27 @@ export class TableroCComponent implements OnInit {
       }
     );
   }
-  editActivity(id: any) {
-    this.actividades = true;
+
+  updateActivity(): void {
+    this.servicioTC.editActivity(this.selectAct).subscribe(
+      (response) => {
+        // Actualiza la lista de actividades
+        const index = this.activities.findIndex(a => a.idactivitycl === this.selectAct.idactivitycl);
+        if (index !== -1) {
+          this.activities[index] = { ...this.selectAct }; // Reemplaza la actividad antigua con la nueva
+        }
+        this.actividades = false; // Cierra el modal
+        this.messageService.add({ severity: 'success', summary: 'Actividad Modificada', detail: 'La actividad se ha modificado correctamente.' });
+      },
+      (error) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'La actividad no se pudo modificar, verifique la información.' });
+        console.error('Error modificando actividad', error);
+      }
+    );
   }
 
+
+   
   deleteGroup(group:Group, event: Event) {
     this.confirmationService.confirm({
       target: event.target as EventTarget,
@@ -283,19 +317,33 @@ export class TableroCComponent implements OnInit {
     });
   }
 
-  deleteActivity(id: number, event: Event) {
+  // src/app/demo/components/TableroCordinador/tablero/tablero-c/tablero-c.component.ts
+
+deleteActivity(id: number, event: Event): void {
     this.confirmationService.confirm({
-      target: event.target as EventTarget,
-      message: '¿Esta seguro de eliminar esta actividad?',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted' });
-      },
-      reject: () => {
-        this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
-      },
-      acceptLabel: 'Sí', // Cambia el texto del botón de aceptación a "Sí"
-      rejectLabel: 'No'
+        target: event.target as EventTarget,
+        message: '¿Está seguro de eliminar esta actividad?',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+            this.servicioTC.deleteActivity(id).subscribe(
+                (response) => {
+                    // Actualiza la lista de actividades
+                    this.activities = this.activities.filter(a => a.idactivitycl !== id);
+                    this.messageService.add({ severity: 'info', summary: 'Confirmado', detail: 'La actividad se ha eliminado correctamente.' });
+                },
+                (error) => {
+                    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar la actividad.' });
+                    console.error('Error eliminando actividad', error);
+                }
+            );
+        },
+        reject: () => {
+            this.messageService.add({ severity: 'error', summary: 'Rechazado', detail: 'No se ha podido eliminar la actividad.' });
+        },
+        acceptLabel: 'Sí', // Cambia el texto del botón de aceptación a "Sí"
+        rejectLabel: 'No'
     });
-  }
+}
+
+  
 }
