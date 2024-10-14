@@ -121,13 +121,11 @@ export class BoardService {
         }, {withCredentials: true}) as Observable<any>;
     }
 
-    newLabel(){
 
-    }
-
-    getPossibleLabels(idlb: []){
+    getPossibleLabels(idlb: [], idw){
         return this.http.post(this.endpoint + 'api/getPossibleLabelsForActivity', {
-            idLabels: idlb
+            idLabels: idlb,
+            idWorkEnv: idw
         }, {withCredentials: true}) as Observable<any>;
     }
 
@@ -239,4 +237,74 @@ export class BoardService {
             withCredentials: true
             }) as Observable<any>;
     }
+
+    updateComment(idc, txt){
+        return this.http.post(this.endpoint + 'api/editComment', {
+            idComment: idc,
+            text: txt
+        }, {
+            withCredentials: true
+            }) as Observable<any>;
+    }
+
+    seenComment(idc){
+        return this.http.post(this.endpoint + 'api/setSeenComment', {
+            idComment: idc,
+        }, {
+            withCredentials: true
+            }) as Observable<any>;
+    }
+
+    newLabel(name, color, idw){
+        return this.http.post(this.endpoint + 'api/newLabel', {
+            idWorkEnv: idw,
+            nameL: name,
+            colorL: color
+        }, {
+            withCredentials: true
+            }) as Observable<any>;
+    }
+
+    editLabel(name, color, idw, idl){
+        return this.http.post(this.endpoint + 'api/editLabel', {
+            idWorkEnv: idw,
+            nameL: name,
+            colorL: color,
+            idLabel: idl
+        }, {
+            withCredentials: true
+            }) as Observable<any>;
+    }
+
+    deleteLabel(idl){
+        return this.http.post(this.endpoint + 'api/deleteLabel', {
+            idLabel: idl
+        }, {
+            withCredentials: true
+            }) as Observable<any>;
+    }
+
+    getLabels(idw){
+        return this.http.get(this.endpoint + `api/getLabels/${idw}` ,{
+            withCredentials: true
+            }) as Observable<any>;
+    }
+
+    updateActivityStatus(idCard: number, newListId: number): void {
+        const updatedData = {
+            idCard: idCard,
+            idList: newListId, // El nuevo ID de la lista
+        };
+    
+        this.http.post(this.endpoint +'api/updateActivity', updatedData, {withCredentials: true}).subscribe(
+            response => {
+                console.log('Actividad actualizada en el backend', response);
+            },
+            error => {
+                console.error('Error al actualizar la actividad', error);
+            }
+        );
+    }
+    
+
 }

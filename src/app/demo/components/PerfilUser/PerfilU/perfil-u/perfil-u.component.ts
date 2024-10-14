@@ -12,7 +12,7 @@ import { FileUpload } from 'primeng/fileupload';
 })
 export class PerfilUComponent implements OnInit, OnDestroy {
   perfilForm: FormGroup;
-  fotoUser: SafeUrl | null = null;
+  fotoUser;
   fotoPreview: SafeUrl | null = null;
   actualizarArchivos: File[] = [];
   private objectUrl: string | null = null;
@@ -36,7 +36,7 @@ export class PerfilUComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.cargarUserPerfil();
-    this.cargarUserFoto();
+   
   }
 
   ngOnDestroy() {
@@ -62,6 +62,13 @@ export class PerfilUComponent implements OnInit, OnDestroy {
           console.error('Datos de usuario incompletos o nulos:', data);
           this.mensajeService.add({severity: 'warn', summary: 'Advertencia', detail: 'Datos de usuario incompletos'});
         }
+
+        if(data.photo){
+          this.fotoUser = 'http://localhost:8000/api/' + data.photo;
+      }else{
+          this.fotoUser = 'http://localhost:8000/api/photos/test.jpg';
+
+      }
       },
       (error) => {
         console.error('Error al cargar el perfil del usuario:', error);
@@ -76,20 +83,7 @@ export class PerfilUComponent implements OnInit, OnDestroy {
     );
   }
 
-  cargarUserFoto() {
-    this.perfilService.ObtenerFotoUser().subscribe(
-      (response: Blob) => {
-        this.objectUrl = URL.createObjectURL(response);
-        this.fotoUser = this.sanitizer.bypassSecurityTrustUrl(this.objectUrl);
-        
-      },
-      (error) => {
-        console.error('Error al cargar la foto del usuario:', error);
-        this.fotoUser = './assets/demo/images/login/avatar.png';
-        this.mensajeService.add({severity: 'error', summary: 'Error', detail: 'No se pudo cargar la foto de perfil'});
-      }
-    );
-  }
+ 
 
   onFileSelected(event: any) {
     const files = event.files;
@@ -150,7 +144,7 @@ export class PerfilUComponent implements OnInit, OnDestroy {
       (response) => {
         console.log('Respuesta del servidor:', response);
         this.mensajeService.add({severity: 'success', summary: 'Éxito', detail: 'Perfil actualizado correctamente'});
-        this.cargarUserFoto(); // Recargar la foto del usuario
+  
         this.fotoPreview = null;
         this.mostrarFotoPreview = false;
         this.nombreArchivoSeleccionado = null;

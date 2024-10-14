@@ -55,12 +55,13 @@ export class WorkEnvComponent implements OnInit {
        if(this.id){
 
           this.WorkEnvServiceM.getWorkEnv(this.id).subscribe({
-
+            
              next: (res) =>{
                 this.dataWork = res;
                 this.privilege = res.privilege;
                 this.idWork = res.idWorkEnv;
                 this.namework = res.title;
+              
              },
 
             error : (er) =>{

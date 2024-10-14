@@ -16,7 +16,6 @@ import { SliderModule } from 'primeng/slider';
 import { RatingModule } from 'primeng/rating';
 import { CalendarModule } from 'primeng/calendar';
 import { DialogModule } from 'primeng/dialog';
-
 import { BoardComponent } from './board.component';
 import { BoardRoutingModule } from './board-routing.module';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -44,7 +43,8 @@ import { RadioButtonModule } from 'primeng/radiobutton';
     CalendarModule,
     DialogModule,
     DragDropModule,
-    RadioButtonModule
+    RadioButtonModule,
+    FormsModule
   ],
   providers: [ConfirmationService, MessageService]
 })

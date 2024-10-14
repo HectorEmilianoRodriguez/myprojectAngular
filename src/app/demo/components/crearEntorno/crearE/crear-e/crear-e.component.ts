@@ -13,7 +13,7 @@ import { WorkEnvService } from '../../../../service/work-env.service';
 })
 export class CrearEComponent implements OnInit {
   entornoForm: FormGroup;
-  tipoEntornos: string[] = ['Tipo 1', 'Tipo 2', 'Tipo 3'];
+  tipoEntornos: string[] = ['Desarollo de software', 'Redes de computadoras', 'Otro'];
 
   constructor(
     private fb: FormBuilder,

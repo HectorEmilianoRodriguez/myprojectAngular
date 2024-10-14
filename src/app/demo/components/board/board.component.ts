@@ -8,11 +8,16 @@ import { forkJoin } from 'rxjs';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop'; 
 import { ChangeDetectorRef } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
+import { ViewChild } from '@angular/core';
+import { Table } from 'primeng/table';
 @Component({
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.scss']
 })
 export class BoardComponent implements OnInit {
+
+  @ViewChild('dt') dt: Table;
+
   newBoardName: string;
   newBoardDescription: string;
   newListName: string;
@@ -59,7 +64,27 @@ export class BoardComponent implements OnInit {
   comments: any [] = [];
   idjoin;
   newComment;
+  displayEditComment = false;
+  EditComment;
+  idcomment;
+  nameL;
+  colorL;
+  displayNewLabelD = false;
+  displayEditLabelD = false;
+  selectedLabel;
+  editnameL;
+  editColorL;
 
+  mylabels: any [] = [];
+  displayLabelD = false;
+  filterName = '';
+  filterColor = '';
+  logicdeleted;
+  isDateInvalid: boolean = false;
+
+  filterNamee: string = '';
+  filterDate: string = '';
+  filteredLists: any [] = [];
   constructor(
     private bs: BoardService,
     private ar: ActivatedRoute,
@@ -77,6 +102,14 @@ export class BoardComponent implements OnInit {
     this.displayNewBoardDialog = true;
   }
 
+  loadLabels(){
+      this.bs.getLabels(this.idw).subscribe({
+        next: (res) =>{
+          this.mylabels = res;
+        }
+      })
+  }
+
   ngOnInit() {
     this.ar.paramMap.subscribe(params => {
       this.idb = params.get('idb');
@@ -87,7 +120,9 @@ export class BoardComponent implements OnInit {
         lists: this.bs.getLists(+(this.idb)),
         workEnv: this.ws.getWorkEnv(this.idw),
         memberswork: this.ws.getMembers(this.idw),
-        userauth: this.auth.getUser()
+        userauth: this.auth.getUser(),
+        labels: this.bs.getLabels(this.idw)
+  
       }).subscribe({
         next: (results) => {
           this.dataBoard = results.board;
@@ -95,6 +130,9 @@ export class BoardComponent implements OnInit {
           this.memberswork = results.memberswork
           this.nameAuth = results.userauth.name;
           this.idjoin = results.workEnv.idJoinUserWork;
+          this.mylabels = results.labels
+          this.logicdeleted = results.workEnv.logicdeleted;
+          console.log(this.logicdeleted);
           this.lists = results.lists.map((list: any) => {
             return {
               idList: list.idList,
@@ -106,6 +144,8 @@ export class BoardComponent implements OnInit {
             };
           });
           
+          this.filteredLists = [...this.lists];
+
           // Cargar etiquetas para cada tarjeta
           const labelRequests = this.lists.flatMap(list => 
             list.cards.map(card => this.getCardLabels(card.idCard).then(labels => {
@@ -132,18 +172,27 @@ export class BoardComponent implements OnInit {
   drop(event: CdkDragDrop<any[]>): void {
     const previousContainerData = event.previousContainer.data;
     const currentContainerData = event.container.data;
-  
+
+    // Mover dentro de la misma lista
     if (event.previousContainer === event.container) {
-      // Move within the same list
-      moveItemInArray(currentContainerData, event.previousIndex, event.currentIndex);
+        moveItemInArray(currentContainerData, event.previousIndex, event.currentIndex);
     } else {
-      // Move between different lists
-      transferArrayItem(previousContainerData,
-                        currentContainerData,
-                        event.previousIndex,
-                        event.currentIndex);
+        // Mover entre listas diferentes
+        const movedItem = previousContainerData[event.previousIndex];
+
+        // Actualiza el idList del movedItem
+        movedItem.idList = event.container.id;
+
+        // Transfiere el item
+        transferArrayItem(previousContainerData, currentContainerData, event.previousIndex, event.currentIndex);
+
+        // Aquí puedes llamar a la función para actualizar el backend
+        this.bs.updateActivityStatus(movedItem.idCard, movedItem.idList);
     }
-  }
+}
+
+
+
 
   openActivityModal(activity: any) {
 
@@ -152,7 +201,7 @@ export class BoardComponent implements OnInit {
     let labelsids = this.selectedActivity.labels.map(label => label.idLabel);
     
 
-    this.bs.getPossibleLabels(labelsids).subscribe({
+    this.bs.getPossibleLabels(labelsids, this.idw).subscribe({
  
         next: (res) =>{
           this.labels = res;
@@ -267,7 +316,19 @@ export class BoardComponent implements OnInit {
     });
   }
   
+  getFilteredCards(cards: any[]): any[] {
+    return cards.filter(card => {
+      // Verifica si filterName tiene un valor antes de filtrar por nombre
+      const matchesName = this.filterNamee ? card.nameC.toLowerCase().includes(this.filterName.toLowerCase()) : true;
+      // Verifica si filterDate tiene un valor antes de filtrar por fecha
+      const matchesDate = this.filterDate ? card.end_date === this.filterDate : true;
+      // Devuelve solo las tarjetas que coincidan con ambos filtros si ambos están presentes
+      return matchesName && matchesDate;
+    });
+  }
 
+  
+  
   createNewList(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this.bs.newList(+(this.idb), this.newListName, this.newListDescription, this.newListColor).subscribe({
@@ -381,9 +442,18 @@ export class BoardComponent implements OnInit {
     this.selectidlist = idList;
   }
 
+  validateDate() {
+    const today = new Date();
+    if (this.newActDate) {
+        this.isDateInvalid = this.newActDate < today;
+    } else {
+        this.isDateInvalid = false; // si no hay fecha, no hay error
+    }
+}
+
   newAct(){
   
-    if(this.newActName){
+    if(this.newActName && !this.isDateInvalid){
       const year = this.newActDate.getFullYear();
       const month = String(this.newActDate.getMonth() + 1).padStart(2, '0'); // Los meses son 0-indexed
       const day = String(this.newActDate.getDate()).padStart(2, '0');
@@ -403,7 +473,7 @@ export class BoardComponent implements OnInit {
 
       });
     }else{
-      this.ms.add({ severity: 'error', summary: 'Error', detail: 'Se requiere un nombre para la actividad.' });
+      this.ms.add({ severity: 'error', summary: 'Error', detail: 'Se requiere un nombre para la actividad o bien la fecha no puede ser antes de la actual.' });
     }
 
   }
@@ -486,7 +556,7 @@ export class BoardComponent implements OnInit {
   
             // Llamar a getPossibleLabels para actualizar las etiquetas disponibles
             const labelsids = this.selectedActivity.labels.map(label => label.idLabel);
-            this.bs.getPossibleLabels(labelsids).subscribe({
+            this.bs.getPossibleLabels(labelsids, this.idw).subscribe({
               next: (res) => {
                 this.labels = res; // Actualizar las etiquetas posibles
               },
@@ -540,7 +610,7 @@ export class BoardComponent implements OnInit {
   
               // Llamar a getPossibleLabels para actualizar las etiquetas disponibles
               const labelsids = this.selectedActivity.labels.map(label => label.idLabel);
-              this.bs.getPossibleLabels(labelsids).subscribe({
+              this.bs.getPossibleLabels(labelsids, this.idw).subscribe({
                 next: (res) => {
                   this.labels = res; // Actualizar las etiquetas posibles
                 },
@@ -864,11 +934,156 @@ deleteComment(idc){
     }
  }
  
- updateComment(idc){
+ updateComment(idc, txt){
+   this.displayEditComment = true;
+   this.EditComment = txt;
+   this.idcomment = idc;
+ }
 
+ changeC(){
+
+  this.cs.confirm({
+    message: '¿Estás seguro de editar este comentario?',
+    header: 'Confirmar',
+    icon: 'pi pi-exclamation-triangle',
+    accept: () => {
+
+        if(this.EditComment){
+          this.ms.add({ severity: 'info', summary: 'Cargando', detail: 'Actualizando comentario...' });
+          this.bs.updateComment(this.idcomment, this.EditComment).subscribe({
+    
+              next: (res) =>{
+                this.ms.add({ severity: 'success', summary: 'Éxito', detail: 'Comentario actualizado con éxito' });
+                this.loadLists().then(()=>{
+                  this.cdr.detectChanges(); // Forzar la detección de cambios después de cargar las listas
+                  this.connectedDropLists = this.lists.map(list => list.idList.toString());
+                  this.openActivityModal(this.selectedActivity);
+                  this.displayEditComment = false;
+                })
+              }
+    
+          });
+        }else{
+          this.ms.add({ severity: 'error', summary: 'Error', detail: 'No puede adjuntar un comentario vacío' });
+
+        }
+      
+      
+    }
+  });
  }
 
  seenComment(idc){
+  this.ms.add({ severity: 'info', summary: 'Cargando', detail: 'Marcando como visto...' });
+
+  this.bs.seenComment(idc).subscribe({
+
+    next: (res) =>{
+      this.ms.add({ severity: 'success', summary: 'Éxito', detail: 'Comentario mercado como visto' });
+      this.loadLists().then(()=>{
+        this.cdr.detectChanges(); // Forzar la detección de cambios después de cargar las listas
+        this.connectedDropLists = this.lists.map(list => list.idList.toString());
+        this.openActivityModal(this.selectedActivity);
+      })
+    }
+
+});
+ }
+
+ newLabel(){
+    this.displayNewLabelD = true;
+ }
+
+ CLabel(){
+    if(this.nameL){
+      this.ms.add({ severity: 'info', summary: 'Cargando', detail: 'Agregando etiqueta...' });
+
+      this.bs.newLabel(this.nameL, this.colorL, this.idw).subscribe({
+
+          next: (res) =>{
+            this.ms.add({ severity: 'success', summary: 'Éxito', detail: 'Etiqueta agregada' });
+            this.loadLists().then(()=>{
+              this.cdr.detectChanges(); // Forzar la detección de cambios después de cargar las listas
+              this.connectedDropLists = this.lists.map(list => list.idList.toString());
+              this.displayNewLabelD = false;
+              this.loadLabels();
+            })
+
+          }
+
+      });
+    }else{
+      this.ms.add({ severity: 'error', summary: 'Error', detail: 'Debe indicar un nombre a la etiqueta' });
+
+    }
 
  }
+  showL(){
+    this.displayLabelD = true;
+  }
+
+  filteredLabels() {
+    return this.mylabels.filter(label =>
+        (!this.filterName || label.name.includes(this.filterName)) &&
+        (!this.filterColor || label.color === this.filterColor)
+    );
 }
+
+editLabel(label){
+  this.displayEditLabelD = true;
+  this.selectedLabel = label;
+  this.editnameL = label.nameL;
+  this.editColorL = label.colorL;
+}
+
+ELabel(){
+  if(this.editnameL){
+    this.ms.add({ severity: 'info', summary: 'Cargando', detail: 'Actualizando etiqueta...' });
+
+    this.bs.editLabel(this.editnameL, this.editColorL, this.idw, this.selectedLabel.idLabel).subscribe({
+
+        next: (res) =>{
+          this.ms.add({ severity: 'success', summary: 'Éxito', detail: 'Etiqueta actualizada' });
+          this.loadLists().then(()=>{
+            this.cdr.detectChanges(); // Forzar la detección de cambios después de cargar las listas
+            this.connectedDropLists = this.lists.map(list => list.idList.toString());
+            this.displayEditLabelD = false;
+            this.loadLabels();
+          })
+
+        }
+
+    });
+  }else{
+    this.ms.add({ severity: 'error', summary: 'Error', detail: 'Debe indicar un nombre a la etiqueta' });
+  }
+}
+
+deleteLabel(idl){
+
+  this.cs.confirm({
+    message: '¿Estás seguro de eliminar esta etiqueta?',
+    header: 'Confirmar',
+    icon: 'pi pi-exclamation-triangle',
+    accept: () => {
+          this.ms.add({ severity: 'info', summary: 'Cargando', detail: 'Eliminando etiqueta...' });
+          this.bs.deleteLabel(idl).subscribe({
+    
+              next: (res) =>{
+                this.ms.add({ severity: 'success', summary: 'Éxito', detail: 'Etiqueta eliminada con éxito' });
+                this.loadLists().then(()=>{
+                  this.cdr.detectChanges(); // Forzar la detección de cambios después de cargar las listas
+                  this.connectedDropLists = this.lists.map(list => list.idList.toString());
+                  this.loadLabels();
+
+                })
+              }
+    
+          }); 
+    }
+  });
+
+}
+
+}
+

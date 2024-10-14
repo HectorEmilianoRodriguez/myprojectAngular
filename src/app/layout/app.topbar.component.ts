@@ -25,7 +25,7 @@ export class AppTopBarComponent implements OnInit {
     @ViewChild('topbarmenu') menu!: ElementRef;
 
     opcionesDesplegadas: boolean = false;
-    fotoUser: SafeUrl | null = null;
+    fotoUser;
     nombreUsuario: string = '';
     isLoadingPhoto: boolean = false;
 
@@ -81,20 +81,17 @@ export class AppTopBarComponent implements OnInit {
                 if (data && data.name) {
                     this.nombreUsuario = data.name;
                 }
+                if(data.photo){
+                    this.fotoUser = 'http://localhost:8000/api/' + data.photo;
+                }else{
+                    this.fotoUser = 'http://localhost:8000/api/photos/test.jpg';
+
+                }
+                 
+
             },
             (error) => {
                 console.error('Error al cargar el perfil del usuario:', error);
-            }
-        );
-
-        this.perfilService.ObtenerFotoUser().subscribe(
-            (response: Blob) => {
-                const objectUrl = URL.createObjectURL(response);
-                this.fotoUser = this.sanitizer.bypassSecurityTrustUrl(objectUrl);
-            },
-            (error) => {
-                console.error('Error al cargar la foto del usuario:', error);
-                this.fotoUser = './assets/demo/images/login/avatar.png';
             }
         );
         this.geNotifi();
@@ -151,15 +148,16 @@ export class AppTopBarComponent implements OnInit {
 
 
     geNotifi() {
-        this.perfilService.getNotificatios().subscribe(
-            (data) => {
-                this.notificaciones = data; // Almacena las notificaciones en la propiedad
-                console.log('Notificaciones recibidas:', this.notificaciones); // Muestra las notificaciones en la consola
+        this.perfilService.getNotificatios().subscribe({
+            next: (res) => {
+              // Convierte el objeto en un array
+              this.notificaciones = Object.values(res);
+              console.log(this.notificaciones); // Verifica la salida
             },
-            (error) => {
-                console.error('Error al obtener las notificaciones:', error); // Manejo de errores
+            error: (er) => {
+              console.log(er);
             }
-        )
+          });
     }
 
     toggleNotificaciones() {

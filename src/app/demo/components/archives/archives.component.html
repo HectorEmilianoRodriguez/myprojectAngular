@@ -1,0 +1,105 @@
+<div class="card" style="display: flex; align-items: center;  justify-content: center;  flex-wrap: wrap; gap: 10px;">
+    <p>{{ folder.nameF }}</p>
+    <button 
+        pButton 
+        type="button"
+        label="Regresar"
+        class="p-button-danger"
+        [routerLink]="['/WorkEnv', idw, 'Files', idw]">
+    </button>
+  
+    <div *ngIf = "logicdeleted === 0">
+        <input 
+            type="file" 
+            id="fileInput" 
+            (change)="onFileSelected($event)" 
+            accept=".pdf, .jpg, .png, .csv" 
+            hidden 
+        />
+        <button 
+            pButton 
+            type="button"
+            label="Agregar archivo"
+            class="p-button-success"
+            (click)="triggerFileInput()">
+        </button>
+    </div>
+  </div>
+
+  <div class = "card">
+
+    <p-table [value]="files" [paginator]="true" [rows]="10" [filterDelay]="500">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="name">Nombre <p-sortIcon [field]="'name'"></p-sortIcon></th>
+                <th pSortableColumn="created_at">Fecha de Agregación <p-sortIcon [field]="'created_at'"></p-sortIcon></th>
+                <th pSortableColumn="filesize">Tamaño (KB) <p-sortIcon [field]="'filesize'"></p-sortIcon></th>
+                <th pSortableColumn="type">Tipo <p-sortIcon [field]="'type'"></p-sortIcon></th>
+                <th>Acciones</th>
+            </tr>
+            <tr>
+                <th>
+                    <p-tableFilterField [field]="'name'"></p-tableFilterField>
+                </th>
+                <th>
+                    <p-tableFilterField [field]="'created_at'"></p-tableFilterField>
+                </th>
+                <th>
+                    <p-tableFilterField [field]="'filesize'"></p-tableFilterField>
+                </th>
+                <th>
+                    <p-tableFilterField [field]="'type'"></p-tableFilterField>
+                </th>
+                <th></th>
+            </tr>
+        </ng-template>
+    
+        <ng-template pTemplate="body" let-file>
+            <tr>
+                <td>{{ file.name }}</td>
+                <td>{{ file.created_at | date: 'dd/MM/yyyy HH:mm' }}</td>
+                <td>{{ file.filesize }}</td>
+                <td>
+                    <i *ngIf="file.type === 'pdf'" class="pi pi-file-pdf" title="PDF"></i>
+                    <i *ngIf="file.type === 'csv'" class="pi pi-file" title="CSV"></i>
+                    <i *ngIf="file.type === 'jpg' || file.type === 'jpeg'" class="pi pi-file-image" title="JPG"></i>
+                    <i *ngIf="file.type === 'png'" class="pi pi-file-image" title="PNG"></i>
+                    {{ file.type }}
+                </td>
+                <td style="display: flex; gap: 4px;">
+                    <button 
+                        pButton 
+                        label="Descargar" 
+                        icon="pi pi-download" 
+                        (click)="downloadFile(file.link)">
+                    </button>
+
+                    <button *ngIf = "logicdeleted === 0"
+                        pButton 
+                        class = "p-button-danger"
+                        label="Eliminar" 
+                        icon="pi pi-times" 
+                        (click)="deleteFile(file.idFile)">
+                    </button>
+
+                </td>
+            </tr>
+        </ng-template>
+    
+        <ng-template pTemplate="footer">
+            <tr>
+                <td colspan="5">
+                    <p-paginator [rows]="10" [totalRecords]="totalFiles" (onPage)="loadFiles($event)"></p-paginator>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    
+
+
+  </div>
+
+  <p-confirmDialog></p-confirmDialog>
+
+  <p-toast></p-toast>
+  

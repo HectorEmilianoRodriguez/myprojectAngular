@@ -7,6 +7,7 @@ import { RespaldoyAuthComponent } from './respaldoy-auth/respaldoy-auth.componen
 import { ButtonModule } from 'primeng/button';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import { ToastModule } from 'primeng/toast';
     FileUploadModule,
     ButtonModule,
     ToastModule,
+    FormsModule
   ]
    
 })
