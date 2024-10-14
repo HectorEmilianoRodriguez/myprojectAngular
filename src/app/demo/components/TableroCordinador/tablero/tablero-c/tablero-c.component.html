@@ -57,9 +57,9 @@
 						<td>{{ activity.end_date | date }}</td>
 						<td>{{ activity.important === 1 ? 'Sí' : 'No' }}</td>
 						<td>
-							<span *ngFor="let label of labels" [hidden]="label.idLabel !== activity.idLabel"
-								[ngStyle]="{'background-color': label.colorL, 'color': 'white'}" class="label-button">
-								{{ label.nameL }}
+							<span 
+								[ngStyle]="{'background-color': activity.label.colorL, 'color': 'white'}" class="label-button">
+								{{ activity.label.nameL }}
 							</span>
 						</td>
 						<td>

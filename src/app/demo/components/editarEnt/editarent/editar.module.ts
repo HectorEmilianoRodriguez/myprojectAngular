@@ -13,7 +13,7 @@ import { ReactiveFormsModule } from '@angular/forms'; // Asegúrate de importar 
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ToastModule } from 'primeng/toast';
+
 
 @NgModule({
   declarations: [EditarEntComponent],
@@ -32,8 +32,8 @@ import { ToastModule } from 'primeng/toast';
   ],
 
   providers: [ConfirmationService, MessageService]
-    ToastModule
-  ]
+   
+  
 
 })
 export class EditarModule { }
