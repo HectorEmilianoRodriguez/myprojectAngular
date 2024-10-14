@@ -1,0 +1,14 @@
+.label-button {
+    display: inline-block; /* Permite que el span se comporte como un bloque en línea */
+    padding: 0.5em 1em; /* Espaciado interno para que se vea como un botón */
+    border-radius: 20px; /* Bordes redondeados */
+    font-weight: bold; /* Texto en negrita */
+    text-align: center; /* Centra el texto */
+    transition: background-color 0.3s, transform 0.2s; /* Transiciones suaves */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+}
+
+.label-button:hover {
+    transform: scale(1.05); /* Efecto de aumento al pasar el mouse */
+    opacity: 0.9; /* Efecto de opacidad al pasar el mouse */
+}

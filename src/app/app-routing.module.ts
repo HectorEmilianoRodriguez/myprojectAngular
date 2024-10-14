@@ -31,6 +31,7 @@ import { AuthGuard } from './demo/components/auth/guards/auth.guard';import { Ap
                     { path: 'perfiles', loadChildren: () => import('./demo/components/PerfilUser/perfil-user.module').then(m => m.PerfilUserModule), canActivate: [AuthGuard] },
                     { path: 'solicitud', loadChildren: () => import('./demo/components/Solicitudes/solicitud-routing.module').then(m => m.SolicitudRoutingModule), canActivate: [AuthGuard] },
                     { path: 'edit-work-env', loadChildren: () => import('./demo/components/editarEnt/editarent/editar-routing.module').then(m => m.EditarRoutingModule), canActivate: [AuthGuard] },
+                    { path: 'tablero', loadChildren: () => import('./demo/components/TableroCordinador/tablero/tablero-c.module').then(m => m.TableroCModule), canActivate: [AuthGuard] },
                     
                     
                     
@@ -44,12 +45,9 @@ import { AuthGuard } from './demo/components/auth/guards/auth.guard';import { Ap
                     { path: 'Reports/:id', loadChildren: () => import('./demo/components/reports/report-component/report-module.module').then(m => m.ReportModuleModule), canActivate: [AuthGuard]},
                     { path: 'Board/:id/:idb',  loadChildren: () => import('./demo/components/board/board.module').then(m => m.BoardModule), canActivate: [AuthGuard]},
                     { path: 'Edit/:id',  loadChildren: () => import('./demo/components/editarEnt/editarent/editar.module').then(m => m.EditarModule), canActivate: [AuthGuard]},
-                  
-                  
-                  
-                  
                     { path: 'Files/:id', loadChildren: () => import('./demo/components/files/files.module').then(m => m.FilesModule)},
-                    { path: 'Folder/:id/:idf', loadChildren: () => import('./demo/components/archives/archives.module').then(m => m.ArchivesModule)}
+                    { path: 'Folder/:id/:idf', loadChildren: () => import('./demo/components/archives/archives.module').then(m => m.ArchivesModule)},
+                    { path: 'grupos/:id', loadChildren: () => import('./demo/components/TableroCordinador/tablero/tablero-c.module').then(m => m.TableroCModule), canActivate: [AuthGuard] },
 
                     
                     

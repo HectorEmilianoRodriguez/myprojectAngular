@@ -20,10 +20,12 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { SolicitudModule } from './demo/components/Solicitudes/solicitud.module';
 import { EditarModule } from './demo/components/editarEnt/editarent/editar.module';
+import { TableroCModule } from './demo/components/TableroCordinador/tablero/tablero-c.module';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
-    imports: [AppRoutingModule, AppLayoutModule,HttpClientModule,  RespaldoModule,  WorkEnvAppLayoutModule,SolicitudModule,EditarModule],
+    imports: [AppRoutingModule, AppLayoutModule,HttpClientModule,  RespaldoModule,  WorkEnvAppLayoutModule,SolicitudModule,EditarModule, CommonModule,PanelMenuModule],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
         { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
