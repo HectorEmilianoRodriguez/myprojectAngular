@@ -1,0 +1,129 @@
+<div class="card">
+    <button *ngIf = "logicdeleted === 0"
+        pButton 
+        type="button"
+        label="Agregar carpeta"
+        class="p-button-success"
+        (click)="openDialogFolder()">
+    </button>
+</div>
+
+<div class="folder-container">
+    <div class="folder" *ngFor="let folder of folders" 
+        [routerLink]="['/WorkEnv', idw, 'Folder', idw, folder.idFolder]" >
+        <div class="folder-icon">
+            <i class="pi pi-folder"></i>
+        </div>
+        <div class="folder-details">
+            <span class="folder-name">{{ folder.nameF }}</span>
+            <span class="folder-date">Creado el: {{ folder.created_at | date:'shortDate' }}</span>
+        </div>
+        <div class="folder-actions">
+            <button pButton icon="pi pi-ellipsis-v" (click)="toggleMenu($event, folder, menu)"></button>
+            <p-menu #menu [model]="menuItems" [popup]="true" [style]="{ width: '150px' }" [appendTo]="'body'"></p-menu>
+        </div>
+        
+    </div>
+</div>
+
+<!-- Modal de Detalles de la Carpeta -->
+<p-dialog header="Detalles de la Carpeta" [(visible)]="displayModal" [modal]="true" [closable]="true" [responsive]="true">
+    <div *ngIf="selectedFolder">
+        <label for="name" style="font-weight: bold;">Nombre</label>
+        <input id="name" type="text" pInputText [(ngModel)]="Ename" [placeholder]="Ename" style="width: 100%; font-size: 16px;" />
+        <p><strong>Creado el:</strong> {{ selectedFolder.created_at | date:'shortDate' }}</p>
+        <footer>
+            <button pButton label="Cerrar" (click)="displayModal = false"></button>
+            <button *ngIf = "logicdeleted === 0" pButton label="Editar" (click)="eFolder()"></button>
+        </footer>
+    </div>
+</p-dialog>
+
+<!-- Diálogo para agregar carpeta -->
+<p-dialog header="Agregar carpeta" [(visible)]="displaynewf" [modal]="true" [closable]="true" [responsive]="true" [style]="{width: '400px'}">
+    <div class="p-fluid" style="margin-top: 20px;">
+        <div class="field" style="margin-bottom: 20px;">
+            <label for="name" style="font-weight: bold;">Nombre</label>
+            <input id="name" type="text" pInputText [(ngModel)]="name" placeholder="Mi carpeta" style="width: 100%; font-size: 16px;" />
+        </div>    
+    </div>
+    <p-footer>
+        <div class="p-d-flex p-jc-between p-ai-center" style="gap: 10px;">
+            <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text p-button-lg" (click)="displaynewf = false" style="width: 45%; height: 45%;"></button>
+            <button pButton label="Agregar" icon="pi pi-check" class="p-button-lg" (click)="newFolder()" style="width: 45%; height: 45%;"></button>
+        </div>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Seleccionar Miembros" [(visible)]="displayDialog" [modal]="true" [responsive]="true">
+    <div *ngFor="let member of members">
+      <div style= "display: flex; gap: 5px; align-items: center;">
+        <img [src]="member.photo" alt="{{ member.name }}" class="member-photo" />
+        <span>{{ member.name }}</span>
+        <span>{{ member.email }}</span>
+        <p-checkbox 
+          [(ngModel)]="member.selected" 
+          [binary]="true"
+          (onChange)="onMemberSelect(member.idJoinUserWork, member.selected)">
+        </p-checkbox>
+      </div>
+    </div>
+
+    <div *ngIf="members && members.length === 0">
+        Sin miembros
+      </div>
+
+    <p-footer>
+      <button *ngIf = "logicdeleted === 0" pButton label="Agregar" type="button" (click)="shareFolder()" icon="pi pi-check"></button>
+      <button pButton label="Cancelar" type="button" (click)="displayDialog = false" icon="pi pi-times"></button>
+    </p-footer>
+  </p-dialog>
+  
+  <p-dialog header="Miembros Compartidos" [(visible)]="displayMembersFolder" [modal]="true" [responsive]="true">
+    <p-table 
+      #dt 
+      [value]="sharedMembers" 
+      [paginator]="true" 
+      [rows]="10" 
+      [globalFilterFields]="['name', 'email']">
+      
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Foto</th>
+          <th pSortableColumn="name">
+            Nombre
+            <p-columnFilter type="text" field="name" display="menu"></p-columnFilter>
+          </th>
+          <th pSortableColumn="email">
+            Email
+            <p-columnFilter type="text" field="email" display="menu"></p-columnFilter>
+          </th>
+          <th>Acción</th>
+        </tr>
+      </ng-template>
+      
+      <ng-template pTemplate="body" let-member>
+        <tr>
+          <td>
+            <img [src]="member.photo" alt="{{ member.name }}" class="member-photo" style="width: 50px; height: 50px; border-radius: 50%;" />
+          </td>
+          <td>{{ member.name }} </td>
+          <td>{{ member.email }}</td>
+          <td *ngIf = "member.idJoinUserWork != idj">
+            <button *ngIf = "logicdeleted === 0" (click)="removeMember(member.idUser, member.idJoinUserWork)" pButton icon="pi pi-times" class="p-button-danger"></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <div *ngIf = "sharedMembers.length === 0">
+        Aún no se ha compartido la carpeta con nadie
+    </div>
+    <p-footer>
+      <button pButton label="Cerrar" (click)="displayMembersFolder = false" icon="pi pi-times"></button>
+    </p-footer>
+  </p-dialog>
+  
+  
+  
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>

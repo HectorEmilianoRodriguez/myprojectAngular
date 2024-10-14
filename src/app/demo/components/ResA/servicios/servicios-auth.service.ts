@@ -30,12 +30,13 @@ export class ServiciosAuthService {
     }) as Observable<any>;
   }
 
-  /*
-  respaldarBaseDeDatos(): Observable<Blob> {
-    return this.http.get(`${this.url}/api/backup-database`, {
+
+  respaldoBD(): Observable<any> {
+    return this.http.get(this.url + 'api/database/backup', { 
       headers: this.getHeaders(),
-      responseType: 'blob',
-      withCredentials: true
+      responseType: 'blob', // Asegúrate de que el tipo de respuesta sea blob
+      withCredentials: true 
     });
-  }*/
+  }
+  
 }

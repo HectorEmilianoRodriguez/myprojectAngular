@@ -26,16 +26,9 @@ export class PerfilUService {
       );
   }
 
-  ObtenerFotoUser(): Observable<Blob> {
-    const timestamp = new Date().getTime();
+  ObtenerFotoUser(): Observable<any> {
 
-    return this.http.get(`${this.url}api/getUserPhoto`, { responseType: 'blob', withCredentials: true })
-      .pipe(
-        catchError((error: HttpErrorResponse) => {
-          console.error('Error al obtener la foto del usuario:', error);
-          return throwError(() => error);
-        })
-      );
+    return this.http.get(`${this.url}api/getUserPhoto`, {withCredentials: true }) as Observable<any>;
   }
 
   getNotificatios(){

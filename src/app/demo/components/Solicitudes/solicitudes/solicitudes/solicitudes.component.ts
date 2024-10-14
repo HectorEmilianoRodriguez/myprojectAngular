@@ -17,12 +17,22 @@ export class SolicitudesComponent implements OnInit {
 
   loadPendingApprovals() {
     this.serviciosService.getPendingApprovals().subscribe((data) => {
-      console.log(data); // Verifica si se están obteniendo datos
-      this.solicitudes = data; // Asignar las solicitudes obtenidas al array
+        console.log(data); // Verifica si se están obteniendo datos
+        this.solicitudes = data; // Asignar las solicitudes obtenidas al array
+
+        // Actualizar las fotos
+        this.solicitudes = this.solicitudes.map(s => {
+            if (s.photo) {
+                s.photo = 'http://localhost:8000/api/' + s.photo; 
+            } else {
+                s.photo = 'http://localhost:8000/api/photos/test.jpg'; 
+            }
+            return s; // Asegúrate de devolver el objeto actualizado
+        });
     }, error => {
-      console.error('Error al cargar las solicitudes:', error); // Manejo de errores
+        console.error('Error al cargar las solicitudes:', error); // Manejo de errores
     });
-  }
+}
 
   acceptRequest(idUser: number, idWorkEnv: number) {
     this.serviciosService.acceptRequest(idUser, idWorkEnv).subscribe((response) => {
