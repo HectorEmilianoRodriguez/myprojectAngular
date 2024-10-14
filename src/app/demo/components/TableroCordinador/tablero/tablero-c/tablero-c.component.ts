@@ -18,7 +18,8 @@ interface ExpandedRows {
 
 @Component({
   templateUrl: './tablero-c.component.html',
-  styleUrls: ['./tablero-c.component.scss']
+  styleUrls: ['./tablero-c.component.scss'],
+  providers: [ConfirmationService, MessageService],
 })
 export class TableroCComponent implements OnInit {
   taskGroups: Group[] = []; // Propiedad para almacenar grupos de tareas
@@ -38,6 +39,11 @@ export class TableroCComponent implements OnInit {
   newGroup: Group; // Inicializa un nuevo grupo
   displayModal: boolean = false; // Controla la visibilidad del modal
 
+  importanceOptions: any[] = [
+    { label: 'Sí', value: 1 },
+    { label: 'No', value: 0 }
+  ];
+
   selectedGroup: EditarGroup = new EditarGroup(0, '', new Date(), new Date(), 0); // Usar el modelo EditarGroup para la edición
 
 
@@ -45,7 +51,8 @@ export class TableroCComponent implements OnInit {
     private workEnvService: WorkEnvMService,
     private route: ActivatedRoute,
     private authService: AuthService,// Inyecta el servicio de autenticación
-    private messageService: MessageService
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService,
 
   ) { }
 
@@ -198,7 +205,7 @@ export class TableroCComponent implements OnInit {
     table.clear();
   }
 
-  
+
 
 
 
@@ -252,5 +259,43 @@ export class TableroCComponent implements OnInit {
   }
   editActivity(id: any) {
     this.actividades = true;
+  }
+
+  deleteGroup(group:Group, event: Event) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: '¿Esta seguro de eliminar este grupo?',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.servicioTC.deleteGroup(group).subscribe(
+          (data) => {
+            this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Se a eliminado correctamente' });
+            this.loadTaskGroups();
+          },
+        )
+        
+      },
+      reject: () => {
+        this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'No se a podido eliminar correctamente' });
+      },
+      acceptLabel: 'Sí', // Cambia el texto del botón de aceptación a "Sí"
+      rejectLabel: 'No'
+    });
+  }
+
+  deleteActivity(id: number, event: Event) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: '¿Esta seguro de eliminar esta actividad?',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted' });
+      },
+      reject: () => {
+        this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
+      },
+      acceptLabel: 'Sí', // Cambia el texto del botón de aceptación a "Sí"
+      rejectLabel: 'No'
+    });
   }
 }

@@ -19,7 +19,7 @@ import { TableroCComponent } from './tablero-c/tablero-c.component';
 import { DialogModule } from 'primeng/dialog';
 import { DividerModule } from 'primeng/divider';
 import { CalendarModule } from 'primeng/calendar';
-
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
 
 
 
@@ -32,11 +32,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
-  declarations: [TableroCComponent],
-  imports: [
-    CommonModule,
-    TableroCRoutingModule,
-    FormsModule,
+	declarations: [TableroCComponent],
+	imports: [
+		CommonModule,
+		TableroCRoutingModule,
+		FormsModule,
 		TableModule, // Asegúrate de que este módulo esté importado
 		RatingModule,
 		ButtonModule,
@@ -52,11 +52,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 		FormsModule,
 		DividerModule,
 		DropdownModule,
-		CalendarModule
+		CalendarModule,
+		ConfirmPopupModule
 
-		
-		
-  ]
- 
+
+
+	]
+
 })
 export class TableroCModule { }

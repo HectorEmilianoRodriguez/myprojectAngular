@@ -30,8 +30,8 @@ export class ServicioTCService {
   }
 
   // Eliminar un grupo
-  deleteGroup(id: number): Observable<any> {
-    return this.http.delete(`${this.url}api/deleteGroup/${id}`, { headers: this.getHeaders(), withCredentials: true });
+  deleteGroup(group: Group): Observable<any> {
+    return this.http.post(`${this.url}api/deleteGroup`,group, { withCredentials: true });
   }
 
   // Obtener todas las actividades de un grupo
