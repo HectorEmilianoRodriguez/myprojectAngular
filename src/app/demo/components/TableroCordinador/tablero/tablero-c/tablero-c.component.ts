@@ -71,7 +71,9 @@ selectAct: EditarAct = new EditarAct(0, '', '', new Date().toISOString().split('
 
           next: (res) =>{
             this.idJoinUserWork = res.idJoinUserWork;
+            this.loadTaskGroups();
           }
+          
 
       });
 
@@ -80,6 +82,7 @@ selectAct: EditarAct = new EditarAct(0, '', '', new Date().toISOString().split('
     });
 
     // Inicializa el nuevo grupo
+    
     this.newGroup = new Group(0, '', new Date(), new Date(), this.idJoinUserWork); // Asegúrate de que el constructor de Group tenga los parámetros correctos
   }
 
@@ -288,10 +291,8 @@ selectAct: EditarAct = new EditarAct(0, '', '', new Date().toISOString().split('
     this.servicioTC.editActivity(this.selectAct).subscribe(
       (response) => {
         // Actualiza la lista de actividades
-        const index = this.activities.findIndex(a => a.idactivitycl === this.selectAct.idactivitycl);
-        if (index !== -1) {
-          this.activities[index] = { ...this.selectAct }; // Reemplaza la actividad antigua con la nueva
-        }
+  
+        this.loadActivities(this.idJoinUserWork);
         this.actividades = false; // Cierra el modal
         this.messageService.add({ severity: 'success', summary: 'Actividad Modificada', detail: 'La actividad se ha modificado correctamente.' });
       },

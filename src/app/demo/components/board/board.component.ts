@@ -531,8 +531,9 @@ export class BoardComponent implements OnInit {
                     this.cdr.detectChanges(); // Forzar la detección de cambios después de cargar las listas
                     this.connectedDropLists = this.lists.map(list => list.idList.toString());
                   })
-                
+                  this.displayActivityDialog = false;
               }
+              
 
           });
       }
@@ -667,8 +668,10 @@ export class BoardComponent implements OnInit {
         error: (err) => {
             console.error('Error fetching members photos:', err);
         }
-    });
 
+      
+    });
+    this.possiblesmembers.map(member => 'http://localhost:8000' + member.photo)
     this.displayMembersDialog = true; // Muestra el diálogo después de iniciar la solicitud
 }
 

@@ -46,6 +46,14 @@
                 (click)="showL()">
         </button>
 
+        <button 
+            pButton 
+            type="button"
+            label="Simular waterfall"
+            class="p-button-success"
+            [routerLink]="['/WorkEnv', idw, 'waterfall', idw, idb]">
+        </button>
+
         
           <!-- Filtro por fecha de fin -->
            Filtrar por fecha de entrega
@@ -525,7 +533,7 @@
                         </button>
                 
                     
-                        <button *ngIf="(dataBoard.logicdeleted === 0 && comment.seen === 0 && privilege === 1 && comment.privilege != 2) && 
+                        <button *ngIf="(dataBoard.logicdeleted === 0 && comment.seen === 0 && privilege === 1 && comment.privilege != 2) && logicdeleted === 0 || 
                                         (comment.seen === 0 && dataBoard.logicdeleted === 0 && privilege === 2 && comment.privilege != 2) && 
                                         logicdeleted === 0" 
                                 pButton icon="pi pi-check" 
