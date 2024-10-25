@@ -31,7 +31,7 @@ export class TableroCComponent implements OnInit {
   expandedRows: ExpandedRows = {}; // Para manejar las filas expandidas
   isExpanded: boolean = false; // Para manejar el estado de expansión
   id: any;
-
+  logicdeleted;
   idJoinUserWork: number; // Variable para almacenar el ID del entorno de trabajo
   labels: Label[] = []; // Propiedad para almacenar etiquetas
   visible: boolean = false;
@@ -71,6 +71,7 @@ selectAct: EditarAct = new EditarAct(0, '', '', new Date().toISOString().split('
 
           next: (res) =>{
             this.idJoinUserWork = res.idJoinUserWork;
+            this.logicdeleted = res.logicdeleted;
             this.loadTaskGroups();
           }
           

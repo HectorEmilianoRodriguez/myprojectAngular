@@ -3,11 +3,11 @@
     <p>Seleccione el tipo de reporte que desea generar:</p>
     
     <div class="report-section">
-        <div class="report-item">
+        <div class="report-item" *ngIf = "privilege === 1 || privilege === 2">
             <h5>Reporte de productividad</h5>
             <button pButton type="button" label="Generar" icon="pi pi-chart-line" class="p-button-success" (click)="productivity()"></button>
         </div>
-        <div class="report-item">
+        <div class="report-item" *ngIf = "privilege === 1 || privilege === 2">
             <h5>Reporte de participación</h5>
             <button pButton type="button" label="Generar" icon="pi pi-users" class="p-button-info" (click)="participation()"></button>
         </div>
@@ -15,15 +15,15 @@
             <h5>Plazos de entrega</h5>
             <button pButton type="button" label="Generar" icon="pi pi-calendar" class="p-button-warning" (click)="deadlines()"></button>
         </div>
-        <div class="report-item">
+        <div class="report-item" *ngIf = "privilege === 1 || privilege === 2">
             <h5>Plazos de entrega (Coordinador)</h5>
             <button pButton type="button" label="Generar" icon="pi pi-briefcase" class="p-button-warning" (click)="coordinatorDeadlines()"></button>
         </div>
-        <div class="report-item">
+        <div class="report-item" *ngIf = "privilege === 1 || privilege === 2">
             <h5>Tareas pendientes</h5>
             <button pButton type="button" label="Generar" icon="pi pi-list" class="p-button-danger" (click)="pendingTasks()"></button>
         </div>
-        <div class="report-item">
+        <div class="report-item" *ngIf = "privilege === 1 || privilege === 2">
             <h5>Tareas completadas</h5>
             <button pButton type="button" label="Generar" icon="pi pi-check" class="p-button-success" (click)="completedTasks()"></button>
         </div>

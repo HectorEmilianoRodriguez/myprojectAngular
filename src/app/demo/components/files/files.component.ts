@@ -234,8 +234,9 @@ removeMember(idUser: number, idjoin) {
     event.stopPropagation(); 
     this.selectedFolder = folder; 
     this.menuItems = [
-        { label: 'Editar', icon: 'pi pi-pencil', command: () => this.editFolder() }, // Este ahora muestra el modal
-        { label: 'Eliminar', icon: 'pi pi-trash', command: () => this.deleteFolder() },
+
+        this.privilege === 1 || this.privilege === 2 && this.logicdeleted === 0 && { label: 'Editar', icon: 'pi pi-pencil', command: () => this.editFolder() }, // Este ahora muestra el modal
+        this.privilege === 1 || this.privilege === 2 && this.logicdeleted === 0 && { label: 'Eliminar', icon: 'pi pi-trash', command: () => this.deleteFolder() },
         { label: 'Compartir', icon: 'pi pi-heart', command: () => this.shareFile() },
         { label: 'Ver miembros compartidos', icon: 'pi pi-users', command: () => this.membersFolder() }
     ];

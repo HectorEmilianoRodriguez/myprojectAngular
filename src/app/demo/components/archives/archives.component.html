@@ -74,7 +74,7 @@
                         (click)="downloadFile(file.link)">
                     </button>
 
-                    <button *ngIf = "logicdeleted === 0"
+                    <button *ngIf = "logicdeleted === 0 && (privilege === 1 || privilege === 2)"
                         pButton 
                         class = "p-button-danger"
                         label="Eliminar" 

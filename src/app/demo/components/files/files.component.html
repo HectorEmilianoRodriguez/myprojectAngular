@@ -34,7 +34,7 @@
         <p><strong>Creado el:</strong> {{ selectedFolder.created_at | date:'shortDate' }}</p>
         <footer>
             <button pButton label="Cerrar" (click)="displayModal = false"></button>
-            <button *ngIf = "logicdeleted === 0" pButton label="Editar" (click)="eFolder()"></button>
+            <button *ngIf = "logicdeleted === 0 && (privilege === 1 || privilege === 2 )" pButton label="Editar" (click)="eFolder()"></button>
         </footer>
     </div>
 </p-dialog>
@@ -109,7 +109,7 @@
           </td>
           <td>{{ member.name }} </td>
           <td>{{ member.email }}</td>
-          <td *ngIf = "member.idJoinUserWork != idj">
+          <td *ngIf = "member.idJoinUserWork != idj  && ( privilege === 1 || privilege === 2) ">
             <button *ngIf = "logicdeleted === 0" (click)="removeMember(member.idUser, member.idJoinUserWork)" pButton icon="pi pi-times" class="p-button-danger"></button>
           </td>
         </tr>

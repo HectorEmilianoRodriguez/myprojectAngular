@@ -25,7 +25,7 @@
                 </th>
 
                 
-                <th *ngIf="privilege == 1 || privilege == 2">
+                <th *ngIf="(privilege == 1 || privilege == 2) && logicdeleted === 0">
                     <i class="pi pi-pencil"></i> Acciones
                 </th>
             </tr>
@@ -58,8 +58,8 @@
                 
                 <td *ngIf="privilege == 1 || privilege == 2">
 
-                    <button  *ngIf = 'customer.privilege == 0 || customer.privilege == 1' class="button" [disabled]="!customer.editedPrivilege" (click)="editPrivilege(customer)">Editar</button>
-                    <button  *ngIf = 'customer.privilege == 0 || customer.privilege == 1' class="button" [disabled] = "privilege == 1 && customer.privilege == 1"  (click)="deleteMember(customer)">Eliminar</button>
+                    <button  *ngIf = '(customer.privilege == 0 || customer.privilege == 1) && logicdeleted === 0' class="button" [disabled]="!customer.editedPrivilege" (click)="editPrivilege(customer)">Editar</button>
+                    <button  *ngIf = '(customer.privilege == 0 || customer.privilege == 1) && logicdeleted === 0' class="button" [disabled] = "privilege == 1 && customer.privilege == 1"  (click)="deleteMember(customer)">Eliminar</button>
                 </td>
             </tr>
         </ng-template>

@@ -33,15 +33,7 @@ export class AppMenuComponent implements OnInit {
                         { label: 'Mis solicitudes', icon: 'pi pi-fw pi-bell', routerLink: ['/solicitud/solicitudM'] },
                     ]
                 },
-                {
-                    label: 'Utilities',
-                    items: [
-                        { label: 'PrimeIcons', icon: 'pi pi-fw pi-prime', routerLink: ['/utilities/icons'] },
-                        { label: 'Tablero', icon: 'pi pi-fw pi-desktop', url: ['https://www.primefaces.org/primeflex/'], target: '_blank' },
-                        { label: 'Mi trabajo', icon: 'pi pi-fw pi-desktop', routerLink: [''] },
-
-                    ]
-                },
+                
 
                 {
 

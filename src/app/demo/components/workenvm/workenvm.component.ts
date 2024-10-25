@@ -33,6 +33,7 @@ export class WorkEnvComponent implements OnInit {
   idWork: number;
   namework: string;
   invitarform: FormGroup;
+  logicdeleted;
   @ViewChild('filter') filter!: ElementRef;
 
   constructor(
@@ -61,7 +62,7 @@ export class WorkEnvComponent implements OnInit {
                 this.privilege = res.privilege;
                 this.idWork = res.idWorkEnv;
                 this.namework = res.title;
-              
+                this.logicdeleted = res.logicdeleted;
              },
 
             error : (er) =>{

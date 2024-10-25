@@ -4,7 +4,7 @@ import { NotfoundComponent } from './demo/components/notfound/notfound.component
 import { AppLayoutComponent } from "./layout/app.layout.component";
 import { AuthGuard } from './demo/components/auth/guards/auth.guard';import { AppLayoutComponent as WorkEnvAppLayoutComponent} from './layoutw/app.layout.component';
 
-@NgModule({
+@NgModule({ //Módulo que define las rutas de la aplicación en formato JSON.
     imports: [
         RouterModule.forRoot([
             {
@@ -12,29 +12,38 @@ import { AuthGuard } from './demo/components/auth/guards/auth.guard';import { Ap
             },
             {
                 path: 'Invitation', loadChildren: () => import('./demo/components/Invitation/invitation.module').then(m => m.InvitationModule)
-
             },
-           
-
+                /*Cada ruta está definida como un objeto
+                cuyos atributos representan algo en concrecto;
+                path es utilizado para indicar la estructura de la ruta,
+                redirectTo es útil para redireccionar a una ruta ya existente,
+                children es utilizado cuando se indica una ruta hija, este tipo de rutas
+                son importantes al momento de renderizar únicamnete un componente sin afectar
+                los demás loadChildren es un atributo que recibe una función anónima que es utilizada
+                para renderizar el contenido de un módulo completo.
+                */
             { 
                 path: '', component: AppLayoutComponent,
                 children: [
-                    { path: 'Dash', loadChildren: () => import('./demo/components/dashboard/dashboard.module').then(m => m.DashboardModule),canActivate: [AuthGuard] },
-                    { path: 'uikit', loadChildren: () => import('./demo/components/uikit/uikit.module').then(m => m.UIkitModule) },
-                    { path: 'utilities', loadChildren: () => import('./demo/components/utilities/utilities.module').then(m => m.UtilitiesModule) },
-                    { path: 'documentation', loadChildren: () => import('./demo/components/documentation/documentation.module').then(m => m.DocumentationModule) },
-                    { path: 'blocks', loadChildren: () => import('./demo/components/primeblocks/primeblocks.module').then(m => m.PrimeBlocksModule) },
-                    { path: 'pages', loadChildren: () => import('./demo/components/pages/pages.module').then(m => m.PagesModule),canActivate: [AuthGuard]  },
-                    { path: 'union', loadChildren: () => import('./demo/components/UnionEntorno/union-entorno.module').then(m => m.UnionEntornoModule),canActivate: [AuthGuard]  },
-                    { path: 'crearE', loadChildren: () => import('./demo/components/crearEntorno/crear-entorno.module').then(m => m.CrearEntornoModule),canActivate: [AuthGuard]  },
-                    { path: 'respaldo', loadChildren: () => import('./demo/components/ResA/respaldo-routing.module').then(m => m.RespaldoRoutingModule),canActivate: [AuthGuard]  },
-                    { path: 'perfiles', loadChildren: () => import('./demo/components/PerfilUser/perfil-user.module').then(m => m.PerfilUserModule), canActivate: [AuthGuard] },
-                    { path: 'solicitud', loadChildren: () => import('./demo/components/Solicitudes/solicitud-routing.module').then(m => m.SolicitudRoutingModule), canActivate: [AuthGuard] },
-                    { path: 'edit-work-env', loadChildren: () => import('./demo/components/editarEnt/editarent/editar-routing.module').then(m => m.EditarRoutingModule), canActivate: [AuthGuard] },
-                    { path: 'tablero', loadChildren: () => import('./demo/components/TableroCordinador/tablero/tablero-c.module').then(m => m.TableroCModule), canActivate: [AuthGuard] },
-                    
-                    
-                    
+                    { path: 'Dash', loadChildren: () => import('./demo/components/dashboard/dashboard.module')
+                    .then(m => m.DashboardModule),canActivate: [AuthGuard] },
+                    //ruta del dashboard.
+                    { path: 'crearE', loadChildren: () => import('./demo/components/crearEntorno/crear-entorno.module')
+                        .then(m => m.CrearEntornoModule),canActivate: [AuthGuard]  },
+                    //ruta para agregar un espacio de trabajo.
+                    { path: 'respaldo', loadChildren: () => import('./demo/components/ResA/respaldo-routing.module')
+                        .then(m => m.RespaldoRoutingModule),canActivate: [AuthGuard]  },
+                    //ruta para respaldar o restaurar la base de datos.
+                    { path: 'perfiles', loadChildren: () => import('./demo/components/PerfilUser/perfil-user.module')
+                        .then(m => m.PerfilUserModule), canActivate: [AuthGuard] },
+                    //ruta para editar información del perfil.
+                    { path: 'solicitud', loadChildren: () => import('./demo/components/Solicitudes/solicitud-routing.module')
+                        .then(m => m.SolicitudRoutingModule), canActivate: [AuthGuard] },
+                    //ruta para enviar solicitudes hacia espacios de trabajos.
+                    { path: 'edit-work-env', loadChildren: () => import('./demo/components/editarEnt/editarent/editar-routing.module')
+                        .then(m => m.EditarRoutingModule), canActivate: [AuthGuard] },
+                    { path: 'tablero', loadChildren: () => import('./demo/components/TableroCordinador/tablero/tablero-c.module')
+                        .then(m => m.TableroCModule), canActivate: [AuthGuard] },      
                 ]
             },
            
