@@ -39,7 +39,7 @@ export class TableroCComponent implements OnInit {
   minDate: Date;
   newGroup: Group; // Inicializa un nuevo grupo
   displayModal: boolean = false; // Controla la visibilidad del modal
-
+  idgrouptaskcl;
   importanceOptions: any[] = [
     { label: 'Sí', value: 1 },
     { label: 'No', value: 0 }
@@ -142,6 +142,7 @@ selectAct: EditarAct = new EditarAct(0, '', '', new Date().toISOString().split('
   }
 
   loadActivities(idgrouptaskcl: number): void {
+    this.idgrouptaskcl = idgrouptaskcl;
     this.servicioTC.getActivitiesByGroup(idgrouptaskcl).subscribe(
       (data) => {
         this.activities = data; // Asigna las actividades a la propiedad
@@ -150,6 +151,7 @@ selectAct: EditarAct = new EditarAct(0, '', '', new Date().toISOString().split('
       (error) => {
         console.error('Error fetching activities', error);
       }
+      
     );
   }
 
@@ -280,6 +282,7 @@ selectAct: EditarAct = new EditarAct(0, '', '', new Date().toISOString().split('
         }
         this.visible = false; // Cierra el modal
         this.messageService.add({ severity: 'success', summary: 'Grupo Modificado', detail: 'El grupo se ha modificado correctamente.' });
+        this.loadTaskGroups();
       },
       (error) => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'El grupo no se pudo modificar, verifique la información.' });
@@ -292,8 +295,7 @@ selectAct: EditarAct = new EditarAct(0, '', '', new Date().toISOString().split('
     this.servicioTC.editActivity(this.selectAct).subscribe(
       (response) => {
         // Actualiza la lista de actividades
-  
-        this.loadActivities(this.idJoinUserWork);
+        this.loadActivities(this.idgrouptaskcl);
         this.actividades = false; // Cierra el modal
         this.messageService.add({ severity: 'success', summary: 'Actividad Modificada', detail: 'La actividad se ha modificado correctamente.' });
       },
