@@ -169,8 +169,12 @@ export class WorkEnvComponent implements OnInit {
 
         });
 
-      }
-    });
+      },
+      acceptLabel: 'Sí', // Cambia el texto del botón de aceptación a "Sí"
+      rejectLabel: 'No'
+    }
+    
+  );
    
   }
 
@@ -196,7 +200,9 @@ export class WorkEnvComponent implements OnInit {
 
         });
 
-      }
+      },
+        acceptLabel: 'Sí', // Cambia el texto del botón de aceptación a "Sí"
+        rejectLabel: 'No'
     });
   }
 

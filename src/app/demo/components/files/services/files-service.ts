@@ -38,8 +38,11 @@ export class fileService{
         }, {withCredentials: true}) as Observable<any>;
     }
 
-    getMembersShare(idw){
-        return this.http.get(this.endpoint + `api/getMembersShareFile/${idw}`, {withCredentials: true}) as Observable<any>;
+    getMembersShare(idw, idfolder){
+        return this.http.post(this.endpoint + `api/getMembersShareFile`, {
+            idWorkEnv: idw,
+            idFolder: idfolder
+        }, {withCredentials: true}) as Observable<any>;
     }
 
     shareFolder(idJoinUserWorks: number[], idf){

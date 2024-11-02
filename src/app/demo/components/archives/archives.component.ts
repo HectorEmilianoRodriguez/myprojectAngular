@@ -150,7 +150,9 @@ export class ArchivesComponent implements OnInit {
               this.getFiles();
             }
         });
-      }
+      },
+        acceptLabel: 'Sí', // Cambia el texto del botón de aceptación a "Sí"
+        rejectLabel: 'No'
     });
   }
 

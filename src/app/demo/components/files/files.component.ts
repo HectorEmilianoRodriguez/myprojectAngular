@@ -27,6 +27,7 @@ export class FilesComponent implements OnInit {
   sharedMembers: any [] = [];
   displayMembersFolder = false;
   logicdeleted = 0;
+  idFolders: any [] = [];
   @ViewChild('dt') dt: Table; // Asegúrate de tener una referencia a la tabla
 
   constructor(
@@ -46,7 +47,6 @@ export class FilesComponent implements OnInit {
           this.idj = res.idJoinUserWork;
           this.logicdeleted = res.logicdeleted;
           this.getFolders();
-          this.getMembers();
         }
       });
     });
@@ -137,16 +137,15 @@ export class FilesComponent implements OnInit {
   }
 
   getMembers(){
-    this.fs.getMembersShare(this.idw).subscribe({
+    this.fs.getMembersShare(this.idw, this.selectedFolder.idFolder).subscribe({
       next: (res) => {
         // Agregar el atributo `selected` a cada miembro
         this.members = res.map(member => ({
           ...member,
           selected: false // Inicializa `selected` como false
-        }));
+        }))
       }
     });
-    
   }
  
   editFolder() {
@@ -189,13 +188,16 @@ deleteFolder() {
 
 
         });
-    }
+    },
+        acceptLabel: 'Sí', // Cambia el texto del botón de aceptación a "Sí"
+        rejectLabel: 'No'
   });
 
 
 }
 
 shareFile(){
+  this.getMembers();
   this.displayDialog = true;
 }
 
@@ -226,8 +228,11 @@ removeMember(idUser: number, idjoin) {
             this.members = [];
             this.getMembers();
           }
+          
         });
-      }})
+      },
+      acceptLabel: 'Sí', // Cambia el texto del botón de aceptación a "Sí"
+      rejectLabel: 'No'})
 }
 
   toggleMenu(event: MouseEvent, folder: any, menu: any) {

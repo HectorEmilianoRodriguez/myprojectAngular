@@ -252,7 +252,9 @@ export class BoardComponent implements OnInit {
             this.r.navigate([`/WorkEnv/${this.idw}/Members/${this.idw}`]);
           }
         });
-      }
+      },
+        acceptLabel: 'Sí', // Cambia el texto del botón de aceptación a "Sí"
+        rejectLabel: 'No'
     });
   }
 
@@ -269,7 +271,9 @@ export class BoardComponent implements OnInit {
             this.getBoardData();
           }
         });
-      }
+      },
+        acceptLabel: 'Sí', // Cambia el texto del botón de aceptación a "Sí"
+        rejectLabel: 'No'
     });
   }
 
@@ -381,7 +385,9 @@ export class BoardComponent implements OnInit {
               }
 
           });
-      }
+      },
+        acceptLabel: 'Sí', // Cambia el texto del botón de aceptación a "Sí"
+        rejectLabel: 'No'
     });
   }
 
@@ -536,7 +542,9 @@ export class BoardComponent implements OnInit {
               
 
           });
-      }
+      },
+       acceptLabel: 'Sí', // Cambia el texto del botón de aceptación a "Sí"
+        rejectLabel: 'No'
     });
   }
 
@@ -640,7 +648,9 @@ export class BoardComponent implements OnInit {
             this.ms.add({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al eliminar la etiqueta' });
           }
         });
-      }
+      },
+       acceptLabel: 'Sí', // Cambia el texto del botón de aceptación a "Sí"
+        rejectLabel: 'No'
     });
   }
   
@@ -700,8 +710,11 @@ export class BoardComponent implements OnInit {
             }
 
          });
-      }
-    });
+      },
+        acceptLabel: 'Sí', // Cambia el texto del botón de aceptación a "Sí"
+        rejectLabel: 'No'
+    },
+  );
   }
 
   addMember(idc){
@@ -826,7 +839,10 @@ ApprobeEvidence(idc,namec){
           }
 
        });
-    }
+    },
+        acceptLabel: 'Sí', // Cambia el texto del botón de aceptación a "Sí"
+        rejectLabel: 'No'
+
   });
 
 }
@@ -854,7 +870,9 @@ DesApprobeEvidence(idc, namec){
           }
 
        });
-    }
+    },
+        acceptLabel: 'Sí', // Cambia el texto del botón de aceptación a "Sí"
+        rejectLabel: 'No'
   });
 }
 
@@ -882,7 +900,9 @@ EndAct(idc, namec){
           }
 
        });
-    }
+    },
+        acceptLabel: 'Sí', // Cambia el texto del botón de aceptación a "Sí"
+        rejectLabel: 'No'
   });
 }
 
@@ -909,7 +929,9 @@ deleteComment(idc){
           }
       });
       
-    }
+    },
+        acceptLabel: 'Sí', // Cambia el texto del botón de aceptación a "Sí"
+        rejectLabel: 'No'
   });
 
 
@@ -1083,7 +1105,9 @@ deleteLabel(idl){
               }
     
           }); 
-    }
+    },
+        acceptLabel: 'Sí', // Cambia el texto del botón de aceptación a "Sí"
+        rejectLabel: 'No'
   });
 
 }
