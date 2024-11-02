@@ -1,0 +1,47 @@
+<full-calendar [options]="calendarOptions"></full-calendar>
+
+
+<!-- Diálogo para agregar una nueva actividad -->
+<p-dialog header="Nueva Actividad" [(visible)]="isActivityDialogVisible" [modal]="true" [responsive]="true">
+    <div class="p-fluid">
+      <div class="p-field">
+        <label for="title">Título</label>
+        <input id="title" type="text" [(ngModel)]="newActivity.title" pInputText />
+      </div>
+      <div class="p-field">
+        <label for="description">Descripción</label>
+        <input id="description" type="text" [(ngModel)]="newActivity.description" pInputText />
+      </div>
+      <div class="p-field">
+        <label for="start">Fecha de Inicio</label>
+        <input id="start" type="date" [(ngModel)]="newActivity.start" pInputText />
+      </div>
+      <div class="p-field">
+        <label for="end">Fecha de Fin</label>
+        <input id="end" type="date" [(ngModel)]="newActivity.end" pInputText />
+      </div>
+      <div class="p-field">
+        <label for="color">Color</label>
+        <input id="color" type="color" [(ngModel)]="newActivity.color" pInputText />
+      </div>
+    </div>
+    <p-footer>
+      <button type="button" (click)="saveActivity()" pButton label="Guardar"></button>
+      <button type="button" (click)="isActivityDialogVisible = false" pButton label="Cancelar"></button>
+    </p-footer>
+  </p-dialog>
+  
+  <!-- Diálogo para ver detalles de la actividad -->
+  <p-dialog header="Detalles de Actividad" [(visible)]="isDetailDialogVisible" [modal]="true" [responsive]="true">
+    <div *ngIf="selectedActivity">
+      <h3>{{ selectedActivity.title }}</h3>
+      <p><strong>Descripción:</strong> {{ selectedActivity.description }}</p>
+      <p><strong>Fecha de Inicio:</strong> {{ selectedActivity.start }}</p>
+      <p><strong>Fecha de Fin:</strong> {{ selectedActivity.end }}</p>
+      <p><strong>Color:</strong> <span [style.background]="selectedActivity.color" style="display:inline-block; width: 20px; height: 20px;"></span></p>
+    </div>
+    <p-footer>
+      <button type="button" (click)="deleteActivity()" pButton label="Eliminar"></button>
+      <button type="button" (click)="isDetailDialogVisible = false" pButton label="Cerrar"></button>
+    </p-footer>
+  </p-dialog>
