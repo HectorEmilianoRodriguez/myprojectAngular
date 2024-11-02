@@ -66,12 +66,18 @@ export class CalendarioComponent implements OnInit {
 
   loadActivities(idJoinUserWork: number) {
     this.activityService.getActivities(idJoinUserWork).subscribe(activities => {
-      this.calendarOptions.events = activities.map(activity => ({
-        title: activity.title,
-        start: activity.start,
-        end: activity.end,
-        id: activity.id.toString()
-      }));
+      if (Array.isArray(activities)) {
+        const processedActivities = activities.map(activity => ({
+          title: activity.title,
+          start: activity.start,
+          end: activity.end,
+          color: activity.color,
+          idCalendarEvent: activity.idCalendarEvent
+        }));
+        this.calendarOptions.events = processedActivities;
+      }
+    }, error => {
+      console.error('Error al cargar actividades:', error);
     });
   }
 
@@ -91,13 +97,30 @@ export class CalendarioComponent implements OnInit {
   }
 
   handleEventClick(arg: any) {
-    this.selectedActivity = null; // Reinicia la actividad seleccionada
-    this.activityService.getActivities(this.idJoinUserWork).subscribe(activities => {
-      this.selectedActivity = activities.find(activity => activity.id === arg.event.id); // Establece la actividad seleccionada
-      this.isDetailDialogVisible = true; // Muestra el diálogo de detalles
-    }, error => {
-      console.error('Error al cargar actividades:', error); // Manejo de errores
-    });
+    console.log('Evento clicado:', arg); // Verifica el objeto completo
+
+    // Accede directamente a los detalles de la actividad desde arg.event
+    const selectedActivity = {
+        title: arg.event.title,
+        description: arg.event.extendedProps.description || 'Sin descripción', // Asegúrate de usar extendedProps
+        start: arg.event.start || new Date(), // Valor predeterminado a la fecha actual si no está definido
+        end: arg.event.end || 'Sin fecha de fin', // Asegúrate de que end esté en el formato correcto
+        color: arg.event.color || '#000000', // Valor predeterminado a negro
+        idCalendarEvent: arg.event.idCalendarEvent,
+        id: '', // Asigna un valor por defecto o extrae de arg.event si está disponible
+        idJoinUserWork: this.idJoinUserWork // Asigna el ID del entorno de trabajo
+    };
+
+    console.log('Actividad seleccionada:', selectedActivity);
+
+    // Asigna la actividad seleccionada
+    this.selectedActivity = selectedActivity;
+
+    // Verifica que se haya encontrado la actividad
+    console.log('Actividad seleccionada:', this.selectedActivity);
+
+    // Muestra el diálogo de detalles
+    this.isDetailDialogVisible = true;
   }
 
   deleteActivity() {

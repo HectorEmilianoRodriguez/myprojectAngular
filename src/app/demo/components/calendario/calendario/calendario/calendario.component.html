@@ -34,11 +34,10 @@
   <!-- Diálogo para ver detalles de la actividad -->
   <p-dialog header="Detalles de Actividad" [(visible)]="isDetailDialogVisible" [modal]="true" [responsive]="true">
     <div *ngIf="selectedActivity">
-      <h3>{{ selectedActivity.title }}</h3>
+      <h3>Título: {{ selectedActivity.title }}</h3>
       <p><strong>Descripción:</strong> {{ selectedActivity.description }}</p>
-      <p><strong>Fecha de Inicio:</strong> {{ selectedActivity.start }}</p>
-      <p><strong>Fecha de Fin:</strong> {{ selectedActivity.end }}</p>
-      <p><strong>Color:</strong> <span [style.background]="selectedActivity.color" style="display:inline-block; width: 20px; height: 20px;"></span></p>
+      <p><strong>Fecha de Inicio:</strong> {{ selectedActivity.start | date:'dd/MM/yy' }}</p>
+      <p><strong>Fecha de Fin:</strong> {{ selectedActivity.end ? (selectedActivity.end | date:'dd/MM/yy') : 'Sin fecha de fin' }}</p>
     </div>
     <p-footer>
       <button type="button" (click)="deleteActivity()" pButton label="Eliminar"></button>
