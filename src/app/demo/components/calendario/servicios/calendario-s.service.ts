@@ -13,7 +13,7 @@ export class CalendarioSService {
   constructor(private http: HttpClient) { }
 
   getActivities(idJoinUserWork: number): Observable<IActivity[]> {
-    return this.http.get<IActivity[]>(`${this.url}api/activities/${idJoinUserWork}`, { withCredentials: true });
+    return this.http.get<IActivity[]>(`${this.url}api/Calendar/getActivities/${idJoinUserWork}`, { withCredentials: true });
   }
 
   getActivityById(id: string): Observable<IActivity> {
@@ -21,14 +21,14 @@ export class CalendarioSService {
   }
 
   newActivity(activityData: IActivity): Observable<IActivity> {
-    return this.http.post<IActivity>(`${this.url}api/newActivity`, activityData, { withCredentials: true });
+    return this.http.post<IActivity>(`${this.url}api/Calendar/newActivity`, activityData, { withCredentials: true });
   }
 
   editActivity(activityData: IActivity): Observable<IActivity> {
-    return this.http.put<IActivity>(`${this.url}api/editActivity`, activityData, { withCredentials: true });
+    return this.http.put<IActivity>(`${this.url}api/Calendar/editActivity`, activityData, { withCredentials: true });
   }
 
   deleteActivity(activityId: number): Observable<void> {
-    return this.http.delete<void>(`${this.url}api/deleteActivity/${activityId}`, { withCredentials: true });
+    return this.http.delete<void>(`${this.url}api/Calendar/deleteActivity/${activityId}`, { withCredentials: true });
   }
 }

@@ -16,6 +16,7 @@ import { ActivatedRoute } from '@angular/router'; // Asegúrate de importar Acti
 })
 
 export class CalendarioComponent implements OnInit {
+  date1: Date;
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
     initialView: 'dayGridMonth',
