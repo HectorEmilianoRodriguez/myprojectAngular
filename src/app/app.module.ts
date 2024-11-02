@@ -22,10 +22,11 @@ import { SolicitudModule } from './demo/components/Solicitudes/solicitud.module'
 import { EditarModule } from './demo/components/editarEnt/editarent/editar.module';
 import { TableroCModule } from './demo/components/TableroCordinador/tablero/tablero-c.module';
 import { CommonModule } from '@angular/common';
+import { FullCalendarModule } from '@fullcalendar/angular';
 
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
-    imports: [AppRoutingModule, AppLayoutModule,HttpClientModule,  RespaldoModule,  WorkEnvAppLayoutModule,SolicitudModule,EditarModule, CommonModule,PanelMenuModule],
+    imports: [AppRoutingModule, AppLayoutModule,HttpClientModule,  RespaldoModule,  WorkEnvAppLayoutModule,SolicitudModule,EditarModule, CommonModule,PanelMenuModule,FullCalendarModule],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
         { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
