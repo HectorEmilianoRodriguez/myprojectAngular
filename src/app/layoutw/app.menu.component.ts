@@ -77,7 +77,7 @@ export class AppMenuComponent implements OnInit {
                         label: 'Opciones',
                         items: [
                             { label: 'Miembros', icon: 'pi pi-fw pi-users', routerLink: [`/WorkEnv/${this.data?.idWorkEnv}/Members/${this.data?.idWorkEnv}`] },
-                            { label: 'Calendario de actividades', icon: 'pi pi-fw pi-calendar', routerLink: ['/union/unionEntorno'] },
+                            { label: 'Calendario de actividades', icon: 'pi pi-fw pi-calendar', routerLink: [`/WorkEnv/${this.data?.idWorkEnv}/calendario/${this.data?.idWorkEnv}`] },
                             { label: 'Recursos', icon: 'pi pi-fw pi-folder-open', routerLink: [`/WorkEnv/${this.data?.idWorkEnv}/Files/${this.data?.idWorkEnv}`] },
                             { label: 'Reportes', icon: 'pi pi-fw pi-file-pdf', routerLink: [`/WorkEnv/${this.data?.idWorkEnv}/Reports/${this.data?.idWorkEnv}`] },
                             ...(this.data.privilege === 1 || this.data.privilege === 2 ? [{ label: 'Grupos de tareas', icon: 'pi pi-fw pi-book', routerLink: [`/WorkEnv/${this.data?.idWorkEnv}/grupos/${this.data?.idWorkEnv}`] }] : []),

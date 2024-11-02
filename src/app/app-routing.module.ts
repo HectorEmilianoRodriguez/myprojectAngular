@@ -58,7 +58,8 @@ import { AuthGuard } from './demo/components/auth/guards/auth.guard';import { Ap
                     { path: 'Folder/:id/:idf', loadChildren: () => import('./demo/components/archives/archives.module').then(m => m.ArchivesModule)},
                     { path: 'grupos/:id', loadChildren: () => import('./demo/components/TableroCordinador/tablero/tablero-c.module').then(m => m.TableroCModule), canActivate: [AuthGuard] },
                     { path: 'waterfall/:id/:idb', loadChildren: () =>import('./demo/components/waterfall/waterfall.module').then(m => m.WaterfallModule), canActivate: [AuthGuard] },
-
+                    { path: 'calendario/:id', loadChildren: () => import('./demo/components/calendario/calendario.module').then(m => m.CalendarioModule), canActivate: [AuthGuard] },
+                    
                     
                     
                 ]

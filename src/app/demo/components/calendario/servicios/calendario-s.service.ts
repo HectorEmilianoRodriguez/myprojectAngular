@@ -16,6 +16,10 @@ export class CalendarioSService {
     return this.http.get<IActivity[]>(`${this.url}api/activities/${idJoinUserWork}`, { withCredentials: true });
   }
 
+  getActivityById(id: string): Observable<IActivity> {
+    return this.http.get<IActivity>(`/api/activities/${id}`); // Adjust the API endpoint as necessary
+  }
+
   newActivity(activityData: IActivity): Observable<IActivity> {
     return this.http.post<IActivity>(`${this.url}api/newActivity`, activityData, { withCredentials: true });
   }

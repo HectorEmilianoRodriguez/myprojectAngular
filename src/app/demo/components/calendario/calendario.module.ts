@@ -6,6 +6,12 @@ import { CalendarioComponent } from './calendario/calendario/calendario.componen
 import { DialogModule } from 'primeng/dialog'; // Importa el módulo de PrimeNG para diálogos
 import { FormsModule } from '@angular/forms'; // Importa FormsModule
 
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DropdownModule } from 'primeng/dropdown';
+import { CalendarModule } from 'primeng/calendar';
 
 @NgModule({
   declarations: [CalendarioComponent],
@@ -14,7 +20,13 @@ import { FormsModule } from '@angular/forms'; // Importa FormsModule
     CalendarioRoutingModule,
     FullCalendarModule,
     DialogModule,
-    FormsModule
+    FormsModule,
+    ButtonModule,
+    InputTextModule,
+    DropdownModule,
+    CalendarModule
+    
+
   ]
 })
 export class CalendarioModule { }

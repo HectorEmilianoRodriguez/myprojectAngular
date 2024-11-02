@@ -1,8 +1,30 @@
-
 export interface IActivity {
-    id: number; // Identificador único de la actividad
-    title: string; // Título de la actividad
-    start: string; // Fecha y hora de inicio en formato ISO 8601 (ejemplo: '2023-10-01T10:00:00')
-    end?: string; // Fecha y hora de finalización en formato ISO 8601 (opcional)
-    description?: string; // Descripción de la actividad (opcional)
-}
+    title: string;
+    description: string;
+    start: string;
+    end: string;
+    color: string;
+    id: string;
+    idJoinUserWork: number;
+  } 
+  
+  
+  export class Activity implements IActivity {
+      title: string;
+      description: string;
+      start: string;
+      end: string;
+      color: string;
+      id: string;
+      idJoinUserWork: number; // Campo agregado
+    
+      constructor(title: string, description: string, start: string, end: string, color: string, id: string, idJoinUserWork: number) {
+        this.title = title;
+        this.description = description;
+        this.start = start;
+        this.end = end;
+        this.color = color;
+        this.id = id;
+        this.idJoinUserWork = idJoinUserWork; // Asignación en el constructor
+      }
+    }
