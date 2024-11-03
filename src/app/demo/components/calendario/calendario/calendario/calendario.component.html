@@ -35,7 +35,7 @@
   <p-dialog header="Detalles de Actividad" [(visible)]="isDetailDialogVisible" [modal]="true" [responsive]="true">
     <div *ngIf="selectedActivity">
       <h3>Título: {{ selectedActivity.title }}</h3>
-      <p><strong>Descripción:</strong> {{ selectedActivity.description }}</p>
+      <p><strong>Descripcióon:</strong> {{ selectedActivity.description }}</p>
       <p><strong>Fecha de Inicio:</strong> {{ selectedActivity.start | date:'dd/MM/yy' }}</p>
       <p><strong>Fecha de Fin:</strong> {{ selectedActivity.end ? (selectedActivity.end | date:'dd/MM/yy') : 'Sin fecha de fin' }}</p>
     </div>
