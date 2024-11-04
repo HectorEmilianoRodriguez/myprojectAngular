@@ -7,6 +7,7 @@ import { IActivity } from '../../calendario/actividadmodel/Actividad'; // Asegú
 import { CalendarioSService } from './../../servicios/calendario-s.service';
 import { WorkEnvMService } from 'src/app/demo/components/workenvm/servicios/workenvm-service'; // Asegúrate de que la ruta sea correcta
 import { ActivatedRoute } from '@angular/router'; // Asegúrate de importar ActivatedRoute
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-calendario',
@@ -36,12 +37,21 @@ export class CalendarioComponent implements OnInit {
   selectedActivity: IActivity | null = null; // Actividad seleccionada para ver detalles
   idJoinUserWork: number; // Variable para almacenar el ID del entorno de trabajo
   id: any; // ID del grupo o del entorno de trabajo
+  isEditing: boolean = false;
+  today: string;
+  minEndDate: string;
+
 
   constructor(
     private activityService: CalendarioSService,
     private workEnvService: WorkEnvMService,
-    private route: ActivatedRoute
-  ) {}
+    private route: ActivatedRoute,
+    private messageService: MessageService
+  ) {
+    const todayDate = new Date();
+    this.today = todayDate.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+    this.minEndDate = this.today; 
+  }
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
@@ -49,6 +59,15 @@ export class CalendarioComponent implements OnInit {
       console.log(this.id);
       this.getWorkEnv(); // Llama a obtener el entorno de trabajo
     });
+  }
+
+  updateMinEndDate() {
+    this.minEndDate = this.newActivity.start; // Actualiza la fecha mínima de fin a la fecha de inicio seleccionada
+  }
+
+  updateColorDisplay() {
+    // Este método se llama automáticamente al cambiar el color
+    // No es necesario hacer nada aquí, ya que el color se muestra directamente en el HTML
   }
 
   getWorkEnv(): void {
@@ -69,8 +88,9 @@ export class CalendarioComponent implements OnInit {
       if (Array.isArray(activities)) {
         const processedActivities = activities.map(activity => ({
           title: activity.title,
-          start: activity.start,
-          end: activity.end,
+          start: activity.start ? activity.start.split('T')[0] : null, // Solo la fecha, sin hora
+          description: activity.description,
+          end: activity.end ? new Date(new Date(activity.end).getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0] : null, // Solo la fecha, sin hora
           color: activity.color,
           idCalendarEvent: activity.idCalendarEvent
         }));
@@ -79,7 +99,7 @@ export class CalendarioComponent implements OnInit {
     }, error => {
       console.error('Error al cargar actividades:', error);
     });
-  }
+}
 
   handleDateClick(arg: any) {
     this.newActivity.start = arg.dateStr; // Establece la fecha de inicio
@@ -106,7 +126,7 @@ export class CalendarioComponent implements OnInit {
         start: arg.event.start || new Date(), // Valor predeterminado a la fecha actual si no está definido
         end: arg.event.end || 'Sin fecha de fin', // Asegúrate de que end esté en el formato correcto
         color: arg.event.color || '#000000', // Valor predeterminado a negro
-        idCalendarEvent: arg.event.idCalendarEvent,
+        idCalendarEvent: arg.event.extendedProps.idCalendarEvent,
         id: '', // Asigna un valor por defecto o extrae de arg.event si está disponible
         idJoinUserWork: this.idJoinUserWork // Asigna el ID del entorno de trabajo
     };
@@ -123,11 +143,36 @@ export class CalendarioComponent implements OnInit {
     this.isDetailDialogVisible = true;
   }
 
+  editActivity() {
+    const activityData = {
+      idCalendarEvent: this.selectedActivity.idCalendarEvent,
+      title: this.selectedActivity.title,
+      description: this.selectedActivity.description,
+      start: this.selectedActivity.start,
+      end: this.selectedActivity.end
+    }
+
+    this.activityService.editActivity(activityData).subscribe(() => {
+      this.loadActivities(this.idJoinUserWork); // Recargar actividades después de editar
+      this.isDetailDialogVisible = false; // Cierra el diálogo
+      this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Actividad editada correctamente' }); // Mensaje de éxito agregado
+    }, error => {
+      console.error('Error al editar la actividad:', error);
+    });
+}
+
+
   deleteActivity() {
     if (this.selectedActivity) {
-      this.activityService.deleteActivity(Number(this.selectedActivity.id)).subscribe(() => { // Convertir id a número
+      const activityId = {
+        idCalendarEvent: this.selectedActivity.idCalendarEvent
+      }
+      this.activityService.deleteActivity(activityId).subscribe(() => {
         this.loadActivities(this.idJoinUserWork); // Recargar actividades después de eliminar
-        this.isDetailDialogVisible = false; // Cierra el diálogo this.selectedActivity = null; // Reinicia la actividad seleccionada
+        this.isDetailDialogVisible = false; // Cierra el diálogo
+        this.selectedActivity = null; // Reinicia la actividad seleccionada
+      }, error => {
+        console.error('Error al eliminar la actividad:', error);
       });
     }
   }

@@ -93,7 +93,9 @@ export class LoginComponent {
                     console.log(data);
                 },
                 complete: () => {
-                    this.router.navigate(['/landing']);
+                    this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Correo enviado correctamente, Por favor revisa tu correo electrónico' });
+                    this.visible = false
+
                 },
     
                 error: error => {
@@ -104,9 +106,6 @@ export class LoginComponent {
         }else{
             this.messageService.add({ severity: 'error', summary: 'Error', detail: 'digite un correo electrónico antes' });
         }
-
-       
-
 
     }
 

@@ -3,44 +3,56 @@
 
 <!-- Diálogo para agregar una nueva actividad -->
 <p-dialog header="Nueva Actividad" [(visible)]="isActivityDialogVisible" [modal]="true" [responsive]="true">
-    <div class="p-fluid">
-      <div class="p-field">
-        <label for="title">Título</label>
-        <input id="title" type="text" [(ngModel)]="newActivity.title" pInputText />
-      </div>
-      <div class="p-field">
-        <label for="description">Descripción</label>
-        <input id="description" type="text" [(ngModel)]="newActivity.description" pInputText />
-      </div>
-      <div class="p-field">
-        <label for="start">Fecha de Inicio</label>
-        <input id="start" type="date" [(ngModel)]="newActivity.start" pInputText />
-      </div>
-      <div class="p-field">
-        <label for="end">Fecha de Fin</label>
-        <input id="end" type="date" [(ngModel)]="newActivity.end" pInputText />
-      </div>
-      <div class="p-field">
-        <label for="color">Color</label>
-        <input id="color" type="color" [(ngModel)]="newActivity.color" pInputText />
+  <div class="p-fluid">
+    <div class="p-field">
+      <label for="title">Título</label>
+      <input id="title" type="text" [(ngModel)]="newActivity.title" pInputText />
+    </div>
+    <div class="p-field">
+      <label for="description">Descripción</label>
+      <input id="description" type="text" [(ngModel)]="newActivity.description" pInputText />
+    </div>
+    <div class="p-field">
+      <label for="start">Fecha de Inicio</label>
+      <input id="start" type="date" [(ngModel)]="newActivity.start" pInputText />
+    </div>
+    <div class="p-field">
+      <label for="end">Fecha de Fin</label>
+      <input id="end" type="date" [(ngModel)]="newActivity.end" pInputText [min]="minEndDate" />
+    </div>
+    <div class="p-field">
+      <label for="color">Color</label>
+      <div class="color-picker-container">
+        <div class="color-picker" (click)="colorInput.click()" [style.backgroundColor]="newActivity.color"></div>
+        <input id="color" type="color" [(ngModel)]="newActivity.color" #colorInput (input)="updateColorDisplay()" style="display: none;" />
       </div>
     </div>
-    <p-footer>
-      <button type="button" (click)="saveActivity()" pButton label="Guardar"></button>
-      <button type="button" (click)="isActivityDialogVisible = false" pButton label="Cancelar"></button>
-    </p-footer>
-  </p-dialog>
-  
-  <!-- Diálogo para ver detalles de la actividad -->
-  <p-dialog header="Detalles de Actividad" [(visible)]="isDetailDialogVisible" [modal]="true" [responsive]="true">
-    <div *ngIf="selectedActivity">
-      <h3>Título: {{ selectedActivity.title }}</h3>
-      <p><strong>Descripcióon:</strong> {{ selectedActivity.description }}</p>
-      <p><strong>Fecha de Inicio:</strong> {{ selectedActivity.start | date:'dd/MM/yy' }}</p>
-      <p><strong>Fecha de Fin:</strong> {{ selectedActivity.end ? (selectedActivity.end | date:'dd/MM/yy') : 'Sin fecha de fin' }}</p>
-    </div>
-    <p-footer>
-      <button type="button" (click)="deleteActivity()" pButton label="Eliminar"></button>
-      <button type="button" (click)="isDetailDialogVisible = false" pButton label="Cerrar"></button>
-    </p-footer>
-  </p-dialog>
+  </div>
+  <p-footer>
+    <button type="button" (click)="saveActivity()" pButton label="Guardar"></button>
+    <button type="button" (click)="isActivityDialogVisible = false" pButton label="Cancelar"></button>
+  </p-footer>
+</p-dialog>
+
+<!-- Diálogo para ver detalles de la actividad -->
+<p-dialog header="Detalles de Actividad" [(visible)]="isDetailDialogVisible" [modal]="true" [responsive]="true">
+  <div *ngIf="selectedActivity">
+    <h4>Título:</h4>
+    <input type="text" [(ngModel)]="selectedActivity.title" pInputText [disabled]="!isEditing" />
+
+    <h4>Descripción:</h4>
+    <input type="text" [(ngModel)]="selectedActivity.description" pInputText [disabled]="!isEditing" />
+
+    <h4>Fecha de Inicio:</h4>
+    <p-calendar [(ngModel)]="selectedActivity.start" [showIcon]="true" [disabled]="!isEditing" [appendTo]="'body'" ></p-calendar>
+
+    <h4>Fecha de Fin:</h4>
+    <p-calendar [(ngModel)]="selectedActivity.end" [showIcon]="true" [disabled]="!isEditing" [appendTo]="'body'" ></p-calendar>
+  </div>
+  <p-footer>
+    <button type="button" (click)="deleteActivity()" pButton label="Eliminar"></button>
+    <button type="button" (click)="isEditing = true" *ngIf="!isEditing" pButton label="Editar"></button>
+    <button type="button" (click)="editActivity()" *ngIf="isEditing" pButton label="Guardar"></button>
+    <button type="button" (click)="isDetailDialogVisible = false" *ngIf="!isEditing" pButton label="Cerrar"></button>
+  </p-footer>
+</p-dialog>

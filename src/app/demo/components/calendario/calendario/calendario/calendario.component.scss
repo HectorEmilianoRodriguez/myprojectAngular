@@ -1,4 +1,20 @@
-/* styles.scss */
-@import '@fullcalendar/common/main.css';
-@import '@fullcalendar/daygrid/daygrid.css'; // Cambia esto
-@import '@fullcalendar/timegrid/timegrid.css'; // Cambia esto
+.color-display {
+    width: 30px; /* Ancho del cuadro de color */
+    height: 30px; /* Alto del cuadro de color */
+    border: 1px solid #ccc; /* Borde del cuadro */
+    margin-top: 5px; /* Espaciado superior */
+  }
+
+  .color-picker-container {
+    display: flex; /* Usar flexbox para alinear los elementos */
+    align-items: center; /* Alinear verticalmente al centro */
+    margin-top: 5px; /* Espaciado superior para separar del label */
+  }
+  
+  .color-picker {
+    width: 40px; /* Ancho del cuadro de color */
+    height: 40px; /* Alto del cuadro de color */
+    border: 1px solid #ccc; /* Borde del cuadro */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el cuadro */
+    margin-right: 10px; /* Espaciado a la derecha del cuadro de color */
+  }

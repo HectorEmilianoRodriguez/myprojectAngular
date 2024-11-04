@@ -6,6 +6,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegistroComponent } from './registro/registro.component';
+import { ToastModule } from 'primeng/toast'; 
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { RegistroComponent } from './registro/registro.component';
     PasswordModule,
     ButtonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ToastModule
   ]
 })
 export class ComponentesModule { }

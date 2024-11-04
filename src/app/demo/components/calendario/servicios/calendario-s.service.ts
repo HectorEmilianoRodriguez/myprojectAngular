@@ -24,11 +24,11 @@ export class CalendarioSService {
     return this.http.post<IActivity>(`${this.url}api/Calendar/newActivity`, activityData, { withCredentials: true });
   }
 
-  editActivity(activityData: IActivity): Observable<IActivity> {
-    return this.http.put<IActivity>(`${this.url}api/Calendar/editActivity`, activityData, { withCredentials: true });
+  editActivity(activityData: any): Observable<any> {
+    return this.http.post(`${this.url}api/Calendar/editActivity`, activityData, { withCredentials: true })as Observable<any>;
   }
 
-  deleteActivity(activityId: number): Observable<void> {
-    return this.http.delete<void>(`${this.url}api/Calendar/deleteActivity/${activityId}`, { withCredentials: true });
+  deleteActivity(activityId: any): Observable<any> {
+    return this.http.post(`${this.url}api/Calendar/deleteActivity`,activityId, { withCredentials: true }) as Observable<any>;
   }
 }
