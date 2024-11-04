@@ -17,7 +17,7 @@ export class CalendarioSService {
   }
 
   getActivityById(id: string): Observable<IActivity> {
-    return this.http.get<IActivity>(`/api/activities/${id}`); // Adjust the API endpoint as necessary
+    return this.http.get<IActivity>(`/api/activities/${id}`); // dAdjust the API endpoint as necessary
   }
 
   newActivity(activityData: IActivity): Observable<IActivity> {
