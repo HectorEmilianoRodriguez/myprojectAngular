@@ -29,14 +29,14 @@
     </div>
   </div>
   <p-footer>
-    <button type="button" (click)="saveActivity()" pButton label="Guardar"></button>
+    <button type="button" (click)="saveActivity()" class = "p-button-success" pButton label="Guardar"></button>
     <button type="button" (click)="isActivityDialogVisible = false" pButton label="Cancelar"></button>
   </p-footer>
 </p-dialog>
 
 <!-- Diálogo para ver detalles de la actividad -->
-<p-dialog header="Detalles de Actividad" [(visible)]="isDetailDialogVisible" [modal]="true" [responsive]="true">
-  <div *ngIf="selectedActivity">
+<p-dialog header="Detalles de Actividad" [(visible)]="isDetailDialogVisible" [modal]="true" [responsive]="true" [style]="{'width':'20%'}">
+  <div *ngIf="selectedActivity" style = "display: flex; gap: 5px; flex-direction: column; align-items: center; justify-content: center;">
     <h4>Título:</h4>
     <input type="text" [(ngModel)]="selectedActivity.title" pInputText [disabled]="!isEditing" />
 
@@ -48,11 +48,26 @@
 
     <h4>Fecha de Fin:</h4>
     <p-calendar [(ngModel)]="selectedActivity.end" [showIcon]="true" [disabled]="!isEditing" [appendTo]="'body'" ></p-calendar>
+
+    <div class="p-field">
+      <label for="color">Color</label>
+      <div class="color-picker-container">
+        <div class="color-picker" (click)="colorInput.click()" [style.backgroundColor]="selectedActivity.color"></div>
+        <input id="color" type="color" [(ngModel)]="selectedActivity.color" #colorInput (input)="updateColorDisplay()" style="display: none;" />
+      </div>
+    </div>
+
+  
+   <button *ngIf = "selectedActivity?.done === 0" pButton class = "p-button-success" label="Marcar como completada" (click) = "setDoneAct(selectedActivity.idCalendarEvent)">
+  </button>
+  <button *ngIf = "selectedActivity?.done === 1" pButton class = "p-button-danger" label="Marcar como no completada" (click) = "setunDoneAct(selectedActivity.idCalendarEvent)">
+  </button>
+  
   </div>
   <p-footer>
-    <button type="button" (click)="deleteActivity()" pButton label="Eliminar"></button>
-    <button type="button" (click)="isEditing = true" *ngIf="!isEditing" pButton label="Editar"></button>
-    <button type="button" (click)="editActivity()" *ngIf="isEditing" pButton label="Guardar"></button>
+    <button type="button" (click)="deleteActivity()" pButton class = "p-button-danger" label="Eliminar"></button>
+    <button type="button" (click)="isEditing = true" *ngIf="!isEditing" class = "p-button-warning" pButton label="Editar"></button>
+    <button type="button" (click)="editActivity()" *ngIf="isEditing" class = "p-button-success" pButton label="Guardar"></button>
     <button type="button" (click)="isDetailDialogVisible = false" *ngIf="!isEditing" pButton label="Cerrar"></button>
   </p-footer>
 </p-dialog>

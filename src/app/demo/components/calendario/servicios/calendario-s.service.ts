@@ -31,4 +31,12 @@ export class CalendarioSService {
   deleteActivity(activityId: any): Observable<any> {
     return this.http.post(`${this.url}api/Calendar/deleteActivity`,activityId, { withCredentials: true }) as Observable<any>;
   }
+
+  doneActivity(activityId: any): Observable<any>{
+    return this.http.post(`${this.url}api/Calendar/setDoneActivity`,activityId, { withCredentials: true }) as Observable<any>;
+  }
+
+  undoneActivity(activityId: any): Observable<any>{
+    return this.http.post(`${this.url}api/Calendar/setunDoneActivity`,activityId, { withCredentials: true }) as Observable<any>;
+  }
 }

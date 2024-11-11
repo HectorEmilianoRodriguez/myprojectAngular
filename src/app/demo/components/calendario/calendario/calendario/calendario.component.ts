@@ -33,14 +33,14 @@ export class CalendarioComponent implements OnInit {
 
   isActivityDialogVisible: boolean = false; // Controla la visibilidad del diálogo de actividad
   isDetailDialogVisible: boolean = false; // Controla la visibilidad del diálogo de detalles
-  newActivity: IActivity = { title: '', description: '', start: '', end: '', color: '#ffffff', idJoinUserWork: 1, id: '' }; // Datos de la nueva actividad
+  newActivity: IActivity = { title: '', description: '', start: '', end: '', color: '#ffffff', idJoinUserWork: 1, id: '', done: 0 }; // Datos de la nueva actividad
   selectedActivity: IActivity | null = null; // Actividad seleccionada para ver detalles
   idJoinUserWork: number; // Variable para almacenar el ID del entorno de trabajo
   id: any; // ID del grupo o del entorno de trabajo
   isEditing: boolean = false;
   today: string;
   minEndDate: string;
-
+  processedActivities;
 
   constructor(
     private activityService: CalendarioSService,
@@ -86,15 +86,17 @@ export class CalendarioComponent implements OnInit {
   loadActivities(idJoinUserWork: number) {
     this.activityService.getActivities(idJoinUserWork).subscribe(activities => {
       if (Array.isArray(activities)) {
-        const processedActivities = activities.map(activity => ({
+          this.processedActivities = [];
+          this.processedActivities = activities.map(activity => ({
           title: activity.title,
           start: activity.start ? activity.start.split('T')[0] : null, // Solo la fecha, sin hora
           description: activity.description,
           end: activity.end ? new Date(new Date(activity.end).getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0] : null, // Solo la fecha, sin hora
           color: activity.color,
-          idCalendarEvent: activity.idCalendarEvent
+          idCalendarEvent: activity.idCalendarEvent,
+          done: activity.done
         }));
-        this.calendarOptions.events = processedActivities;
+        this.calendarOptions.events = this.processedActivities;
       }
     }, error => {
       console.error('Error al cargar actividades:', error);
@@ -108,40 +110,52 @@ export class CalendarioComponent implements OnInit {
   }
 
   saveActivity() {
-    this.newActivity.idJoinUserWork = this.idJoinUserWork; // Asigna el ID del entorno de trabajo a la nueva actividad
-    this.activityService.newActivity(this.newActivity).subscribe(() => {
-      this.loadActivities(this.idJoinUserWork); // Recargar actividades después de crear una nueva
-      this.isActivityDialogVisible = false; // Cierra el diálogo
-      this.newActivity = { title: '', description: '', start: '', end: '', color: '#ffffff', idJoinUserWork: this.idJoinUserWork, id: '' }; // Reinicia los datos
-    });
+
+    if(this.newActivity.title && this.newActivity.start && this.newActivity.end){
+        this.newActivity.idJoinUserWork = this.idJoinUserWork; // Asigna el ID del entorno de trabajo a la nueva actividad
+        this.activityService.newActivity(this.newActivity).subscribe(() => {
+        this.loadActivities(this.idJoinUserWork); // Recargar actividades después de crear una nueva
+        this.isActivityDialogVisible = false; // Cierra el diálogo
+        this.newActivity = { title: '', description: '', start: '', end: '', color: '#ffffff', idJoinUserWork: this.idJoinUserWork, id: '', done: 0 }; // Reinicia los datos
+        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Actividad agregada correctamente' }); // Mensaje de éxito agregado
+  
+      });
+    }else{
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Indique el nombre y fecha de inicio y fin de la actividad' }); // Mensaje de éxito agregado
+    }
+
+
+    
   }
 
   handleEventClick(arg: any) {
     console.log('Evento clicado:', arg); // Verifica el objeto completo
-
+  
     // Accede directamente a los detalles de la actividad desde arg.event
     const selectedActivity = {
-        title: arg.event.title,
-        description: arg.event.extendedProps.description || 'Sin descripción', // Asegúrate de usar extendedProps
-        start: arg.event.start || new Date(), // Valor predeterminado a la fecha actual si no está definido
-        end: arg.event.end || 'Sin fecha de fin', // Asegúrate de que end esté en el formato correcto
-        color: arg.event.color || '#000000', // Valor predeterminado a negro
-        idCalendarEvent: arg.event.extendedProps.idCalendarEvent,
-        id: '', // Asigna un valor por defecto o extrae de arg.event si está disponible
-        idJoinUserWork: this.idJoinUserWork // Asigna el ID del entorno de trabajo
+      title: arg.event.title,
+      description: arg.event.extendedProps.description || 'Sin descripción', // Asegúrate de usar extendedProps
+      start: arg.event.start || new Date(), // Valor predeterminado a la fecha actual si no está definido
+      end: arg.event.end || 'Sin fecha de fin', // Asegúrate de que end esté en el formato correcto
+      color: arg.event.color || '#000000', // Valor predeterminado a negro
+      idCalendarEvent: arg.event.extendedProps.idCalendarEvent,
+      id: '', // Asigna un valor por defecto o extrae de arg.event si está disponible
+      idJoinUserWork: this.idJoinUserWork, // Asigna el ID del entorno de trabajo
+      done: arg.event.extendedProps.done ?? 0 // Asigna 0 si `done` es null o undefined
     };
-
+  
     console.log('Actividad seleccionada:', selectedActivity);
-
+  
     // Asigna la actividad seleccionada
     this.selectedActivity = selectedActivity;
-
+  
     // Verifica que se haya encontrado la actividad
     console.log('Actividad seleccionada:', this.selectedActivity);
-
+  
     // Muestra el diálogo de detalles
     this.isDetailDialogVisible = true;
   }
+  
 
   editActivity() {
     const activityData = {
@@ -149,7 +163,9 @@ export class CalendarioComponent implements OnInit {
       title: this.selectedActivity.title,
       description: this.selectedActivity.description,
       start: this.selectedActivity.start,
-      end: this.selectedActivity.end
+      end: this.selectedActivity.end,
+      color: this.selectedActivity.color,
+      done: this.selectedActivity.done
     }
 
     this.activityService.editActivity(activityData).subscribe(() => {
@@ -168,12 +184,48 @@ export class CalendarioComponent implements OnInit {
         idCalendarEvent: this.selectedActivity.idCalendarEvent
       }
       this.activityService.deleteActivity(activityId).subscribe(() => {
-        this.loadActivities(this.idJoinUserWork); // Recargar actividades después de eliminar
         this.isDetailDialogVisible = false; // Cierra el diálogo
         this.selectedActivity = null; // Reinicia la actividad seleccionada
+        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Actividad eliminada correctamente' }); // Mensaje de éxito agregado
+        this.loadActivities(this.idJoinUserWork); // Recargar actividades después de eliminar
+
       }, error => {
         console.error('Error al eliminar la actividad:', error);
       });
     }
   }
+
+  setDoneAct(idCalendarEvent){
+
+    const actid = {
+      idCalendarEvent: idCalendarEvent
+    }
+    this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Actividad marcada como completada' }); // Mensaje de éxito agregado
+
+    this.activityService.doneActivity(actid).subscribe({
+
+        next: (res) =>{
+          this.loadActivities(this.idJoinUserWork); // Recargar actividades después de editar
+        }
+    });
+
+    console.log(idCalendarEvent);
+  }
+
+  setunDoneAct(idCalendarEvent){
+     const actid = {
+      idCalendarEvent: idCalendarEvent
+     }
+     this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Actividad marcada como no completada' }); // Mensaje de éxito agregado
+
+    this.activityService.undoneActivity(actid).subscribe({
+
+        next: (res) =>{
+          this.loadActivities(this.idJoinUserWork); // Recargar actividades después de editar
+        }
+
+    });
+  }
+
+
 }
