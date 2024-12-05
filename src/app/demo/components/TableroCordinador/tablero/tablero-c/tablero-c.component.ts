@@ -273,41 +273,52 @@ selectAct: EditarAct = new EditarAct(0, '', '', new Date().toISOString().split('
 }
 
   updateGroup(): void {
-    this.servicioTC.editGroup(this.selectedGroup).subscribe(
-      (response) => {
-        // Actualiza el grupo en la lista
-        const index = this.taskGroups.findIndex(g => g.idgrouptaskcl === this.selectedGroup.idgrouptaskcl);
-        if (index !== -1) {
-          this.taskGroups[index] = { ...this.selectedGroup }; // Reemplaza el grupo antiguo con el nuevo
-        }
-        this.visible = false; // Cierra el modal
-        this.messageService.add({ severity: 'success', summary: 'Grupo Modificado', detail: 'El grupo se ha modificado correctamente.' });
-        this.loadTaskGroups();
-      },
-      (error) => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'El grupo no se pudo modificar, verifique la información.' });
-        console.error('Error modificando grupo', error);
-      }
-    );
+
+    if(this.selectedGroup.name && this.selectedGroup.startdate && this.selectedGroup.enddate){
+        this.servicioTC.editGroup(this.selectedGroup).subscribe(
+          (response) => {
+            // Actualiza el grupo en la lista
+            const index = this.taskGroups.findIndex(g => g.idgrouptaskcl === this.selectedGroup.idgrouptaskcl);
+            if (index !== -1) {
+              this.taskGroups[index] = { ...this.selectedGroup }; // Reemplaza el grupo antiguo con el nuevo
+            }
+            this.visible = false; // Cierra el modal
+            this.messageService.add({ severity: 'success', summary: 'Grupo Modificado', detail: 'El grupo se ha modificado correctamente.' });
+            this.loadTaskGroups();
+          },
+          (error) => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'El grupo no se pudo modificar, verifique la información.' });
+            console.error('Error modificando grupo', error);
+          }
+        );
+    }else{
+       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Debe específicar un nombre y una fecha de inicio y fin.' });
+    }
+
+    
   }
 
   updateActivity(): void {
-    this.servicioTC.editActivity(this.selectAct).subscribe(
-      (response) => {
-        // Actualiza la lista de actividades
-        this.loadActivities(this.idgrouptaskcl);
-        this.actividades = false; // Cierra el modal
-        this.messageService.add({ severity: 'success', summary: 'Actividad Modificada', detail: 'La actividad se ha modificado correctamente.' });
-      },
-      (error) => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'La actividad no se pudo modificar, verifique la información.' });
-        console.error('Error modificando actividad', error);
-      }
-    );
+
+    if(this.selectAct.nameT && this.selectAct.end_date){
+      this.servicioTC.editActivity(this.selectAct).subscribe(
+        (response) => {
+          // Actualiza la lista de actividades
+          this.loadActivities(this.idgrouptaskcl);
+          this.actividades = false; // Cierra el modal
+          this.messageService.add({ severity: 'success', summary: 'Actividad Modificada', detail: 'La actividad se ha modificado correctamente.' });
+        },
+        (error) => {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'La actividad no se pudo modificar, verifique la información.' });
+          console.error('Error modificando actividad', error);
+        }
+      );
+    }else{
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Debe indiar antes un nombre y la fecha de fín.' });
+    }
+
   }
 
-
-   
   deleteGroup(group:Group, event: Event) {
     this.confirmationService.confirm({
       target: event.target as EventTarget,

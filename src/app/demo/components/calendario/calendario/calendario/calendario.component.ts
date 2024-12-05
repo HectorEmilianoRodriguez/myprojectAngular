@@ -168,13 +168,18 @@ export class CalendarioComponent implements OnInit {
       done: this.selectedActivity.done
     }
 
-    this.activityService.editActivity(activityData).subscribe(() => {
-      this.loadActivities(this.idJoinUserWork); // Recargar actividades después de editar
-      this.isDetailDialogVisible = false; // Cierra el diálogo
-      this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Actividad editada correctamente' }); // Mensaje de éxito agregado
-    }, error => {
-      console.error('Error al editar la actividad:', error);
-    });
+    if(activityData.title && activityData.end && activityData.start){
+      this.activityService.editActivity(activityData).subscribe(() => {
+        this.loadActivities(this.idJoinUserWork); // Recargar actividades después de editar
+        this.isDetailDialogVisible = false; // Cierra el diálogo
+        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Actividad editada correctamente' }); // Mensaje de éxito agregado
+      }, error => {
+        console.error('Error al editar la actividad:', error);
+      });
+    }else{
+      this.messageService.add({ severity: 'error', summary: 'Éxito', detail: 'Debe indicar un título y una fecha de inicio y fin' }); // Mensaje de éxito agregado
+    }
+
 }
 
 
