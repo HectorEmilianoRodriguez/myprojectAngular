@@ -33,6 +33,7 @@ export class WorkEnvComponent implements OnInit {
   idWork: number;
   namework: string;
   invitarform: FormGroup;
+  logicdeleted;
   @ViewChild('filter') filter!: ElementRef;
 
   constructor(
@@ -55,12 +56,13 @@ export class WorkEnvComponent implements OnInit {
        if(this.id){
 
           this.WorkEnvServiceM.getWorkEnv(this.id).subscribe({
-
+            
              next: (res) =>{
                 this.dataWork = res;
                 this.privilege = res.privilege;
                 this.idWork = res.idWorkEnv;
                 this.namework = res.title;
+                this.logicdeleted = res.logicdeleted;
              },
 
             error : (er) =>{
@@ -167,8 +169,12 @@ export class WorkEnvComponent implements OnInit {
 
         });
 
-      }
-    });
+      },
+      acceptLabel: 'Sí', // Cambia el texto del botón de aceptación a "Sí"
+      rejectLabel: 'No'
+    }
+    
+  );
    
   }
 
@@ -194,7 +200,9 @@ export class WorkEnvComponent implements OnInit {
 
         });
 
-      }
+      },
+        acceptLabel: 'Sí', // Cambia el texto del botón de aceptación a "Sí"
+        rejectLabel: 'No'
     });
   }
 

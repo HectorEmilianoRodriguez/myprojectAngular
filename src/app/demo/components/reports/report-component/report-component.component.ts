@@ -25,7 +25,7 @@ export class ReportComponentComponent implements OnInit {
 
     public dataWork: any;
     public privilege: number;
-    public idWork: number;
+    public idWork;
     public namework: string;
     public id: string;
     public customers1: Miembro[] = [];
@@ -199,7 +199,7 @@ export class ReportComponentComponent implements OnInit {
         const selectedLabelIds = this.selectedLabels.map(label => label.idLabel);
         this.messageService.add({severity: 'info', summary: 'Cargando', detail: 'El reporte se está generando...'});
 
-        this.reportService.participant(this.id, this.selectedMember.idUser, this.startDate, this.endDate, selectedLabelIds)
+        this.reportService.participant(this.idWork, this.selectedMember.idUser, this.startDate, this.endDate, selectedLabelIds)
         .subscribe((response: Blob) => {
             // Crear un objeto Blob con la respuesta (PDF)
             const blob = new Blob([response], { type: 'application/pdf' });

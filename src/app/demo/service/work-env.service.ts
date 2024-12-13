@@ -12,8 +12,6 @@ export interface WorkEnvCounts {
 }
 
 export interface WorkActiCounts {
-  idWorkEnv: number,
-  nameW: string,
   NotSeenComments: number,
   requests: number,
   AlmostExpiredOrExpiredActivities: number,
@@ -76,7 +74,30 @@ export class WorkEnvService {
       withCredentials: true
     })
   }
+
+  joinWork(code){
+    return this.http.get<any>(`${this.url}api/joinOnWorkEnv/${code}`, {
+      withCredentials: true
+    }) as Observable<any>;
+  }
   
+  NotifyUserNewRequest(code){
+    return this.http.get<any>(`${this.url}api/NotifyUserNewRequest/${code}`, {
+      withCredentials: true
+    }) as Observable<any>;
+  }
+
+  deleteWorkEnv(idw){
+    return this.http.delete<any>(`${this.url}api/deleteWorkEnv/${idw}`, {
+      withCredentials: true
+    }) as Observable<any>;
+  }
+
+  undeleteWorkEnv(idw){
+    return this.http.delete<any>(`${this.url}api/undeleteWorkEnv/${idw}`, {
+      withCredentials: true
+    }) as Observable<any>;
+  }
 
 
 }

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { WorkEnvService } from '../../../../service/work-env.service';
-import { MessageService } from 'primeng/api'; 
+import { ConfirmationService, MessageService } from 'primeng/api'; 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'; 
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-editar-ent',
   templateUrl: './editar-ent.component.html',
@@ -13,12 +14,14 @@ export class EditarEntComponent implements OnInit {
   entornoData: any; 
   tipoEntornos: any[]; 
   entornoForm: FormGroup; 
-
+  logicdeletedWork;
   constructor(
       private route: ActivatedRoute,
       private workEnvService: WorkEnvService,
       private fb: FormBuilder, 
-      private messageService: MessageService
+      private messageService: MessageService,
+      private cs: ConfirmationService,
+      private router: Router
   ) { }
 
   ngOnInit() {
@@ -42,9 +45,9 @@ export class EditarEntComponent implements OnInit {
   loadTipoEntornos() {
       // Aquí puedes definir las opciones para el dropdown
       this.tipoEntornos = [
-          { label: 'Tipo 1', value: 'Tipo 1' },
-          { label: 'Tipo 2', value: 'Tipo 2' },
-          { label: 'Tipo 3', value: 'Tipo 3' }
+          { label: 'Desarollo de software', value: 'Desarollo de software' },
+          { label: 'Redes de computadoras', value: 'Redes de computadoras' },
+          { label: 'Otro', value: 'Otro' }
       ];
   }
 
@@ -52,7 +55,7 @@ export class EditarEntComponent implements OnInit {
     this.workEnvService.getWorkEnv(this.entornoId).subscribe(data => {
         console.log('Datos recuperados:', data); 
 
-        
+        this.logicdeletedWork = data.logicdeleted;
         this.entornoData = {
             nameW: data.title, 
             type: data.type,
@@ -69,6 +72,8 @@ export class EditarEntComponent implements OnInit {
             date_start: this.entornoData.date_start,
             date_end: this.entornoData.date_end
         });
+
+ 
     }, error => {
         console.error('Error al cargar los datos del entorno:', error);
     });
@@ -97,6 +102,7 @@ export class EditarEntComponent implements OnInit {
             response => {
                 console.log('Respuesta del servidor:', response); // Verifica la respuesta del servidor
                 this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Entorno actualizado correctamente' });
+                this.loadEntornoData();
             },
             error => {
                 console.error('Error al actualizar el entorno:', error); // Maneja el error
@@ -117,5 +123,47 @@ export class EditarEntComponent implements OnInit {
           }
       });
   }
+
+  deleteWorkEnv(){
+
+    this.cs.confirm({
+        message: '¿Estás seguro de que deseas archivar este espacio de trabajo?',
+        header: 'Confirmar',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+            this.messageService.add({ severity: 'info', summary: 'Cargando', detail: 'Archivando espacio de trabajo...' });
+            this.workEnvService.deleteWorkEnv(this.entornoId).subscribe({
+                next: (res) =>{
+                    this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Espacio de trabajo archivado.' });
+                    this.router.navigate(['/Dash']);
+                }
+            });
+        }
+      });
+
+
+    
+
+  }
+
+
+  undeleteWorkEnv(){
+    this.cs.confirm({
+        message: '¿Estás seguro de que deseas desarchivar este espacio de trabajo?',
+        header: 'Confirmar',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+            this.messageService.add({ severity: 'info', summary: 'Cargando', detail: 'Desarchivando espacio de trabajo...' });
+            this.workEnvService.undeleteWorkEnv(this.entornoId).subscribe({
+                next: (res) =>{
+                    this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Espacio de trabajo desarchivado.' });
+                    this.router.navigate(['/Dash']);
+                }
+            });
+        }
+      });
+  }
+
+
 }
 

@@ -54,8 +54,15 @@
                         </div>
                     </div>
                     <button type="submit" pButton label="Guardar Cambios" class="request-button"></button>
+                    <button *ngIf = "logicdeletedWork === 0" pButton label="Archivar" class="p-button-danger" (click) = "deleteWorkEnv()"></button>
+                    <button *ngIf = "logicdeletedWork === 1" pButton label="Desarchivar" class="p-button-danger" (click) = "undeleteWorkEnv()"></button>
+
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<p-confirmDialog></p-confirmDialog>
+
+<p-toast></p-toast>

@@ -86,16 +86,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.workEnvService.getEntornos().subscribe(data => {
             console.log('Datos de entornos:', data); // Verifica la respuesta de la API
 
-            const ownerItems = data.owner
-                .filter(entorno => entorno.privilege === 2) // Filtra por privilegio
+            const ownerItems = data.owner.filter(entorno => entorno.logicdeleted === 0)
                 .map(entorno => ({
                     label: entorno.title,
                     icon: 'pi pi-fw pi-calendar',
                     command: () => this.editWorkEnv(entorno.idWorkEnv) // Verifica que 'entorno.id' sea correcto
                 }));
 
-            const participantItems = data.participant
-                .filter(entorno => entorno.privilege === 2) // Filtra por privilegio
+            const participantItems = data.participant.filter(entorno => entorno.logicdeleted === 0)
                 .map(entorno => ({
                     label: entorno.title,
                     icon: 'pi pi-fw pi-calendar',
@@ -104,9 +102,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
             this.misEntornos = [
                 {
-                    label: 'Mis Entornos',
-                    items: [...ownerItems, ...participantItems]
+                    label: 'Mis espacios',
+                    items: [...ownerItems]
                 }
+            ];
+
+            this.elementosEntornosParticipo = [
+
+                  {
+                    label: 'Espacios donde participo',
+                    items: [...participantItems]
+                  }
+
             ];
         });
 
@@ -116,32 +123,27 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     editWorkEnv(id: string) {
         console.log('ID del entorno:', id); // Agrega este log para verificar el ID
-        this.router.navigate([`WorkEnv/${id}/Edit/${id}`]); // Navega al componente de edición
+        this.router.navigate([`WorkEnv/${id}/Members/${id}`]); // Navega al componente de edición
     }
     
     getCantInvEntornos() {
         this.workEnvService.getEntornos().subscribe(data => {
 
             const ownerItems = data.owner
-                .filter(entorno => entorno.privilege === 1) // Filtra por privilegio
+                .filter(entorno => entorno.logicdeleted === 0) // Filtra por privilegio
                 .map(entorno => ({
                     label: entorno.title,
                     icon: 'pi pi-fw pi-calendar',
                 }));
 
             const participantItems = data.participant
-                .filter(entorno => entorno.privilege === 1) // Filtra por privilegio
+                .filter(entorno => entorno.logicdeleted === 0) // Filtra por privilegio
                 .map(entorno => ({
                     label: entorno.title,
                     icon: 'pi pi-fw pi-calendar',
                 }));
 
-            this.elementosEntornosParticipo = [
-                {
-                    label: 'Entornos a los que pertenezco',
-                    items: [...ownerItems, ...participantItems]
-                }
-            ];
+           
         })
         this.getNocoments();
     }

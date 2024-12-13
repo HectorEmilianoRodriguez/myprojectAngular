@@ -1,0 +1,49 @@
+.folder-container {
+    display: flex;
+    gap: 10px; /* Espacio entre carpetas */
+    
+}
+
+.folder {
+    display: flex; /* Usa flexbox para alinear ícono y texto en una línea */
+    align-items: center; /* Centrar verticalmente el contenido */
+    background-color: #fff; /* Fondo blanco */
+    border: 1px solid #ddd; /* Borde gris claro */
+    border-radius: 8px; /* Bordes redondeados */
+    padding: 12px; /* Espaciado interno */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    cursor: pointer;
+}
+
+.folder-icon {
+    font-size: 48px; /* Tamaño del ícono */
+    margin-right: 12px; /* Espacio a la derecha del ícono */
+}
+
+.folder-details {
+    display: flex; /* Flexbox para el nombre y la fecha */
+    flex-direction: column; /* Coloca nombre y fecha uno debajo del otro */
+}
+
+.folder-name {
+    font-size: 1.2em; /* Tamaño del texto del nombre */
+}
+
+.folder-date {
+    font-size: 0.9em; /* Tamaño del texto de la fecha */
+    color: #888; /* Color gris para la fecha */
+}
+
+.member-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .member-photo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* Para hacer la foto circular */
+    margin-right: 10px;
+  }
+  

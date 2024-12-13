@@ -8,7 +8,7 @@
   <div *ngFor="let solicitud of solicitudes" class="card p-3 shadow-2 mb-3">
     <div class="flex mb-3">
         <div class="flex-none w-3 flex align-items-center justify-content-center">
-            <img [src]="solicitud.photo" alt="Foto de perfil" class="w-full h-auto border-circle" />
+            <img [src]="solicitud.photo" alt="Foto de perfil" style = "border-radius: 50%; width: 5vh; height: 5vh;" />
         </div>
         <div class="flex-1 flex align-items-center pl-3">
             <p class="label text-lg m-0">El usuario: "{{ solicitud.name }}" desea unirse a tu entorno de trabajo "{{ solicitud.nameW }}"</p>

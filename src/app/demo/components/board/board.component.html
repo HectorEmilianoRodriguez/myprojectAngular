@@ -1,35 +1,63 @@
 <div class="card">
-    <div class="p-d-flex p-jc-between p-ai-center" style="display: flex; align-items: center; gap: 10px;">
+    <div class="p-d-flex p-jc-between p-ai-center" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
         <strong>{{dataBoard.nameB}}</strong>
         <strong>{{dataBoard.descriptionB}}</strong>
 
-        <p-button *ngIf="(dataBoard.logicdeleted === 0 && (privilege === 1 || privilege === 2))"
-                  label="Editar tablero"
-                  class="request-button"
-                  (click)="DialogEditBoard()">
+        <p-button *ngIf="dataBoard.logicdeleted === 0 && (privilege === 1 || privilege === 2) && logicdeleted === 0" 
+        label="Editar tablero" 
+        class="request-button" 
+        (click)="DialogEditBoard()">
         </p-button>
 
-        <button *ngIf="(dataBoard.logicdeleted !== 0 && (privilege === 1 || privilege === 2))"
-                pButton type="button"
-                label="Desarchivar"
-                class="p-button-success"
+
+        <button *ngIf="dataBoard.logicdeleted !== 0 && (privilege === 1 || privilege === 2) && logicdeleted === 0" 
+                pButton type="button" 
+                label="Desarchivar" 
+                class="p-button-success" 
                 (click)="UnDeleteBoard()">
         </button>
 
-        <button *ngIf="(dataBoard.logicdeleted === 0 && (privilege === 1 || privilege === 2))"
-                pButton type="button"
-                label="Archivar"
-                class="p-button-danger"
+        <button *ngIf="dataBoard.logicdeleted === 0 && (privilege === 1 || privilege === 2) && logicdeleted === 0" 
+                pButton type="button" 
+                label="Archivar" 
+                class="p-button-danger" 
                 (click)="DeleteBoard()">
         </button>
 
-        <button *ngIf="dataBoard.logicdeleted === 0"
-                pButton type="button"
-                label="Agregar lista"
-                class="p-button-success"
+        <button *ngIf="dataBoard.logicdeleted === 0 && (privilege === 1 || privilege === 2) && logicdeleted === 0" 
+                pButton type="button" 
+                label="Agregar lista" 
+                class="p-button-success" 
                 (click)="createList()">
         </button>
 
+        <button *ngIf="dataBoard.logicdeleted === 0 && logicdeleted === 0" 
+                pButton type="button" 
+                label="Agregar etiqueta" 
+                class="p-button-success" 
+                (click)="newLabel()">
+        </button>
+
+
+        <button 
+                pButton type="button"
+                label="Ver mis etiquetas"
+                class="p-button-success"
+                (click)="showL()">
+        </button>
+
+        <button 
+            pButton 
+            type="button"
+            label="Simular waterfall"
+            class="p-button-success"
+            [routerLink]="['/WorkEnv', idw, 'waterfall', idw, idb]">
+        </button>
+
+        
+          <!-- Filtro por fecha de fin -->
+           Filtrar por fecha de entrega
+          <input type="date" pInputText  placeholder="Filtrar por fecha" [(ngModel)]="filterDate" />
 
     </div>
 </div>
@@ -40,72 +68,178 @@
 </div>
 
 <div class="kanban" *ngIf="!loading">
-    <div *ngFor="let list of lists" 
-         class="list" 
-         [ngStyle]="{'background-color': list.color}" 
-         cdkDropList 
-         (cdkDropListDropped)="drop($event)" 
-         [cdkDropListData]="list.cards"
-         [cdkDropListConnectedTo]="connectedDropLists" 
-         [id]="list.idList.toString()">
+    <div *ngFor="let list of lists" class="list" [ngStyle]="{'background-color': list.color}" cdkDropList 
+         (cdkDropListDropped)="drop($event)" [cdkDropListData]="list.cards"
+         [cdkDropListConnectedTo]="connectedDropLists" [id]="list.idList.toString()">
   
       <div class="list-header">
         <h3>{{list.name}}</h3>
-        <button *ngIf="(dataBoard.logicdeleted === 0 && (privilege === 1 || privilege === 2))"
-          pButton 
-          icon="pi pi-trash" 
-          class="delete-list-button" 
-          (click)="confirmDeleteList(list.idList)"
-          aria-label="Eliminar lista">
-        </button>
-
-        <button *ngIf="(dataBoard.logicdeleted === 0 && (privilege === 1 || privilege === 2))"
-        pButton 
-        icon="pi pi-pencil" 
-        class="update-list-button" 
-        (click)="UpdateListDialog(list)"
-        aria-label="Editar lista">
-        </button>
-
-        <button *ngIf="(dataBoard.logicdeleted === 0)"
-        pButton 
-        icon="pi pi-plus" 
-        class="add-act-button" 
-        (click)="addActivity(list.idList)"
-        aria-label="Agregar actividad">
-        </button>
-
+        
+        <button *ngIf="dataBoard.logicdeleted === 0 && (privilege === 1 || privilege === 2) && logicdeleted === 0"
+                pButton icon="pi pi-trash" class="delete-list-button"
+                (click)="confirmDeleteList(list.idList)" aria-label="Eliminar lista"></button>
+        <button *ngIf="dataBoard.logicdeleted === 0 && (privilege === 1 || privilege === 2) && logicdeleted === 0"
+                pButton icon="pi pi-pencil" class="update-list-button"
+                (click)="UpdateListDialog(list)" aria-label="Editar lista"></button>
+        <button *ngIf="dataBoard.logicdeleted === 0 && logicdeleted === 0"
+                pButton icon="pi pi-plus" class="add-act-button"
+                (click)="addActivity(list.idList)" aria-label="Agregar actividad"></button>
       </div>
       
       <p>{{list.description}}</p>
   
       <div class="cards">
-        <div *ngFor="let card of list.cards" 
-             cdkDrag 
-             class="card-item" 
+        <div *ngFor="let card of getFilteredCards(list.cards)" 
+             cdkDrag class="card-item" 
              (click)="openActivityModal(card)">
           <div style="display: flex; gap: 5px; flex-wrap: wrap;">
-            <p>{{card?.nameC}}</p>  
+            <p>{{card?.nameC}}</p>
           </div>
-          <p>Fecha de entrega: {{card.end_date}}  <i class = "pi pi-fw pi-calendar"></i></p>
+          <p>Fecha de entrega: {{card.end_date}}  <i class="pi pi-fw pi-calendar"></i></p>
           <div class="labels" style="display: flex; gap: 5px; flex-wrap: wrap;">
-            <div *ngIf = "card.important === 1" style="background-color: rgb(173, 11, 11); padding: 10px; border: 1px solid black;">Urgente</div>
-            <div *ngIf = "(card.done === 1 && card.approbed === 1)" style="background-color: rgb(26, 209, 102); padding: 10px; border: 1px solid black;">Completada</div>
+            <div *ngIf="card.important === 1" style="background-color: rgb(173, 11, 11); padding: 10px; border: 1px solid black;">Urgente</div>
+            <div *ngIf="(card.done === 1 && card.approbed === 1)" style="background-color: rgb(26, 209, 102); padding: 10px; border: 1px solid black;">Completada</div>
             <div *ngFor="let label of card.labels" [style.background-color]="label.colorL" style="padding: 10px; border: 1px solid black;">
                 {{label.nameL}}
             </div>
+          </div>
         </div>
-        
-        </div>
-        <div *ngIf="list.cards.length === 0">
+        <div *ngIf="getFilteredCards(list.cards).length === 0">
           <p>No hay tarjetas disponibles.</p>
         </div>
-
       </div>
-
     </div>
   </div>
   
+  
+<!-- Diálogo para crear etiqueta -->
+<p-dialog header="Agregar etiqueta" [(visible)]="displayNewLabelD" [modal]="true" [closable]="true" [responsive]="true" [style]="{width: '400px'}" [baseZIndex]="10000">
+    <div class="p-fluid" style="margin-top: 20px;">
+        <div class="field" style="margin-bottom: 20px;">
+            <label for="name" style="font-weight: bold;">Nombre</label>
+            <input id="name" type="text" pInputText [(ngModel)]="nameL" placeholder="Mi etiqueta" style="width: 100%; font-size: 16px;" />
+        </div>
+        
+        <div class="field" style="margin-bottom: 20px;">
+            <label for="colorL" style="font-weight: bold;">Color</label>
+            <input id="colorL" type="color" [(ngModel)]="colorL" style="width: 100%; height: 40px;" />
+        </div>
+
+    </div>
+    <p-footer>
+        <div class="p-d-flex p-jc-between p-ai-center" style="gap: 10px;">
+            <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text p-button-lg" (click)="displayNewLabelD = false" style="width: 45%; height: 45%; "></button>
+            <button pButton label="Agregar" icon="pi pi-check" class="p-button-lg" (click)="CLabel()" style="width: 45%; height: 45%; "></button>
+        </div>
+    </p-footer>
+</p-dialog>
+
+<!-- Diálogo para editar etiqueta -->
+<p-dialog header="Editar etiqueta" [(visible)]="displayEditLabelD" [modal]="true" [closable]="true" [responsive]="true" [style]="{width: '400px'}" [baseZIndex]="10000">
+    <div class="p-fluid" style="margin-top: 20px;">
+        <div class="field" style="margin-bottom: 20px;">
+            <label for="name" style="font-weight: bold;">Nombre</label>
+            <input id="name" type="text" pInputText [(ngModel)]="editnameL" [placeholder]="editnameL" style="width: 100%; font-size: 16px;" />
+        </div>
+        
+        <div class="field" style="margin-bottom: 20px;">
+            <label for="colorL" style="font-weight: bold;">Color</label>
+            <input id="colorL" type="color" [(ngModel)]="editColorL" style="width: 100%; height: 40px;" />
+        </div>
+
+    </div>
+    <p-footer>
+        <div class="p-d-flex p-jc-between p-ai-center" style="gap: 10px;">
+            <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text p-button-lg" (click)="displayEditLabelD = false" style="width: 45%; height: 45%; "></button>
+            <button pButton label="Actualizar" icon="pi pi-check" class="p-button-lg" (click)="ELabel()" style="width: 45%; height: 45%; "></button>
+        </div>
+    </p-footer>
+</p-dialog>
+
+
+<p-dialog header="Administrar Etiquetas" [(visible)]="displayLabelD" [modal]="true" [closable]="true" [responsive]="true" [style]="{width: '600px'}" [baseZIndex]="10000">
+    <p-table #dt [value]="mylabels" [paginator]="true" [rows]="10">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="nameL">
+                    Nombre
+                    <p-sortIcon [field]="'nameL'"></p-sortIcon>
+                    <ng-template pTemplate="filter" let-col>
+                        <input type="text" pInputText (input)="dt.filter($event.target.value, 'nameL', 'contains')" placeholder="Buscar por nombre" />
+                    </ng-template>
+                </th>
+                <th pSortableColumn="colorL">
+                    Color
+                    <p-sortIcon [field]="'colorL'"></p-sortIcon>
+                </th>
+                <th>
+                    Acción
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-label>
+            <tr>
+                <td>{{ label.nameL }}</td>
+                <td>
+                    <div [ngStyle]="{'width': '20px', 'height': '20px', 'background-color': label.colorL, 'border-radius': '50%'}"></div>
+                </td>
+                <td>
+                    <button *ngIf="dataBoard.logicdeleted === 0 && logicdeleted === 0 && (privilege === 1 || privilege === 2)" pButton icon="pi pi-pencil" (click)="editLabel(label)" class="p-button-text"></button>
+                    <button *ngIf="dataBoard.logicdeleted === 0 && logicdeleted === 0 && (privilege === 1 || privilege === 2)" pButton icon="pi pi-trash" (click)="deleteLabel(label.idLabel)" class="p-button-text"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <p-footer>
+        <div class="p-d-flex p-jc-between p-ai-center" style="gap: 10px;">
+            <button pButton label="Cerrar" icon="pi pi-times" class="p-button-text p-button-lg" (click)="displayLabelD = false" style="width: 45%; height: 45%;"></button>
+        </div>
+    </p-footer>
+</p-dialog>
+
+
+
+
+
+
+  <!-- Diálogo para editar actividad -->
+
+<p-dialog header="Editar actividad" [(visible)]="displayEditActDialog" [modal]="true" [closable]="true" [responsive]="true" [style]="{width: '400px'}" [baseZIndex]="10000">
+<div class="p-fluid" style="margin: 20px 0; padding: 0;">
+    <div class="field" style="margin-bottom: 20px;">
+        <label for="nameL" style="font-weight: bold;">Nombre de la actividad</label>
+        <input id="nameL" type="text" pInputText [(ngModel)]="EditActName" [placeholder]="EditActName" style="width: 100%; font-size: 16px;" />
+    </div>
+    <div class="field" style="margin-bottom: 20px;">
+        <label for="descriptionL" style="font-weight: bold;">Descripción</label>
+        <textarea id="descriptionL" pInputTextarea [(ngModel)]="EditActDescription" [placeholder]="EditActDescription" style="width: 100%; height: 100px; font-size: 16px; resize: vertical;"></textarea>
+    </div>
+    
+    <div class="field" style="margin-bottom: 20px;">
+        <label style="font-weight: bold;">¿Es urgente?</label>
+        <div>
+            <p-radioButton name="urgente" value="1" [(ngModel)]="EditisUrgent"></p-radioButton>
+            <label for="si">Sí</label>
+            <p-radioButton name="urgente" value="0" [(ngModel)]="EditisUrgent"></p-radioButton>
+            <label for="no">No</label>
+        </div>
+    </div>
+
+    <div class="field" style="margin-bottom: 20px;">
+        <label for="dateL" style="font-weight: bold;">Fecha de entrega</label>
+        <p-calendar id="dateL" [(ngModel)]="EditActDate" [showIcon]="true" [placeholder]="EditActDate" style="width: 100%; display: block;" dateFormat="yy-mm-dd" />
+    </div>
+
+</div>
+<p-footer>
+    <div class="p-d-flex p-jc-between p-ai-center" style="gap: 10px;">
+        <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text p-button-lg" (click)="displayEditActDialog = false" style="width: 45%; height: 45%;"></button>
+        <button pButton label="Actualizar" icon="pi pi-check" class="p-button-lg" (click)="editAct()" style="width: 45%; height: 45%;"></button>
+    </div>
+</p-footer>
+</p-dialog>
+
 
   <!-- Diálogo para editar actividad -->
 
@@ -188,7 +322,6 @@
     </p-footer>
 </p-dialog>
 
-<!-- Diálogo para crear actividad -->
 <p-dialog header="Nueva actividad" [(visible)]="displayNewActDialog" [modal]="true" [closable]="true" [responsive]="true" [style]="{width: '400px'}" [baseZIndex]="10000">
     <div class="p-fluid" style="margin: 20px 0; padding: 0;">
         <div class="field" style="margin-bottom: 20px;">
@@ -212,14 +345,14 @@
 
         <div class="field" style="margin-bottom: 20px;">
             <label for="dateL" style="font-weight: bold;">Fecha de entrega</label>
-            <p-calendar id="dateL" [(ngModel)]="newActDate" [showIcon]="true" placeholder="Selecciona una fecha" style="width: 100%; display: block;" dateFormat="yy-mm-dd" />
+            <p-calendar id="dateL" [(ngModel)]="newActDate" [showIcon]="true" placeholder="Selecciona una fecha" style="width: 100%; display: block;" dateFormat="yy-mm-dd" (onSelect)="validateDate()" />
+            <small *ngIf="isDateInvalid" style="color: red;">La fecha no puede ser anterior a la fecha actual.</small>
         </div>
-
     </div>
     <p-footer>
         <div class="p-d-flex p-jc-between p-ai-center" style="gap: 10px;">
             <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text p-button-lg" (click)="displayNewActDialog = false" style="width: 45%; height: 45%;"></button>
-            <button pButton label="Agregar" icon="pi pi-check" class="p-button-lg" (click)="newAct()" style="width: 45%; height: 45%;"></button>
+            <button pButton label="Agregar" icon="pi pi-check" class="p-button-lg" (click)="newAct()" [disabled]="isDateInvalid" style="width: 45%; height: 45%;"></button>
         </div>
     </p-footer>
 </p-dialog>
@@ -258,7 +391,7 @@
                     <th>Nombre</th>
                     <th>Email</th>
                     <th>Foto</th>
-                    <th *ngIf = "privilege === 2 || privilege === 1">Acción</th>
+                    <th *ngIf = "dataBoard.logicdeleted === 0 || logicdeleted === 0 && (privilege === 2 || privilege === 1)">Acción</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-member>
@@ -268,22 +401,24 @@
                     <td>
                         <img *ngIf="member.photo" [src]="member.photo" alt="{{ member.name }}" style="width: 40px; height: 40px; border-radius: 50%;">
                     </td>
-                    <td *ngIf = "privilege === 2 || privilege === 1">
-                        <button 
-                        pButton 
-                        icon="pi pi-trash" 
-                        class="delete-list-button" 
-                        (click)="confirmDeleteMember(member.idJoinUserWork, selectedActivity.idCard)"
-                        aria-label="Remover miembro">
-                      </button>
-                    </td>
+                    <td *ngIf="(privilege === 2 && dataBoard.logicdeleted === 0 && logicdeleted === 0) || 
+                    (privilege === 1 && dataBoard.logicdeleted === 0 && logicdeleted === 0)">
+                    <button *ngIf="dataBoard.logicdeleted === 0 && (privilege === 1 || privilege === 2) && logicdeleted === 0"
+                            pButton 
+                            icon="pi pi-trash" 
+                            class="delete-list-button" 
+                            (click)="confirmDeleteMember(member.idJoinUserWork, selectedActivity.idCard)"
+                            aria-label="Remover miembro">
+                    </button>
+                     </td>
+         
                 </tr>
             </ng-template>
         </p-table>  
     </div>
 
     <div class="p-fluid" style="margin-top: 20px; display: flex; gap: 5px;">
-        <p-multiSelect *ngIf="(dataBoard.logicdeleted === 0 && (privilege === 1 || privilege === 2))"
+        <p-multiSelect *ngIf="(dataBoard.logicdeleted === 0 && logicdeleted === 0 && (privilege === 1 || privilege === 2))"
                 [options]="possiblesmembers" 
                 [(ngModel)]="selectedmembers" 
                 optionLabel="name" 
@@ -293,7 +428,7 @@
                 style="display: inline-block; width: 90%; cursor: pointer;">
             </p-multiSelect>
 
-            <button *ngIf="(dataBoard.logicdeleted === 0 && (privilege === 1 || privilege === 2))"
+            <button *ngIf="(dataBoard.logicdeleted === 0 && logicdeleted === 0 &&  (privilege === 1 || privilege === 2))"
             pButton 
             icon="pi pi-plus" 
             class="delete-list-button" 
@@ -314,10 +449,10 @@
     <div class="p-fluid">
         <div style="display: flex; gap: 5px; flex-wrap: wrap; align-items: center; margin-top: 5px; margin-right: 200px;">
             <!-- Botones de acción -->
-            <button *ngIf="(dataBoard.logicdeleted === 0 && (privilege === 1 || privilege === 2))"
+            <button *ngIf="(dataBoard.logicdeleted === 0 && (privilege === 1 || privilege === 2 ) && logicdeleted === 0 )"
                 pButton icon="pi pi-pencil" class="update-list-button" (click)="UpdateActDialog()" aria-label="Editar actividad">
             </button>
-            <button *ngIf="(dataBoard.logicdeleted === 0 && (privilege === 1 || privilege === 2))"
+            <button *ngIf="(dataBoard.logicdeleted === 0 && (privilege === 1 || privilege === 2 ) && logicdeleted === 0  )"
                 pButton icon="pi pi-trash" class="delete-list-button" (click)="confirmDeleteAct(selectedActivity.idCard)" aria-label="Eliminar actividad">
             </button>
             <button pButton icon="pi pi-users" class="add-act-button" (click)="getMembersAct(selectedActivity.idCard)" aria-label="Mostrar miembros"></button>
@@ -325,21 +460,36 @@
             <div class="labels" style="display: flex; gap: 5px; flex-wrap: wrap;">
                 <div *ngIf="selectedActivity.important === 1" style="background-color: rgb(173, 11, 11); padding: 10px; border: 1px solid black; color: white;">Urgente</div>
                 <div *ngIf="(selectedActivity.done === 1 && selectedActivity.approbed === 1)" style="background-color: rgb(26, 209, 102); padding: 10px; border: 1px solid black; color: white;">Completada</div>
-                <div *ngFor="let label of selectedActivity.labels" [style.background-color]="label.colorL" style="padding: 10px; border: 1px solid black; color: white; cursor: pointer; display: flex; gap: 5px;" (click)="deleteLabelAct(selectedActivity.idCard, label.idLabel)">
-                    {{label.nameL}} <i class="pi pi-times"></i>
+                <div *ngFor="let label of selectedActivity.labels" [style.background-color]="label.colorL" style="padding: 10px; border: 1px solid black; color: white; display: flex; gap: 5px;">
+                    {{label.nameL}} <i *ngIf = "(dataBoard.logicdeleted === 0)" class="pi pi-times" style = "cursor: pointer;" (click)="deleteLabelAct(selectedActivity.idCard, label.idLabel)"></i>
                 </div>
             </div>
 
-            <p-multiSelect [options]="labels" [(ngModel)]="selectedLabels" optionLabel="nameL" placeholder="Agregar más etiquetas" [showClear]="true" [appendTo]="'body'" style="display: inline-block; width: 90%; cursor: pointer;">
-                <ng-template let-label pTemplate="item">
-                    <div class="label-item" [style.backgroundColor]="label.colorL" style="padding: 5px; border-radius: 5px; color: white;">
-                        {{ label.nameL }}
-                    </div>
-                </ng-template>
+            <p-multiSelect *ngIf="dataBoard.logicdeleted === 0 && logicdeleted === 0" 
+            [options]="labels" 
+            [(ngModel)]="selectedLabels" 
+            optionLabel="nameL" 
+            placeholder="Agregar más etiquetas" 
+            [showClear]="true" 
+            [appendTo]="'body'" 
+            style="display: inline-block; width: 90%; cursor: pointer;">
+            <ng-template let-label pTemplate="item">
+                <div class="label-item" [style.backgroundColor]="label.colorL" 
+                    style="padding: 5px; border-radius: 5px; color: white;">
+                    {{ label.nameL }}
+                </div>
+            </ng-template>
             </p-multiSelect>
 
-            <button pButton icon="pi pi-plus" class="delete-list-button" (click)="addLabel(selectedActivity.idCard)" aria-label="Agregar etiqueta"></button>
-        </div>   
+
+            <button *ngIf="dataBoard.logicdeleted === 0 && logicdeleted === 0" 
+            pButton 
+            icon="pi pi-plus" 
+            class="delete-list-button" 
+            (click)="addLabel(selectedActivity.idCard)" 
+            aria-label="Agregar etiqueta">
+             </button>
+            </div>   
     </div>
     
     <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
@@ -368,19 +518,29 @@
                         
     
                         <p style="margin-left: auto; margin-right: 5px;">{{comment.created_at}}</p>  
-                    
-                        <button *ngIf="( (dataBoard.logicdeleted === 0 && privilege === 1 ) || (privilege === 2 && dataBoard.logicdeleted === 0) )" 
-                                pButton icon="pi pi-times" class="delete-comment-button" 
+                        <button *ngIf="(dataBoard.logicdeleted === 0 && privilege === 1) || 
+                                        (privilege === 2 && dataBoard.logicdeleted === 0) &&
+                                        logicdeleted === 0" 
+                                pButton icon="pi pi-times" 
+                                class="delete-comment-button" 
                                 (click)="deleteComment(comment.idComment)"> 
                         </button>
-                        <button *ngIf="( (dataBoard.logicdeleted === 0 && comment.name === nameAuth ) || (comment.name === nameAuth  && dataBoard.logicdeleted === 0 ) )" 
-                                pButton icon="pi pi-pencil" class="update-list-button" 
-                                (click)="updateComment(comment.idComment)"> 
+                    
+                        <button *ngIf="dataBoard.logicdeleted === 0 && comment.name === nameAuth && logicdeleted === 0" 
+                        pButton icon="pi pi-pencil" 
+                        class="update-list-button" 
+                        (click)="updateComment(comment.idComment, comment.text)"> 
                         </button>
-                        <button *ngIf="( (dataBoard.logicdeleted === 0 && comment.seen === 0 && privilege === 1 && comment.privilege != 2 ) || (comment.seen === 0  && dataBoard.logicdeleted === 0  && privilege === 2 && comment.privilege != 2) )" 
-                                pButton icon="pi pi-check" class="p-button-success" 
+                
+                    
+                        <button *ngIf="(dataBoard.logicdeleted === 0 && comment.seen === 0 && privilege === 1 && comment.privilege != 2) && logicdeleted === 0 || 
+                                        (comment.seen === 0 && dataBoard.logicdeleted === 0 && privilege === 2 && comment.privilege != 2) && 
+                                        logicdeleted === 0" 
+                                pButton icon="pi pi-check" 
+                                class="p-button-success" 
                                 (click)="seenComment(comment.idComment)"> 
                         </button>
+                    
                     </div>
                     <div style="display: flex; gap: 2px; flex-wrap: wrap; align-items: center;">
                         <p>{{comment.text}}</p>
@@ -390,31 +550,68 @@
             </div>    
 
             <div style="margin-top: 10px;">
-                <label for="commentt" style="font-weight: bold;">Agregar comentario</label>
-                <input id="commentt" type="text" pInputText [(ngModel)]="newComment" placeholder ="Insertar comentario aquí" style="width: 100%; font-size: 16px;" />
-                <button pButton icon="pi pi-plus" class="delete-comment-button" (click)="newC(selectedActivity.idCard)">Agregar</button>
+                <label *ngIf="dataBoard.logicdeleted === 0 && logicdeleted === 0" 
+                       for="commentt" style="font-weight: bold;">Agregar comentario</label>
+                
+                <input *ngIf="dataBoard.logicdeleted === 0 && logicdeleted === 0" 
+                       id="commentt" 
+                       type="text" 
+                       pInputText 
+                       [(ngModel)]="newComment" 
+                       placeholder="Insertar comentario aquí" 
+                       style="width: 100%; font-size: 16px;" />
+                       
+                <button *ngIf="dataBoard.logicdeleted === 0 && logicdeleted === 0" 
+                        pButton 
+                        icon="pi pi-plus" 
+                        class="delete-comment-button" 
+                        (click)="newC(selectedActivity.idCard)">Agregar</button>
             </div>
+            
         </div>
     </div>
 
     <div style="display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px;"> 
         <input type="file" id="fileInput" (change)="onFileSelected($event, selectedActivity.idCard)" style="display: none;" accept=".pdf">
-        <button pButton icon="pi pi-plus" class="p-button-success" label="Adjuntar nueva evidencia" (click)="onUploadClick()"></button>
+        <button  *ngIf = "(dataBoard.logicdeleted === 0 || logicdeleted === 0)" pButton icon="pi pi-plus" class="p-button-success" label="Adjuntar nueva evidencia" (click)="onUploadClick()"></button>
         <button pButton icon="pi pi-check" class="request-button" label="Descargar evidencia" (click)="downloadEvidence(selectedActivity.idCard)"></button>
-        <button *ngIf="(dataBoard.logicdeleted === 0 && selectedActivity.approbed === 0 && selectedActivity.done === 1 && (privilege === 1 || privilege === 2))" 
-                pButton icon="pi pi-check" class="p-button-success" label="Aprobar actividad" (click)="ApprobeEvidence(selectedActivity.idCard, selectedActivity.nameC)">
+        <button *ngIf="dataBoard.logicdeleted === 0 && selectedActivity.approbed === 0 && selectedActivity.done === 1 && (privilege === 1 || privilege === 2) && logicdeleted === 0" 
+        pButton icon="pi pi-check" 
+        class="p-button-success" 
+        label="Aprobar actividad" 
+        (click)="ApprobeEvidence(selectedActivity.idCard, selectedActivity.nameC)">
         </button>
-        <button *ngIf="(dataBoard.logicdeleted === 0 && selectedActivity.approbed === 1 && selectedActivity.done === 1 && (privilege === 1 || privilege === 2))" 
-                pButton icon="pi pi-times" class="p-button-danger" label="Deshacer aprobación" (click)="DesApprobeEvidence(selectedActivity.idCard, selectedActivity.nameC)">
+
+        <button *ngIf="dataBoard.logicdeleted === 0 && selectedActivity.approbed === 1 && selectedActivity.done === 1 && (privilege === 1 || privilege === 2) && logicdeleted === 0" 
+                pButton icon="pi pi-times" 
+                class="p-button-danger" 
+                label="Deshacer aprobación" 
+                (click)="DesApprobeEvidence(selectedActivity.idCard, selectedActivity.nameC)">
         </button>
-        <button *ngIf="(dataBoard.logicdeleted === 0 && selectedActivity.approbed === 0 && selectedActivity.done === 0)" 
-                pButton icon="pi pi-check" class="p-button-success" label="Marcar como terminada" (click)="EndAct(selectedActivity.idCard, selectedActivity.nameC)">
+
+        <button *ngIf="dataBoard.logicdeleted === 0 && selectedActivity.approbed === 0 && selectedActivity.done === 0 && logicdeleted === 0" 
+                pButton icon="pi pi-check" 
+                class="p-button-success" 
+                label="Marcar como terminada" 
+                (click)="EndAct(selectedActivity.idCard, selectedActivity.nameC)">
         </button>
+
     </div>
 
     <p-footer>
         <button pButton label="Cerrar" icon="pi pi-times" (click)="displayActivityDialog = false"></button>
     </p-footer>
+</p-dialog>
+
+
+<p-dialog header="Editar comentario" [(visible)]="displayEditComment" [modal]="true" [closable]="true" [responsive]="true" [style]="{width: '50%'}" [baseZIndex]="10000">
+
+    <div style="margin-top: 10px;">
+        <label for="commentt" style="font-weight: bold;">Editar comentario</label>
+        <input id="commentt" type="text" pInputText [(ngModel)]="EditComment" [placeholder] = "EditComment" style="width: 100%; font-size: 16px;" />
+        <button pButton icon="pi pi-check" class="delete-comment-button" (click)="changeC()">Actualizar</button> 
+    </div>
+
 </p-dialog>
 
 

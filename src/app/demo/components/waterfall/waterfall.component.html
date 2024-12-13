@@ -1,0 +1,22 @@
+<div class = "card">
+
+    <button 
+            pButton 
+            type="button"
+            label="Regresar a tablero Kanban"
+            class="p-button-success"
+            [routerLink]="['/WorkEnv', idw, 'Board', idw, idb]">
+        </button>
+
+</div>
+
+
+
+
+<p-timeline [value]="events">
+    <ng-template pTemplate="content" let-event>
+        <h3>{{ event.end_date }}</h3>
+        <p style="display: flex; gap: 5px;">{{ event.nameC }} <span *ngIf = "event.done === 1 && event.approbed === 1" style="color: rgb(31, 196, 31)">Terminada</span> <span *ngIf = "event.important === 1" style="color: rgb(185, 29, 18)">Urgente</span></p>
+    </ng-template>
+</p-timeline>
+  

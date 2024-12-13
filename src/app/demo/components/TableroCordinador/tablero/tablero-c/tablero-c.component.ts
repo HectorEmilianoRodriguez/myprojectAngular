@@ -31,7 +31,7 @@ export class TableroCComponent implements OnInit {
   expandedRows: ExpandedRows = {}; // Para manejar las filas expandidas
   isExpanded: boolean = false; // Para manejar el estado de expansión
   id: any;
-
+  logicdeleted;
   idJoinUserWork: number; // Variable para almacenar el ID del entorno de trabajo
   labels: Label[] = []; // Propiedad para almacenar etiquetas
   visible: boolean = false;
@@ -39,7 +39,7 @@ export class TableroCComponent implements OnInit {
   minDate: Date;
   newGroup: Group; // Inicializa un nuevo grupo
   displayModal: boolean = false; // Controla la visibilidad del modal
-
+  idgrouptaskcl;
   importanceOptions: any[] = [
     { label: 'Sí', value: 1 },
     { label: 'No', value: 0 }
@@ -63,14 +63,27 @@ selectAct: EditarAct = new EditarAct(0, '', '', new Date().toISOString().split('
     this.route.paramMap.subscribe(params => {
       this.id = params.get('id'); // Obtiene el ID del grupo
       console.log(this.id);
-      this.idJoinUserWork = Number(this.id); // Asigna el ID a idJoinUserWork
-      console.log('ID del entorno de trabajo:', this.idJoinUserWork);
       this.loadTaskGroups(); // Carga los grupos de tareas
       this.loadLabels();
       this.minDate = new Date();
+
+      this.workEnvService.getWorkEnv(this.id).subscribe({
+
+          next: (res) =>{
+            this.idJoinUserWork = res.idJoinUserWork;
+            this.logicdeleted = res.logicdeleted;
+            this.loadTaskGroups();
+          }
+          
+
+      });
+
+
+
     });
 
     // Inicializa el nuevo grupo
+    
     this.newGroup = new Group(0, '', new Date(), new Date(), this.idJoinUserWork); // Asegúrate de que el constructor de Group tenga los parámetros correctos
   }
 
@@ -129,6 +142,7 @@ selectAct: EditarAct = new EditarAct(0, '', '', new Date().toISOString().split('
   }
 
   loadActivities(idgrouptaskcl: number): void {
+    this.idgrouptaskcl = idgrouptaskcl;
     this.servicioTC.getActivitiesByGroup(idgrouptaskcl).subscribe(
       (data) => {
         this.activities = data; // Asigna las actividades a la propiedad
@@ -137,6 +151,7 @@ selectAct: EditarAct = new EditarAct(0, '', '', new Date().toISOString().split('
       (error) => {
         console.error('Error fetching activities', error);
       }
+      
     );
   }
 
@@ -267,6 +282,7 @@ selectAct: EditarAct = new EditarAct(0, '', '', new Date().toISOString().split('
         }
         this.visible = false; // Cierra el modal
         this.messageService.add({ severity: 'success', summary: 'Grupo Modificado', detail: 'El grupo se ha modificado correctamente.' });
+        this.loadTaskGroups();
       },
       (error) => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'El grupo no se pudo modificar, verifique la información.' });
@@ -279,10 +295,7 @@ selectAct: EditarAct = new EditarAct(0, '', '', new Date().toISOString().split('
     this.servicioTC.editActivity(this.selectAct).subscribe(
       (response) => {
         // Actualiza la lista de actividades
-        const index = this.activities.findIndex(a => a.idactivitycl === this.selectAct.idactivitycl);
-        if (index !== -1) {
-          this.activities[index] = { ...this.selectAct }; // Reemplaza la actividad antigua con la nueva
-        }
+        this.loadActivities(this.idgrouptaskcl);
         this.actividades = false; // Cierra el modal
         this.messageService.add({ severity: 'success', summary: 'Actividad Modificada', detail: 'La actividad se ha modificado correctamente.' });
       },

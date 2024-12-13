@@ -10,7 +10,11 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ButtonModule } from 'primeng/button';
 import { ReactiveFormsModule } from '@angular/forms'; // Asegúrate de importar ReactiveFormsModule
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+
+
 @NgModule({
   declarations: [EditarEntComponent],
   imports: [
@@ -23,7 +27,13 @@ import { ToastModule } from 'primeng/toast';
     InputTextModule,
     InputTextareaModule,
     ButtonModule,
-    ToastModule
-  ]
+    ToastModule,
+    ConfirmDialogModule
+  ],
+
+  providers: [ConfirmationService, MessageService]
+   
+  
+
 })
 export class EditarModule { }

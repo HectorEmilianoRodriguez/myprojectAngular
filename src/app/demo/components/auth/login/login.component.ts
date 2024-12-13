@@ -87,19 +87,25 @@ export class LoginComponent {
 
         this.app.showLoading();
 
-        this.servicioLogin.recuperarPassword(this.resetCorreo).subscribe({
-            next: data => {
-                console.log(data);
-            },
-            complete: () => {
-                this.router.navigate(['/landing']);
-            },
+        if(this.resetCorreo){
+            this.servicioLogin.recuperarPassword(this.resetCorreo).subscribe({
+                next: data => {
+                    console.log(data);
+                },
+                complete: () => {
+                    this.router.navigate(['/landing']);
+                },
+    
+                error: error => {
+                    //mensajes de error
+                }
+    
+            })
+        }else{
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'digite un correo electrónico antes' });
+        }
 
-            error: error => {
-                //mensajes de error
-            }
-
-        })
+       
 
 
     }

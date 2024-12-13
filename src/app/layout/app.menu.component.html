@@ -5,3 +5,21 @@
     </ng-container>
   
 </ul>
+
+<!-- Diálogo para unirse a un espacio -->
+<p-dialog header="Solicitud de unión a espacio de trabajo" [(visible)]="displayWorkDialog" [modal]="true" [closable]="true" [responsive]="true" [style]="{width: '400px'}" [baseZIndex]="10000">
+    <div class="p-fluid" style="margin-top: 20px;">
+        <div class="field" style="margin-bottom: 20px;">
+            <label for="name" style="font-weight: bold;">Ingrese el código del espacio de trabajo</label>
+            <input id="name" type="text" pInputText [(ngModel)]="codeWork" placeholder="Código del espacio de trabajo aquí" style="width: 100%; font-size: 16px;" />
+        </div>
+    </div>
+    <p-footer>
+        <div class="p-d-flex p-jc-between p-ai-center" style="gap: 10px;">
+            <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text p-button-lg" (click)="displayWorkDialog = false" style="width: 45%; height: 45%; "></button>
+            <button pButton label="Enviar" icon="pi pi-check" class="p-button-lg" (click)="joinWork()" style="width: 45%; height: 45%; "></button>
+        </div>
+    </p-footer>
+</p-dialog>
+
+<p-toast></p-toast>
